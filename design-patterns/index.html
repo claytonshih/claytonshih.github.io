@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>設計模式互動學習｜SOLID 與 9 大 GoF 模式（JavaScript）</title>
+<meta name="description" content="用生活比喻與互動示範學設計模式：SOLID 五原則，以及 Singleton、Factory、Builder、Adapter、Decorator、Facade、Observer、Strategy、Iterator 九大 GoF 模式，附 JavaScript 範例與使用時機。">
+<meta name="keywords" content="設計模式, Design Patterns, SOLID, Singleton, Factory, Builder, Adapter, Decorator, Facade, Observer, Strategy, Iterator, GoF, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/design-patterns/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="設計模式互動學習｜SOLID 與 9 大 GoF 模式">
+<meta property="og:description" content="用生活比喻與互動示範學 9 大設計模式，附 JavaScript 範例與使用時機。">
+<meta property="og:url" content="https://claytonshih.github.io/design-patterns/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl active">設計模式</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🧩 設計模式 Design Patterns</h1>
+  <p class="page-sub">前人整理的「常見問題標準解法」——不是程式碼範本，而是解決問題的套路。</p>
+
+<section id="solid">
+  <h2>SOLID 五原則</h2>
+  <p>設計模式背後的共同精神，可以濃縮成五條原則，合稱 SOLID。它們是「判斷設計好不好」的準繩。</p>
+  <table>
+    <tr><th>字母</th><th>原則</th><th>白話</th></tr>
+    <tr><td><b>S</b></td><td>單一職責</td><td>一個類別只做一件事，改動的理由只有一個。</td></tr>
+    <tr><td><b>O</b></td><td>開放封閉</td><td>對「擴充」開放、對「修改」封閉——加功能不必動舊碼。</td></tr>
+    <tr><td><b>L</b></td><td>里氏替換</td><td>子類別要能無痛替換父類別，不破壞行為。</td></tr>
+    <tr><td><b>I</b></td><td>介面隔離</td><td>介面要小而精，別逼使用者依賴用不到的方法。</td></tr>
+    <tr><td><b>D</b></td><td>依賴反轉</td><td>依賴「抽象」而非「具體」，高層不該綁死低層細節。</td></tr>
+  </table>
+  <div class="tip">看模式時可以想：「這個模式幫我守住了哪一條原則？」多數模式都是為了 <strong>O（開放封閉）</strong> 與 <strong>D（依賴反轉）</strong> 而生。</div>
+</section>
+
+<section id="singleton">
+  <h2>單例 Singleton <span class="badge b-c">創建型</span></h2>
+  <p class="lead">確保一個類別<strong>「全程只有一個實例」</strong>，並提供一個全域取用點。</p>
+  <div class="analogy"><b>比喻：</b>一個國家只有一位總統。不管你從哪個部門去問「總統是誰」，拿到的都是同一個人。</div>
+  <div class="when"><b>什麼時候用：</b>設定檔、資料庫連線池、日誌記錄器、快取——這些「應該全系統共用同一份」的東西。</div>
+  <pre><span class="kw">class</span> <span class="fn">Config</span> {
+  <span class="kw">constructor</span>() {
+    <span class="kw">if</span> (<span class="fn">Config</span>.instance) <span class="kw">return</span> <span class="fn">Config</span>.instance;
+    <span class="kw">this</span>.data = {};
+    <span class="fn">Config</span>.instance = <span class="kw">this</span>;
+  }
+}</pre>
+  <div class="card">
+    <h4>互動：不管建幾次，都是同一個</h4>
+    <div class="controls"><button onclick="sglNew()">new Config()</button><button class="ghost" onclick="sglReset()">重置</button></div>
+    <div id="sglOut" class="out"></div>
+  </div>
+  <div class="tip">⚠️ 小心濫用：Singleton 本質是「全域變數」，過度使用會讓模組互相隱形耦合、也不好做單元測試。</div>
+</section>
+
+<section id="factory">
+  <h2>工廠 Factory <span class="badge b-c">創建型</span></h2>
+  <p class="lead">把「決定要 new 哪個類別」的邏輯集中到一個工廠函式，呼叫端只說<strong>「我要什麼」</strong>。</p>
+  <div class="analogy"><b>比喻：</b>去飲料店你只說「我要珍奶」，店員（工廠）決定用哪些原料、怎麼做。你不用自己進廚房組裝。</div>
+  <div class="when"><b>什麼時候用：</b>要產生的物件種類很多、或未來會新增種類時。呼叫端不必到處寫 <code class="inline">new</code>。</div>
+  <div class="card">
+    <h4>互動：跟工廠點一杯</h4>
+    <div class="controls">
+      <button class="ghost" onclick="order('珍奶','🧋 珍珠奶茶：茶底 + 牛奶 + 珍珠')">點 珍奶</button>
+      <button class="ghost" onclick="order('拿鐵','☕ 拿鐵：濃縮咖啡 + 蒸奶')">點 拿鐵</button>
+      <button class="ghost" onclick="order('氣泡水','🫧 氣泡水：水 + 二氧化碳')">點 氣泡水</button>
+    </div>
+    <div id="factoryOut" class="out">工廠待命中…</div>
+  </div>
+</section>
+
+<section id="builder">
+  <h2>建造者 Builder <span class="badge b-c">創建型</span></h2>
+  <p class="lead">分步驟組裝一個複雜物件，把「一長串參數」變成一句句清楚的鏈式呼叫。</p>
+  <div class="analogy"><b>比喻：</b>Subway 點餐——選麵包、加料、選醬、要不要烤，一步步堆疊，最後 <code class="inline">.build()</code> 送出成品。</div>
+  <div class="when"><b>什麼時候用：</b>物件有很多可選參數時，避免看不懂的超長建構子。</div>
+  <div class="card">
+    <h4>互動：自己堆一個漢堡</h4>
+    <div class="controls">
+      <button class="ghost" onclick="addPart('🥩 肉排')">加肉排</button>
+      <button class="ghost" onclick="addPart('🧀 起司')">加起司</button>
+      <button class="ghost" onclick="addPart('🥬 生菜')">加生菜</button>
+      <button class="ghost" onclick="addPart('🍅 番茄')">加番茄</button>
+      <button onclick="buildBurger()">🍔 build()</button>
+      <button class="ghost" onclick="resetBurger()">重置</button>
+    </div>
+    <div id="builderParts" style="min-height:24px;margin-bottom:8px"></div>
+    <div id="builderOut" class="out"></div>
+  </div>
+</section>
+
+<section id="adapter">
+  <h2>轉接器 Adapter <span class="badge b-s">結構型</span></h2>
+  <p class="lead">在兩個「介面對不上」的東西中間夾一層轉接，讓它們能一起運作。</p>
+  <div class="analogy"><b>比喻：</b>出國用的萬用轉接頭。你的插頭沒變、插座沒變，中間那個轉接器把它們兜起來。</div>
+  <div class="when"><b>什麼時候用：</b>要接第三方套件或舊系統，但它的方法名稱／格式跟你目前的程式不相容時。</div>
+  <pre><span class="com">// 舊 SDK 的方法叫 makePayment，但我們全站都用 pay()</span>
+<span class="kw">class</span> <span class="fn">PayAdapter</span> {
+  <span class="fn">constructor</span>(oldSdk){ <span class="kw">this</span>.sdk = oldSdk; }
+  <span class="fn">pay</span>(amount){
+    <span class="kw">return</span> <span class="kw">this</span>.sdk.<span class="fn">makePayment</span>(amount, <span class="str">"TWD"</span>);
+  }
+}</pre>
+</section>
+
+<section id="decorator">
+  <h2>裝飾者 Decorator <span class="badge b-s">結構型</span></h2>
+  <p class="lead">不改原本的類別，用「一層層包起來」的方式動態疊加功能。</p>
+  <div class="analogy"><b>比喻：</b>一杯基底咖啡，可以加奶泡、加糖漿、加奶油——每加一層都還是「咖啡」，但功能不斷疊上去。</div>
+  <div class="when"><b>什麼時候用：</b>想給物件加功能，但用繼承會爆炸（各種組合要開一堆子類別）時。裝飾者用組合取代繼承。</div>
+  <div class="card">
+    <h4>互動：一層層裝飾你的咖啡</h4>
+    <div class="controls">
+      <button class="ghost" onclick="decorate('奶',10)">＋奶泡 $10</button>
+      <button class="ghost" onclick="decorate('糖漿',15)">＋糖漿 $15</button>
+      <button class="ghost" onclick="decorate('奶油',20)">＋奶油 $20</button>
+      <button class="ghost" onclick="resetCoffee()">重來一杯（基底 $50）</button>
+    </div>
+    <div id="decoOut" class="out"></div>
+  </div>
+</section>
+
+<section id="facade">
+  <h2>外觀 Facade <span class="badge b-s">結構型</span></h2>
+  <p class="lead">在一堆複雜的子系統前面，放一個「簡單的統一入口」，讓外部只需呼叫一個方法。</p>
+  <div class="analogy"><b>比喻：</b>看電影用的「一鍵觀影」按鈕——背後幫你關燈、放下投影幕、開播放器、調音響，但你只按一顆鈕。</div>
+  <div class="when"><b>什麼時候用：</b>子系統很多、步驟很繁瑣，想給使用者一個乾淨簡單的介面時。</div>
+  <div class="card">
+    <h4>互動：一鍵啟動家庭劇院</h4>
+    <div class="controls"><button onclick="watchMovie()">🎬 watchMovie()</button><button class="ghost" onclick="document.getElementById('facadeOut').textContent=''">清除</button></div>
+    <div id="facadeOut" class="out"></div>
+  </div>
+</section>
+
+<section id="observer">
+  <h2>觀察者 Observer <span class="badge b-b">行為型</span></h2>
+  <p class="lead">一個「主題」狀態改變時，自動通知所有「訂閱者」。一對多的自動廣播。</p>
+  <div class="analogy"><b>比喻：</b>YouTube 訂閱。你按下訂閱（註冊為觀察者），頻道一發新片，所有訂閱者立刻收到通知。</div>
+  <div class="when"><b>什麼時候用：</b>事件系統、UI 資料綁定、通知推播——「一處變動、多處要跟著反應」時。</div>
+  <div class="card">
+    <h4>互動：訂閱頻道並發片</h4>
+    <div class="controls">
+      <button class="ghost" onclick="subUser('小明')">小明 訂閱</button>
+      <button class="ghost" onclick="subUser('小華')">小華 訂閱</button>
+      <button class="ghost" onclick="subUser('小美')">小美 訂閱</button>
+      <button onclick="publishVideo()">📢 發布新片</button>
+      <button class="ghost" onclick="resetObserver()">重置</button>
+    </div>
+    <div style="margin-bottom:8px">目前訂閱者：<span id="subList"><span class="pill" style="opacity:.5">（尚無）</span></span></div>
+    <div id="observerOut" class="out"></div>
+  </div>
+</section>
+
+<section id="strategy">
+  <h2>策略 Strategy <span class="badge b-b">行為型</span></h2>
+  <p class="lead">把「可以互換的演算法」各自包成一個策略，執行時再決定要用哪一個——不必寫一堆 if/else。</p>
+  <div class="analogy"><b>比喻：</b>導航 App 的「最快 / 最短 / 避開收費」。目的地不變，你隨時切換「怎麼走」的策略，路線就跟著換。</div>
+  <div class="when"><b>什麼時候用：</b>同一件事有多種做法要動態切換時（不同運費計算、不同排序規則、不同折扣方案）。</div>
+  <div class="card">
+    <h4>互動：切換結帳策略（原價 $1000）</h4>
+    <div class="controls">
+      <button class="ghost" onclick="applyStrategy('原價',1)">一般</button>
+      <button class="ghost" onclick="applyStrategy('VIP 八折',0.8)">VIP</button>
+      <button class="ghost" onclick="applyStrategy('清倉五折',0.5)">清倉</button>
+      <button class="ghost" onclick="applyStrategy('會員日 65 折',0.65)">會員日</button>
+    </div>
+    <div id="strategyOut" class="out"></div>
+  </div>
+</section>
+
+<section id="iterator">
+  <h2>迭代器 Iterator <span class="badge b-b">行為型</span></h2>
+  <p class="lead">提供一致的方式「一個接一個」走訪集合裡的元素，不必知道它內部長怎樣。</p>
+  <div class="analogy"><b>比喻：</b>電視遙控器的「下一台」。你不需要知道電視怎麼儲存頻道清單，按一下就跳到下一個。</div>
+  <div class="when"><b>什麼時候用：</b>想統一走訪不同資料結構的方式。JS 的 <code class="inline">for...of</code> 就是靠它。</div>
+  <div class="card">
+    <h4>互動：手動點 next()</h4>
+    <div class="controls"><button onclick="iterNext()">▶ next()</button><button class="ghost" onclick="resetIter()">重置</button></div>
+    <div id="iterOut" class="out"></div>
+  </div>
+</section>
+
+<section>
+  <h2>📋 速查表</h2>
+  <table>
+    <tr><th>模式</th><th>類別</th><th>一句話</th><th>典型場景</th></tr>
+    <tr><td>Singleton 單例</td><td><span class="badge b-c">創建</span></td><td>全系統只留一個實例</td><td>設定檔、連線池、日誌</td></tr>
+    <tr><td>Factory 工廠</td><td><span class="badge b-c">創建</span></td><td>集中決定 new 哪個類別</td><td>依型別產生物件</td></tr>
+    <tr><td>Builder 建造者</td><td><span class="badge b-c">創建</span></td><td>分步組裝複雜物件</td><td>多可選參數的建構</td></tr>
+    <tr><td>Adapter 轉接器</td><td><span class="badge b-s">結構</span></td><td>讓不相容介面能對接</td><td>包裝第三方／舊 SDK</td></tr>
+    <tr><td>Decorator 裝飾者</td><td><span class="badge b-s">結構</span></td><td>一層層動態加功能</td><td>咖啡加料、串流加密</td></tr>
+    <tr><td>Facade 外觀</td><td><span class="badge b-s">結構</span></td><td>複雜子系統的簡單入口</td><td>一鍵完成多步驟</td></tr>
+    <tr><td>Observer 觀察者</td><td><span class="badge b-b">行為</span></td><td>狀態變動自動通知訂閱者</td><td>事件、UI 綁定、推播</td></tr>
+    <tr><td>Strategy 策略</td><td><span class="badge b-b">行為</span></td><td>可互換的演算法動態切換</td><td>運費、折扣、排序規則</td></tr>
+    <tr><td>Iterator 迭代器</td><td><span class="badge b-b">行為</span></td><td>統一走訪集合元素</td><td>for...of、自訂集合</td></tr>
+  </table>
+  <div class="tip"><strong>學習建議：</strong>入門先熟這四個最常用的——<b>Singleton、Factory、Observer、Strategy</b>。其餘的等實際遇到對應問題再回來查即可。模式是工具不是目標，程式讀起來清楚、好改，比「用了幾個模式」重要得多。</div>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#solid">SOLID 五原則</a>
+    <a href="#singleton">單例 Singleton</a>
+    <a href="#factory">工廠 Factory</a>
+    <a href="#builder">建造者 Builder</a>
+    <a href="#adapter">轉接器 Adapter</a>
+    <a href="#decorator">裝飾者 Decorator</a>
+    <a href="#facade">外觀 Facade</a>
+    <a href="#observer">觀察者 Observer</a>
+    <a href="#strategy">策略 Strategy</a>
+    <a href="#iterator">迭代器 Iterator</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* Singleton */
+let sglInstance=null, sglCount=0, sglLog=[];
+function sglNew(){
+  sglCount++;
+  if(!sglInstance){ sglInstance={id:'#'+Math.floor(Math.random()*9000+1000)}; sglLog.push(`第 ${sglCount} 次 new → 建立新實例 ${sglInstance.id}`); }
+  else { sglLog.push(`第 ${sglCount} 次 new → 回傳既有實例 ${sglInstance.id}（沒有產生新的）`); }
+  sglLog.push(`　目前實例數：1，永遠是 ${sglInstance.id}`);
+  document.getElementById('sglOut').textContent=sglLog.slice(-6).join('\n');
+}
+function sglReset(){ sglInstance=null; sglCount=0; sglLog=[]; document.getElementById('sglOut').textContent='（已重置，按 new Config() 試試）'; }
+sglReset();
+
+/* Factory */
+function order(name,desc){ document.getElementById('factoryOut').textContent=`createDrink("${name}") →\n${desc}`; }
+
+/* Builder */
+let burger=[];
+function addPart(p){ burger.push(p); renderBurgerParts(); }
+function renderBurgerParts(){ document.getElementById('builderParts').innerHTML=burger.length?burger.map(p=>`<span class="pill">${p}</span>`).join(''):'<span style="color:var(--muted);font-size:13px">尚未加料</span>'; }
+function buildBurger(){ document.getElementById('builderOut').textContent=burger.length?('🍔 = '+burger.join(' + ')):'空的漢堡？先加點料吧'; }
+function resetBurger(){ burger=[]; renderBurgerParts(); document.getElementById('builderOut').textContent=''; }
+resetBurger();
+
+/* Decorator */
+let coffee={cost:50,desc:'咖啡'};
+function decorate(name,price){ coffee={cost:coffee.cost+price,desc:coffee.desc+'+'+name}; showCoffee(); }
+function resetCoffee(){ coffee={cost:50,desc:'咖啡'}; showCoffee(); }
+function showCoffee(){ document.getElementById('decoOut').textContent=`${coffee.desc}\n總價：$${coffee.cost}`; }
+showCoffee();
+
+/* Facade */
+function watchMovie(){
+  const steps=['💡 lights.dim() → 燈光轉暗','📽️ screen.down() → 放下投影幕','🔦 projector.on() → 投影機開啟','🔊 sound.setSurround() → 環繞音效','▶️ player.play() → 開始播放','','🎬 開始看電影！（你只按了一顆鈕）'];
+  const out=document.getElementById('facadeOut'); out.textContent=''; let i=0;
+  const t=setInterval(()=>{ out.textContent+=(i?'\n':'')+steps[i]; if(++i>=steps.length)clearInterval(t); },260);
+}
+
+/* Observer */
+let subs=[];
+function subUser(name){ if(subs.includes(name)){return;} subs.push(name); renderSubs(); document.getElementById('observerOut').textContent=`${name} 已訂閱 ✅`; }
+function renderSubs(){ document.getElementById('subList').innerHTML=subs.length?subs.map(s=>`<span class="pill">🔔 ${s}</span>`).join(''):'<span class="pill" style="opacity:.5">（尚無）</span>'; }
+function publishVideo(){
+  if(!subs.length){ document.getElementById('observerOut').textContent='還沒有人訂閱，發片沒人收到 😅'; return; }
+  document.getElementById('observerOut').textContent='📢 頻道發布新片！自動通知所有訂閱者：\n'+subs.map(s=>`  → ${s} 收到通知`).join('\n');
+}
+function resetObserver(){ subs=[]; renderSubs(); document.getElementById('observerOut').textContent=''; }
+
+/* Strategy */
+function applyStrategy(label,rate){ const price=Math.round(1000*rate); document.getElementById('strategyOut').textContent=`套用策略「${label}」\n$1000 → $${price}`; }
+
+/* Iterator */
+let iterData=['🍎','🍌','🍇','🍑','🍊'], iterIdx=0;
+function iterNext(){
+  if(iterIdx>=iterData.length){ document.getElementById('iterOut').textContent='{ done: true } → 走完了，沒有下一個'; return; }
+  const v=iterData[iterIdx];
+  document.getElementById('iterOut').textContent=`next() → { value: "${v}", done: false }\n進度：${iterData.map((x,i)=>i<=iterIdx?x:'⬜').join(' ')}`;
+  iterIdx++;
+}
+function resetIter(){ iterIdx=0; document.getElementById('iterOut').textContent='（按 next() 開始逐一取出）'; }
+resetIter();
+</script>
+</body>
+</html>
