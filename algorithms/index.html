@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>演算法互動學習｜Big-O、排序、二分搜尋、BFS/DFS（JavaScript）</title>
+<meta name="description" content="用圖解與可操作動畫學演算法：時間複雜度 Big-O、遞迴、氣泡／選擇／插入排序動畫、二分搜尋，以及圖的走訪 BFS 與 DFS。程式碼以 JavaScript 示範。">
+<meta name="keywords" content="演算法, Big-O, 時間複雜度, 遞迴, 排序演算法, 氣泡排序, 二分搜尋, BFS, DFS, 圖的走訪, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/algorithms/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="演算法互動學習｜Big-O、排序、二分搜尋、BFS/DFS">
+<meta property="og:description" content="用圖解與可操作動畫學演算法：Big-O、遞迴、排序、二分搜尋、圖的走訪。">
+<meta property="og:url" content="https://claytonshih.github.io/algorithms/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl active">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🧭 演算法</h1>
+  <p class="page-sub">「事情怎麼做才快」——用圖解與互動動畫理解核心演算法觀念。</p>
+
+<section id="bigo">
+  <h2>時間複雜度 Big-O</h2>
+  <p>Big-O 描述當資料量 <code class="inline">n</code> 變大時，「工作量」成長得多快。我們只在乎成長「趨勢」，不在乎精確秒數。</p>
+  <div class="analogy"><b>比喻：</b>找一本書。書架有標籤（照字母排好）你可以「對半找」＝很快；書堆成一團只能一本本翻＝很慢。資料越多，這個差距越誇張。</div>
+  <div class="card">
+    <h4>常見等級（由快到慢）</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">資料量 n = <span id="nVal" class="stat">16</span></label>
+      <input id="nRange" type="range" min="1" max="64" value="16" style="flex:1;min-width:160px">
+    </div>
+    <svg id="bigoChart" viewBox="0 0 640 300" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <div class="legend">
+      <span><span class="dot" style="background:#34d399"></span>O(1) 常數</span>
+      <span><span class="dot" style="background:#38bdf8"></span>O(log n) 對數</span>
+      <span><span class="dot" style="background:#818cf8"></span>O(n) 線性</span>
+      <span><span class="dot" style="background:#fbbf24"></span>O(n log n)</span>
+      <span><span class="dot" style="background:#fb7185"></span>O(n²) 平方</span>
+    </div>
+  </div>
+  <table>
+    <tr><th>記號</th><th>名稱</th><th>白話</th><th>例子</th></tr>
+    <tr><td><code class="inline">O(1)</code></td><td>常數</td><td>不管多少資料，一步搞定</td><td>用索引拿陣列的某一格</td></tr>
+    <tr><td><code class="inline">O(log n)</code></td><td>對數</td><td>每一步砍掉一半</td><td>二分搜尋</td></tr>
+    <tr><td><code class="inline">O(n)</code></td><td>線性</td><td>每筆都看一次</td><td>從頭找到尾</td></tr>
+    <tr><td><code class="inline">O(n log n)</code></td><td>線性對數</td><td>好的排序法極限</td><td>合併／快速排序</td></tr>
+    <tr><td><code class="inline">O(n²)</code></td><td>平方</td><td>雙層迴圈，資料翻倍時間變四倍</td><td>氣泡排序</td></tr>
+  </table>
+  <div class="tip">記一句話就好：<strong>n 變大時，能不能少看一點資料？</strong>能對半砍就是 log，能只掃一次就是 n，要巢狀比較就會變 n²。</div>
+</section>
+
+<section id="recursion">
+  <h2>遞迴 Recursion</h2>
+  <p>遞迴就是「函式呼叫自己」，把大問題切成一模一樣的小問題，直到小到不能再切（<strong>終止條件</strong>）。</p>
+  <div class="analogy"><b>比喻：</b>兩面鏡子對照會出現無限層倒影。遞迴也是一層包一層，但一定要有「停下來」的那一層，否則會無限下去（程式會爆掉）。</div>
+  <pre><span class="com">// 階乘 5! = 5 × 4 × 3 × 2 × 1</span>
+<span class="kw">function</span> <span class="fn">factorial</span>(n) {
+  <span class="kw">if</span> (n <= <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;   <span class="com">// ← 終止條件（最小問題）</span>
+  <span class="kw">return</span> n * <span class="fn">factorial</span>(n - <span class="num">1</span>); <span class="com">// ← 呼叫自己，問題縮小</span>
+}
+<span class="fn">factorial</span>(<span class="num">5</span>); <span class="com">// 120</span></pre>
+  <div class="card">
+    <h4>展開過程（點按觀察）</h4>
+    <div class="controls"><button onclick="stepFact()">▶ 展開一層</button><button class="ghost" onclick="resetFact()">重置</button></div>
+    <div id="factView" style="font-family:ui-monospace,monospace;font-size:15px;line-height:2"></div>
+  </div>
+  <div class="tip">寫遞迴的口訣：<strong>①先寫終止條件 ②再讓問題「變小」呼叫自己。</strong>缺了終止條件就是無限迴圈。</div>
+</section>
+
+<section id="sort">
+  <h2>排序演算法（互動動畫）</h2>
+  <p>排序就是把資料由小到大排好。下面可以<strong>選演算法、按開始</strong>，看它怎麼比較（黃）與交換（紅），排好變綠。</p>
+  <div class="card">
+    <div class="controls">
+      <select id="algoSel" class="ghost" style="padding:8px 12px;border-radius:8px;background:var(--panel2);color:var(--ink);border:1px solid var(--line)">
+        <option value="bubble">氣泡排序 Bubble　O(n²)</option>
+        <option value="selection">選擇排序 Selection　O(n²)</option>
+        <option value="insertion">插入排序 Insertion　O(n²)</option>
+      </select>
+      <button onclick="startSort()">▶ 開始</button>
+      <button class="ghost" onclick="shuffleBars()">🔀 打亂</button>
+      <span style="color:var(--muted);font-size:13px">比較 <span id="cmpCount" class="stat">0</span> ｜ 交換 <span id="swapCount" class="stat">0</span></span>
+    </div>
+    <div id="bars" class="bars"></div>
+    <div class="legend">
+      <span><span class="dot" style="background:#38bdf8"></span>一般</span>
+      <span><span class="dot" style="background:#fbbf24"></span>正在比較</span>
+      <span><span class="dot" style="background:#fb7185"></span>正在交換</span>
+      <span><span class="dot" style="background:#34d399"></span>已排好</span>
+    </div>
+  </div>
+  <div id="sortExplain" class="card"><h4>氣泡排序 Bubble Sort</h4><p>相鄰兩個比一比，比較大的往後「冒泡」，一輪把最大的推到最後。簡單但慢，<span class="badge b-time">O(n²)</span>。</p></div>
+  <h3>更快的排序：合併與快速</h3>
+  <p>實務上用 <span class="badge b-time">O(n log n)</span> 的排序，關鍵是「分而治之」——把資料切一半、各自排好、再合起來。</p>
+  <div class="grid2">
+    <div class="card"><h4>合併排序 Merge Sort</h4><p>一直對半切到剩單個，再兩兩「合併」成有序。穩定、最壞也是 O(n log n)。</p></div>
+    <div class="card"><h4>快速排序 Quick Sort</h4><p>選一個「基準 pivot」，比它小的丟左邊、大的丟右邊，再各自遞迴。平均最快。</p></div>
+  </div>
+</section>
+
+<section id="binarysearch">
+  <h2>二分搜尋 Binary Search</h2>
+  <p>前提：資料<strong>已經排好序</strong>。每次都看「正中間」，比目標大就往左半找、比目標小就往右半找，每一步砍掉一半 ➜ <span class="badge b-time">O(log n)</span>。</p>
+  <div class="analogy"><b>比喻：</b>猜 1～100 的數字。與其一個個猜，不如先猜 50——「太大」就往 1～49 猜，「太小」就往 51～100。最多七次就中。</div>
+  <div class="card">
+    <h4>互動：在 1～20 裡找一個數</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">目標 = <input id="bsTarget" type="number" min="1" max="20" value="13" style="width:60px;padding:6px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);border-radius:6px"></label>
+      <button onclick="startBinary()">▶ 開始搜尋</button>
+      <button class="ghost" onclick="renderBS()">重置</button>
+    </div>
+    <div id="bsCells" class="cells" style="justify-content:center"></div>
+    <p id="bsMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+  <pre><span class="kw">function</span> <span class="fn">binarySearch</span>(arr, target){
+  <span class="kw">let</span> lo = <span class="num">0</span>, hi = arr.length - <span class="num">1</span>;
+  <span class="kw">while</span> (lo <= hi){
+    <span class="kw">const</span> mid = Math.<span class="fn">floor</span>((lo + hi) / <span class="num">2</span>);
+    <span class="kw">if</span> (arr[mid] === target) <span class="kw">return</span> mid;
+    <span class="kw">if</span> (arr[mid] &lt; target) lo = mid + <span class="num">1</span>;
+    <span class="kw">else</span> hi = mid - <span class="num">1</span>;
+  }
+  <span class="kw">return</span> -<span class="num">1</span>;
+}</pre>
+</section>
+
+<section id="graph">
+  <h2>圖的走訪 BFS / DFS</h2>
+  <p>圖 (graph) 是節點 + 連線，可以任意相連（像地圖、社群網路）。要「走遍」所有節點有兩種經典方式。</p>
+  <div class="card">
+    <h4>互動：從節點 A 出發走訪</h4>
+    <svg id="graphSvg" viewBox="0 0 480 240" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <div class="controls">
+      <button onclick="runTraversal('bfs')">▶ BFS 廣度優先</button>
+      <button onclick="runTraversal('dfs')">▶ DFS 深度優先</button>
+      <button class="ghost" onclick="renderGraph()">重置</button>
+    </div>
+    <p id="graphMsg" style="color:var(--warn);font-family:ui-monospace,monospace;min-height:20px"></p>
+  </div>
+  <div class="grid2">
+    <div class="card"><h4>BFS 廣度優先 · 用佇列</h4><p>像水波紋一圈圈擴散：先走完所有「鄰居」，再走鄰居的鄰居。常用於找<strong>最短路徑</strong>。</p></div>
+    <div class="card"><h4>DFS 深度優先 · 用堆疊/遞迴</h4><p>像走迷宮：一條路走到底、走不通再回頭換路。常用於<strong>探索所有可能</strong>、判斷連通。</p></div>
+  </div>
+  <div class="analogy"><b>一句話記憶：</b>BFS＝「先看近的」（佇列，先進先出）；DFS＝「一路衝到底」（堆疊，後進先出）。</div>
+  <p style="margin-top:24px">想複習這些演算法用到的資料結構（佇列、堆疊）？看 <a href="../data-structures/index.html">資料結構</a> 頁。</p>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#bigo">時間複雜度 Big-O</a>
+    <a href="#recursion">遞迴 Recursion</a>
+    <a href="#sort">排序演算法</a>
+    <a href="#binarysearch">二分搜尋</a>
+    <a href="#graph">圖的走訪 BFS/DFS</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* Big-O chart */
+const bigoSvg=document.getElementById('bigoChart');
+function drawBigO(n){
+  const W=640,H=300,pad=34, maxN=64;
+  const fns={
+    'O(1)':{c:'#34d399',f:_=>1},
+    'O(log n)':{c:'#38bdf8',f:x=>Math.log2(x+1)},
+    'O(n)':{c:'#818cf8',f:x=>x},
+    'O(n log n)':{c:'#fbbf24',f:x=>x*Math.log2(x+1)},
+    'O(n²)':{c:'#fb7185',f:x=>x*x},
+  };
+  const maxY=maxN*maxN;
+  const sx=x=>pad+(x/maxN)*(W-2*pad);
+  const sy=y=>H-pad-(Math.min(y,maxY)/maxY)*(H-2*pad);
+  let s=`<line x1="${pad}" y1="${H-pad}" x2="${W-pad}" y2="${H-pad}" stroke="#334155"/>`;
+  s+=`<line x1="${pad}" y1="${pad}" x2="${pad}" y2="${H-pad}" stroke="#334155"/>`;
+  s+=`<text x="${W-pad}" y="${H-pad+22}" fill="#64748b" font-size="12" text-anchor="end">資料量 n →</text>`;
+  s+=`<text x="${pad-6}" y="${pad}" fill="#64748b" font-size="12" text-anchor="end">工作量</text>`;
+  for(const [name,{c,f}] of Object.entries(fns)){
+    let d='';
+    for(let x=0;x<=maxN;x+=1){ d+=(x===0?'M':'L')+sx(x).toFixed(1)+' '+sy(f(x)).toFixed(1)+' '; }
+    s+=`<path d="${d}" fill="none" stroke="${c}" stroke-width="2.5" opacity=".9"/>`;
+    s+=`<circle cx="${sx(n)}" cy="${sy(f(n))}" r="4" fill="${c}"/>`;
+  }
+  s+=`<line x1="${sx(n)}" y1="${pad}" x2="${sx(n)}" y2="${H-pad}" stroke="#475569" stroke-dasharray="4"/>`;
+  bigoSvg.innerHTML=s;
+}
+const nRange=document.getElementById('nRange');
+nRange.addEventListener('input',()=>{document.getElementById('nVal').textContent=nRange.value; drawBigO(+nRange.value);});
+drawBigO(16);
+
+/* Recursion */
+let factStep=0;
+function resetFact(){factStep=0; document.getElementById('factView').innerHTML='<span style="color:#94a3b8">點「展開一層」開始</span>';}
+function stepFact(){
+  const lines=['factorial(5)','= 5 × factorial(4)','= 5 × 4 × factorial(3)','= 5 × 4 × 3 × factorial(2)','= 5 × 4 × 3 × 2 × factorial(1)','= 5 × 4 × 3 × 2 × 1 = 120  ✅'];
+  factStep=Math.min(factStep+1,lines.length);
+  document.getElementById('factView').innerHTML=lines.slice(0,factStep).map((l,i)=>
+    `<div style="color:${i===factStep-1?'#fbbf24':'#e2e8f0'}">${l}</div>`).join('');
+}
+resetFact();
+
+/* Sorting */
+let arr=[], animating=false;
+const barsEl=document.getElementById('bars');
+function shuffleBars(){ if(animating)return; arr=Array.from({length:18},()=>Math.floor(Math.random()*95)+8); renderBars(); document.getElementById('cmpCount').textContent=0; document.getElementById('swapCount').textContent=0;}
+function renderBars(states={}){ barsEl.innerHTML=arr.map((v,i)=>`<div class="bar ${states[i]||''}" style="height:${v}%"></div>`).join(''); }
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+let cmp=0,swp=0;
+function bump(t){ if(t==='c'){cmp++;document.getElementById('cmpCount').textContent=cmp;} else {swp++;document.getElementById('swapCount').textContent=swp;} }
+async function startSort(){
+  if(animating)return; animating=true; cmp=0;swp=0; document.getElementById('cmpCount').textContent=0; document.getElementById('swapCount').textContent=0;
+  const algo=document.getElementById('algoSel').value;
+  if(algo==='bubble') await bubble(); else if(algo==='selection') await selection(); else await insertion();
+  renderBars(Object.fromEntries(arr.map((_,i)=>[i,'done']))); animating=false;
+}
+async function bubble(){ for(let i=0;i<arr.length-1;i++){ for(let j=0;j<arr.length-1-i;j++){ bump('c'); renderBars({[j]:'cmp',[j+1]:'cmp'}); await sleep(45); if(arr[j]>arr[j+1]){ [arr[j],arr[j+1]]=[arr[j+1],arr[j]]; bump('s'); renderBars({[j]:'swap',[j+1]:'swap'}); await sleep(45);} } } }
+async function selection(){ for(let i=0;i<arr.length;i++){ let m=i; for(let j=i+1;j<arr.length;j++){ bump('c'); renderBars({[m]:'cmp',[j]:'cmp'}); await sleep(30); if(arr[j]<arr[m]) m=j; } if(m!==i){ [arr[i],arr[m]]=[arr[m],arr[i]]; bump('s'); renderBars({[i]:'swap',[m]:'swap'}); await sleep(60);} } }
+async function insertion(){ for(let i=1;i<arr.length;i++){ let j=i; while(j>0){ bump('c'); renderBars({[j]:'cmp',[j-1]:'cmp'}); await sleep(45); if(arr[j-1]>arr[j]){ [arr[j-1],arr[j]]=[arr[j],arr[j-1]]; bump('s'); renderBars({[j]:'swap',[j-1]:'swap'}); await sleep(45); j--; } else break; } } }
+document.getElementById('algoSel').addEventListener('change',e=>{
+  const map={bubble:['氣泡排序 Bubble Sort','相鄰兩個比一比，比較大的往後「冒泡」，一輪把最大的推到最後。簡單但慢，'],selection:['選擇排序 Selection Sort','每一輪從未排區找出「最小的」，換到前面。交換次數少，但比較次數仍是 '],insertion:['插入排序 Insertion Sort','像整理撲克牌：拿一張往左邊已排好的位置插進去。資料近乎排好時很快，一般 ']};
+  const [t,d]=map[e.target.value];
+  document.getElementById('sortExplain').innerHTML=`<h4>${t}</h4><p>${d}<span class="badge b-time">O(n²)</span>。</p>`;
+});
+shuffleBars();
+
+/* Binary search */
+const bsArr=Array.from({length:20},(_,i)=>i+1);
+const bsCellsEl=document.getElementById('bsCells');
+function renderBS(states={}){
+  bsCellsEl.innerHTML=bsArr.map((v,i)=>{
+    const st=states[i]; let bg='#273449',col='#e2e8f0';
+    if(st==='out'){bg='#1a2332';col='#475569';}
+    if(st==='range'){bg='#3730a3';col='#e0e7ff';}
+    if(st==='mid'){bg='#fbbf24';col='#04283a';}
+    if(st==='found'){bg='#34d399';col='#04283a';}
+    return `<div class="cell" style="background:${bg};color:${col};width:38px;height:38px;font-size:13px">${v}</div>`;
+  }).join('');
+  document.getElementById('bsMsg').textContent='';
+}
+async function startBinary(){
+  const target=+document.getElementById('bsTarget').value;
+  let lo=0,hi=bsArr.length-1,steps=0; const msg=document.getElementById('bsMsg');
+  while(lo<=hi){
+    steps++; const mid=Math.floor((lo+hi)/2);
+    const st={}; bsArr.forEach((_,i)=>{ st[i]=(i<lo||i>hi)?'out':'range'; }); st[mid]='mid';
+    renderBS(st); msg.textContent=`第 ${steps} 步：看中間 arr[${mid}]=${bsArr[mid]}`; await sleep(700);
+    if(bsArr[mid]===target){ st[mid]='found'; renderBS(st); msg.innerHTML=`✅ 找到了！在索引 ${mid}，只花了 <b>${steps}</b> 步（線性搜尋平均要 ${Math.round(bsArr.length/2)} 步）`; return; }
+    if(bsArr[mid]<target){ msg.textContent+=` → 太小，往右半找`; lo=mid+1; } else { msg.textContent+=` → 太大，往左半找`; hi=mid-1; }
+    await sleep(500);
+  }
+  msg.textContent='找不到這個數（範圍 1～20）';
+}
+renderBS();
+
+/* Graph */
+const nodes={A:[70,50],B:[220,40],C:[370,60],D:[130,150],E:[300,160],F:[420,180]};
+const edges=[['A','B'],['A','D'],['B','C'],['B','E'],['C','F'],['D','E'],['E','F']];
+const adj={}; Object.keys(nodes).forEach(k=>adj[k]=[]);
+edges.forEach(([a,b])=>{adj[a].push(b); adj[b].push(a);});
+Object.keys(adj).forEach(k=>adj[k].sort());
+const gsvg=document.getElementById('graphSvg');
+function renderGraph(active={}, order=[]){
+  let s='';
+  edges.forEach(([a,b])=>{ s+=`<line x1="${nodes[a][0]}" y1="${nodes[a][1]}" x2="${nodes[b][0]}" y2="${nodes[b][1]}" stroke="#334155" stroke-width="2"/>`; });
+  for(const [k,[x,y]] of Object.entries(nodes)){
+    const on=active[k]; const fill=on==='cur'?'#fbbf24':on==='done'?'#34d399':'#273449'; const col=on?'#04283a':'#e2e8f0';
+    s+=`<circle cx="${x}" cy="${y}" r="22" fill="${fill}" stroke="#38bdf8" stroke-width="1.5"/>`;
+    s+=`<text x="${x}" y="${y+6}" text-anchor="middle" font-size="16" font-weight="700" fill="${col}">${k}</text>`;
+  }
+  gsvg.innerHTML=s;
+  document.getElementById('graphMsg').textContent=order.length?('走訪順序： '+order.join(' → ')):'';
+}
+async function runTraversal(type){
+  const start='A', visited=new Set(), order=[];
+  if(type==='bfs'){
+    const q=[start]; visited.add(start);
+    while(q.length){ const cur=q.shift(); order.push(cur); renderGraph(Object.fromEntries([...order.map(n=>[n,'done']),[cur,'cur']]),order); await sleep(650); for(const nb of adj[cur]) if(!visited.has(nb)){ visited.add(nb); q.push(nb); } }
+  } else {
+    const stk=[start];
+    while(stk.length){ const cur=stk.pop(); if(visited.has(cur))continue; visited.add(cur); order.push(cur); renderGraph(Object.fromEntries([...order.map(n=>[n,'done']),[cur,'cur']]),order); await sleep(650); for(const nb of [...adj[cur]].reverse()) if(!visited.has(nb)) stk.push(nb); }
+  }
+  renderGraph(Object.fromEntries(order.map(n=>[n,'done'])),order);
+  document.getElementById('graphMsg').textContent=(type==='bfs'?'BFS ':'DFS ')+'走訪順序： '+order.join(' → ');
+}
+renderGraph();
+</script>
+</body>
+</html>
