@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>數值模擬互動教學｜用「一小步一小步」看懂差分與時間積分</title>
+<meta name="description" content="不用怕微積分或差分方程：數值模擬其實就是「重複一條簡單的更新規則」。用可調步長、可播放的落體、冷卻、熱擴散動畫，把歐拉法與有限差分講到直覺好懂。JavaScript 示範。">
+<meta name="keywords" content="數值模擬, 有限差分, 歐拉法, 時間積分, 差分方程, 熱傳導, 牛頓冷卻, numerical simulation, finite difference, Euler method, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/numerical/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="數值模擬互動教學｜用「一小步一小步」看懂差分">
+<meta property="og:description" content="數值模擬其實就是重複一條簡單的更新規則。用可調步長、可播放的動畫理解歐拉法與有限差分。">
+<meta property="og:url" content="https://claytonshih.github.io/numerical/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* 本頁自訂：數學式排版（不依賴外部函式庫，維持離線可用） */
+  .eq{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;margin:14px 0;font-family:"Cambria Math","Latin Modern Math","Times New Roman",Georgia,serif;
+    font-size:21px;color:#e2e8f0;text-align:center;overflow-x:auto;line-height:2.1}
+  .eq .lbl{display:block;font-family:"Noto Sans TC",system-ui,sans-serif;font-size:12px;
+    letter-spacing:2px;color:#64748b;margin-bottom:2px;text-transform:uppercase}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;font-size:.92em}
+  .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
+  .frac>span:last-child{padding:2px .35em 0}
+  .eq sub,.eq sup{font-size:.62em}
+  .eq .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl{color:var(--brand)}      /* 藍：更新項 */
+  .eq .hl2{color:var(--warn)}      /* 黃：步長 */
+  .eq .hl3{color:var(--pink)}      /* 粉：差分項 */
+  /* 對照卡：微分方程 → 差分 → 程式碼 */
+  .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .steps .row{display:grid;grid-template-columns:130px 1fr;align-items:center;border-top:1px solid var(--line)}
+  .steps .row:first-child{border-top:none}
+  .steps .tag{background:var(--panel2);color:#cbd5e1;font-size:13px;font-weight:700;padding:12px 14px;height:100%;display:flex;align-items:center}
+  .steps .body{padding:10px 16px;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:19px;color:#e2e8f0;overflow-x:auto}
+  .steps .body.code{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#86efac}
+  .steps .body sub,.steps .body sup{font-size:.62em}
+  @media(max-width:640px){ .steps .row{grid-template-columns:92px 1fr} .steps .tag{font-size:12px;padding:10px} }
+</style>
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../numerical/index.html" class="nl active">數值模擬</a>
+  <a href="../wave/index.html" class="nl">波動模擬</a>
+  <a href="../airy/index.html" class="nl">水波理論</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🌊 數值模擬</h1>
+  <p class="page-sub">別怕微積分或差分方程——數值模擬其實就是「重複一條簡單的更新規則」。</p>
+
+<section id="idea">
+  <h2>核心觀念：把時間切成一小步一小步</h2>
+  <p>真實世界是<strong>連續</strong>變化的，但電腦沒辦法算「連續」。所以數值模擬的做法是：把時間切成很多很小的步（每步 <code class="inline">Δt</code>），每一步都用一條簡單規則往前推一次，一直重複。</p>
+  <div class="analogy"><b>比喻：</b>就像縮時攝影或一格一格的翻頁動畫。你不是拍下「連續的運動」，而是拍很多張靜態照片，快速播放看起來就連續了。步（照片）越密，看起來越滑順、越準。</div>
+  <div class="card">
+    <h4>整份教學只要記住這一條式子</h4>
+    <p style="font-size:19px;color:#fff;text-align:center;margin:10px 0">
+      下一刻的值 ＝ 現在的值 ＋ <span style="color:var(--brand)">變化率</span> × <span style="color:var(--warn)">一小步 Δt</span>
+    </p>
+    <p style="color:var(--muted);margin:0">這就是最基本的<strong>歐拉法（Euler method）</strong>，也是「有限差分」最直覺的樣子。</p>
+  </div>
+  <div class="tip"><b>「差分」到底是什麼？</b>就是把嚇人的微分 <code class="inline">dy/dx</code>（瞬間變化）換成<strong>相鄰兩點的差</strong> <code class="inline">Δy/Δx</code>。一換，微分方程就變成只有加減乘除的算式，電腦一步步算就好。</div>
+
+  <h3>寫成式子長這樣</h3>
+  <p>「變化率」在數學上就是導數（微分）。差分法把它近似成兩個相鄰點的差：</p>
+  <div class="eq">
+    <span class="lbl">微分 → 差分近似</span>
+    <span class="frac"><span>dy</span><span>dt</span></span>
+    <span class="op">≈</span>
+    <span class="frac"><span>y(t+<span class="hl2">Δt</span>) <span class="op">−</span> y(t)</span><span><span class="hl2">Δt</span></span></span>
+  </div>
+  <p>把上式左右兩邊乘開、移項，就得到那條「更新規則」的通式（<b>歐拉法</b>，其中 y<sub>n</sub> 表示第 n 步的值，<span style="font-family:Georgia,serif">f</span> 是變化率）：</p>
+  <div class="eq">
+    <span class="lbl">歐拉法通式</span>
+    y<sub>n+1</sub> <span class="op">=</span> y<sub>n</sub> <span class="op">+</span> <span class="hl"><span style="font-family:Georgia,serif">f</span>(t<sub>n</sub>, y<sub>n</sub>)</span> <span class="op">·</span> <span class="hl2">Δt</span>
+  </div>
+  <div class="tip">後面每個例子，都只是把不同的「變化率 <span style="font-family:Georgia,serif">f</span>」代進這條通式而已。看的時候可以對照：<b>微分方程</b>（連續世界）↔ <b>更新式</b>（電腦一步步算）↔ <b>程式碼</b>。</div>
+</section>
+
+<section id="falling">
+  <h2>互動一：讓球掉下來（歐拉法）</h2>
+  <p>自由落體的物理就兩條微分方程：速度的變化率是重力 <span style="font-family:Georgia,serif">g</span>、位置的變化率是速度 <span style="font-family:Georgia,serif">v</span>。把它們套進歐拉通式，就變成每一步的更新規則：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">微分方程</div><div class="body"><span class="frac"><span>dv</span><span>dt</span></span> = <span class="hl">g</span> <span class="op">，</span> <span class="frac"><span>dy</span><span>dt</span></span> = <span class="hl">v</span></div></div>
+    <div class="row"><div class="tag">更新式（歐拉）</div><div class="body">v<sub>n+1</sub> = v<sub>n</sub> + <span class="hl">g</span>·<span class="hl2">Δt</span> <span class="op">，</span> y<sub>n+1</sub> = y<sub>n</sub> + <span class="hl">v<sub>n</sub></span>·<span class="hl2">Δt</span></div></div>
+    <div class="row"><div class="tag">精確解（對照用）</div><div class="body">y(t) = <span class="frac"><span>1</span><span>2</span></span> g t<sup>2</sup></div></div>
+    <div class="row"><div class="tag">程式碼</div><div class="body code">v = v + g*dt;  y = y + v*dt;</div></div>
+  </div>
+  <p>下面互動裡的灰球就是用精確解 <span style="font-family:Georgia,serif">y = ½gt²</span> 畫的，藍球則是用上面的更新式一步步算——比一比就看得出誤差。</p>
+  <pre><span class="com">// 每一步（Δt）重複：</span>
+速度 = 速度 + 重力 * <span class="num">Δt</span>;   <span class="com">// 速度被重力加速</span>
+位置 = 位置 + 速度 * <span class="num">Δt</span>;   <span class="com">// 位置被速度推動</span></pre>
+  <div class="card">
+    <h4>互動：藍球用你選的步長，灰球是「真實答案」</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">步長 Δt = <span id="dtVal" class="stat">0.20</span> 秒</label>
+      <input id="dtRange" type="range" min="5" max="60" value="20" style="flex:1;min-width:160px">
+      <button onclick="dropBall()">▶ 放開球</button>
+      <button class="ghost" onclick="resetBall()">重置</button>
+    </div>
+    <svg id="ballSvg" viewBox="0 0 480 280" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="ballMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+    <div class="legend">
+      <span><span class="dot" style="background:#38bdf8"></span>歐拉法（你的步長）</span>
+      <span><span class="dot" style="background:#94a3b8"></span>真實位置（精確解）</span>
+    </div>
+  </div>
+  <div class="tip"><b>你會發現：</b>步長越小，藍球越貼近灰球（越準），但要重複算越多次；步長太大，藍球會「衝過頭」——這就是數值誤差。這是所有模擬的核心取捨：<strong>精準度 vs 計算量</strong>。</div>
+</section>
+
+<section id="cooling">
+  <h2>互動二：咖啡慢慢變涼（牛頓冷卻）</h2>
+  <p>一杯熱咖啡放著會慢慢降到室溫，而且<strong>離室溫越遠、降得越快</strong>。「降溫速度正比於溫差」寫成微分方程就是牛頓冷卻定律，再套歐拉通式變成更新式：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">微分方程</div><div class="body"><span class="frac"><span>dT</span><span>dt</span></span> = <span class="op">−</span>k<span class="op">(</span>T <span class="op">−</span> T<sub>室</sub><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">更新式（歐拉）</div><div class="body">T<sub>n+1</sub> = T<sub>n</sub> <span class="op">−</span> k<span class="op">(</span>T<sub>n</sub> <span class="op">−</span> T<sub>室</sub><span class="op">)</span>·<span class="hl2">Δt</span></div></div>
+    <div class="row"><div class="tag">精確解</div><div class="body">T(t) = T<sub>室</sub> + <span class="op">(</span>T<sub>0</sub> <span class="op">−</span> T<sub>室</sub><span class="op">)</span> e<sup>−k t</sup></div></div>
+    <div class="row"><div class="tag">程式碼</div><div class="body code">T = T + (-k)*(T - 25)*dt;   // 室溫 25</div></div>
+  </div>
+  <p>精確解裡的 <span style="font-family:Georgia,serif">e<sup>−kt</sup></span> 就是「指數衰減」——這也是為什麼曲線會先陡後平、慢慢貼近室溫。</p>
+  <div class="card">
+    <h4>互動：從 90 度開始冷卻</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">冷卻速度 k = <span id="kVal" class="stat">0.30</span></label>
+      <input id="kRange" type="range" min="5" max="80" value="30" style="flex:1;min-width:160px">
+      <button onclick="runCooling()">▶ 開始冷卻</button>
+      <button class="ghost" onclick="resetCooling()">重置</button>
+    </div>
+    <svg id="coolSvg" viewBox="0 0 480 240" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="coolMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+  <div class="tip">曲線一開始陡（溫差大、降得快），越接近室溫越平緩——這種「指數趨近」在自然界到處都是（充放電、藥物代謝、人口趨於上限…）。你只用一條加法規則就模擬出來了。</div>
+</section>
+
+<section id="heat">
+  <h2>互動三：熱在鐵棒上擴散（空間的差分）</h2>
+  <p>前兩個例子只跟「時間」有關。這個例子多了「空間」：一根鐵棒，中間一段很燙，熱會慢慢往兩邊散開、最後變均勻。把鐵棒切成一格一格，每一格的更新規則是——<strong>往「左右鄰居的平均」靠近一點</strong>：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">偏微分方程</div><div class="body"><span class="frac"><span>∂T</span><span>∂t</span></span> = α <span class="frac"><span>∂<sup>2</sup>T</span><span>∂x<sup>2</sup></span></span> <span style="color:#64748b;font-size:14px">（熱傳導方程）</span></div></div>
+    <div class="row"><div class="tag">空間二階差分</div><div class="body"><span class="frac"><span>∂<sup>2</sup>T</span><span>∂x<sup>2</sup></span></span> ≈ <span class="frac"><span><span class="hl3">T<sub>i−1</sub> <span class="op">−</span> 2T<sub>i</sub> <span class="op">+</span> T<sub>i+1</sub></span></span><span>Δx<sup>2</sup></span></span></div></div>
+    <div class="row"><div class="tag">更新式</div><div class="body">T<sub>i</sub><sup>n+1</sup> = T<sub>i</sub><sup>n</sup> + α<span class="op">(</span><span class="hl3">T<sub>i−1</sub><sup>n</sup> <span class="op">−</span> 2T<sub>i</sub><sup>n</sup> + T<sub>i+1</sub><sup>n</sup></span><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">程式碼</div><div class="body code">next[i] = T[i] + a*(T[i-1] + T[i+1] - 2*T[i]);</div></div>
+  </div>
+  <p>那條粉紅色的 <span style="font-family:Georgia,serif">T<sub>i−1</sub> − 2T<sub>i</sub> + T<sub>i+1</sub></span> 就是「二階差分」，數學上對應 <span style="font-family:Georgia,serif">∂²T/∂x²</span>（拉普拉斯項）。它的意思很直白：<b>比左右鄰居的平均低就升溫、高就降溫</b>，所以熱會慢慢抹平。</p>
+  <pre><span class="com">// 每一步，每一格 i：</span>
+新溫度[i] = 溫度[i] + α * (溫度[i-1] + 溫度[i+1] - 2*溫度[i]);</pre>
+  <div class="card">
+    <h4>互動：中間很燙，看熱怎麼散開變均勻</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">擴散速度 α = <span id="aVal" class="stat">0.20</span></label>
+      <input id="aRange" type="range" min="2" max="45" value="20" style="flex:1;min-width:160px">
+      <button onclick="toggleHeat()" id="heatBtn">▶ 播放</button>
+      <button class="ghost" onclick="resetHeat()">重置（中間加熱）</button>
+    </div>
+    <div id="heatRow" style="display:flex;gap:2px;height:70px;padding:8px;background:var(--code-bg);border-radius:10px"></div>
+    <p id="heatMsg" style="color:var(--muted);font-size:14px;min-height:20px">紅＝燙，藍＝冷。按播放看熱怎麼擴散。</p>
+    <div class="legend">
+      <span><span class="dot" style="background:#fb7185"></span>高溫</span>
+      <span><span class="dot" style="background:#818cf8"></span>中溫</span>
+      <span><span class="dot" style="background:#38bdf8"></span>低溫</span>
+    </div>
+  </div>
+  <div class="tip">那條 <code class="inline">左 + 右 - 2×自己</code> 就是二階差分（數學上叫拉普拉斯項），也就是「熱傳導方程」的差分版。看起來嚇人的偏微分方程，落到程式裡就是這一行加減乘除。⚠️ 把 α 拉太大，數值會「爆掉」亂跳——這叫<strong>數值不穩定</strong>，提醒你步長不能貪心。</div>
+</section>
+
+<section id="heat2d">
+  <h2>互動四：熱在平面上擴散（二維）</h2>
+  <p>把上一個例子從「一根鐵棒」升級成「一整片鐵板」。差別只有一個：一維時每一格只有<strong>左、右兩個</strong>鄰居；二維時每一格有<strong>上、下、左、右四個</strong>鄰居。規則還是同一句話——<strong>往鄰居的平均靠近一點</strong>。</p>
+  <div class="analogy"><b>比喻：</b>一維像排隊的人，只跟前後兩位借體溫；二維像坐在方格座位上，跟前後左右四個人一起取平均。鄰居多了兩個，熱散得更快、也更均勻。</div>
+  <div class="steps">
+    <div class="row"><div class="tag">偏微分方程</div><div class="body"><span class="frac"><span>∂T</span><span>∂t</span></span> = α<span class="op">(</span><span class="frac"><span>∂<sup>2</sup>T</span><span>∂x<sup>2</sup></span></span> <span class="op">+</span> <span class="frac"><span>∂<sup>2</sup>T</span><span>∂y<sup>2</sup></span></span><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">空間差分（五點）</div><div class="body"><span class="hl3">T<sub>上</sub> + T<sub>下</sub> + T<sub>左</sub> + T<sub>右</sub> <span class="op">−</span> 4T<sub>中</sub></span></div></div>
+    <div class="row"><div class="tag">更新式</div><div class="body">T<sub>i,j</sub><sup>n+1</sup> = T<sub>i,j</sub><sup>n</sup> + α<span class="op">(</span><span class="hl3">T<sub>i−1,j</sub> + T<sub>i+1,j</sub> + T<sub>i,j−1</sub> + T<sub>i,j+1</sub> <span class="op">−</span> 4T<sub>i,j</sub></span><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">程式碼</div><div class="body code">next[i][j] = T[i][j] + a*(T[i-1][j]+T[i+1][j]+T[i][j-1]+T[i][j+1] - 4*T[i][j]);</div></div>
+  </div>
+  <p>看出規律了嗎？一維是「左 ＋ 右 <b>− 2×</b>自己」，二維就是「上 ＋ 下 ＋ 左 ＋ 右 <b>− 4×</b>自己」。<strong>多一個維度，就多兩個鄰居，中間的係數也從 2 變成 4。</strong>這個 <span style="font-family:Georgia,serif">T<sub>上</sub>+T<sub>下</sub>+T<sub>左</sub>+T<sub>右</sub>−4T<sub>中</sub></span> 叫做「五點差分」，是二維拉普拉斯項 <span style="font-family:Georgia,serif">∇²T</span> 的離散版。這裡的 <span style="font-family:Georgia,serif">i</span> 是「第幾列」、<span style="font-family:Georgia,serif">j</span> 是「第幾行」，<span style="font-family:Georgia,serif">n</span> 一樣是「第幾步（時間）」。</p>
+  <div class="card">
+    <h4>互動：中間發熱的鐵板，看熱怎麼往四面八方散開</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">擴散速度 α = <span id="a2Val" class="stat">0.15</span></label>
+      <input id="a2Range" type="range" min="2" max="32" value="15" style="flex:1;min-width:160px">
+      <button onclick="toggle2d()" id="heat2dBtn">▶ 播放</button>
+      <button class="ghost" onclick="reset2d()">重置</button>
+    </div>
+    <canvas id="heat2dCanvas" style="width:100%;max-width:340px;aspect-ratio:1;display:block;margin:0 auto;background:var(--code-bg);border-radius:10px;image-rendering:pixelated;cursor:crosshair;touch-action:none"></canvas>
+    <p id="heat2dMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+    <div class="legend">
+      <span><span class="dot" style="background:#fb7185"></span>高溫</span>
+      <span><span class="dot" style="background:#818cf8"></span>中溫</span>
+      <span><span class="dot" style="background:#38bdf8"></span>低溫</span>
+    </div>
+  </div>
+  <div class="tip"><b>試試看：</b>直接用滑鼠在方格上<strong>點一點、拖一拖</strong>就能加熱——看多個熱源怎麼各自擴散、再融合成一片。⚠️ 二維的穩定界限比一維更嚴（α 大約要 ≤ 0.25）：把 α 拉到底，你會看到畫面開始閃爍亂跳，那就是<strong>數值不穩定</strong>。</div>
+</section>
+
+<section id="takeaway">
+  <h2>小結：模擬其實不難</h2>
+  <p>回頭看，這幾個模擬都長一樣：</p>
+  <ol>
+    <li><strong>選一條更新規則</strong>（下一刻＝現在＋變化×Δt）。</li>
+    <li><strong>用迴圈重複它</strong>很多次。</li>
+    <li><strong>把每一步畫出來</strong>，就成了動畫。</li>
+  </ol>
+  <p>建議的學法：先別急著看嚴謹推導。<strong>先動手跑、看動畫、拉拉步長</strong>，建立「一小步一小步往前推」的直覺；等你對它有感覺了，再回頭看課本上的微分方程，會發現它們只是把你剛剛做的事寫成緊湊的符號而已。</p>
+  <div class="tip"><b>下一步（進階）：</b>步長太大會不準或不穩定，這時可以用更小的步長，或更聰明的方法（如 <span class="badge b-time">RK4</span> 龍格–庫塔）在同樣步長下更準。但那些都是「同一套心法」的升級版——核心永遠是那條更新規則。</div>
+  <p style="margin-top:22px">想複習「迴圈重複」與效率的關係？看 <a href="../algorithms/index.html#bigo">時間複雜度 Big-O</a>。</p>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#idea">核心觀念：時間切小步</a>
+    <a href="#falling">互動一：落體（歐拉法）</a>
+    <a href="#cooling">互動二：咖啡冷卻</a>
+    <a href="#heat">互動三：熱擴散（一維）</a>
+    <a href="#heat2d">互動四：熱擴散（二維）</a>
+    <a href="#takeaway">小結：模擬其實不難</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* ===== 互動一：落體（歐拉法 vs 精確解）===== */
+const ballSvg=document.getElementById('ballSvg');
+const dtRange=document.getElementById('dtRange');
+let ballTimer=null;
+const G=9.8, X_E=150, X_S=330, TOP=30, GROUND=250, PXPM=8; // 8px = 1公尺, 落 ~27.5m
+function ballY(dist){ return Math.min(GROUND, TOP + dist*PXPM); }
+function drawBall(t, eulerDist, exactDist){
+  let s='';
+  s+=`<line x1="60" y1="${GROUND}" x2="420" y2="${GROUND}" stroke="#334155" stroke-width="2"/>`;
+  s+=`<text x="60" y="${GROUND+20}" fill="#64748b" font-size="12">地面</text>`;
+  s+=`<text x="${X_E}" y="22" fill="#38bdf8" font-size="12" text-anchor="middle">歐拉法</text>`;
+  s+=`<text x="${X_S}" y="22" fill="#94a3b8" font-size="12" text-anchor="middle">真實</text>`;
+  s+=`<circle cx="${X_S}" cy="${ballY(exactDist)}" r="14" fill="#94a3b8" opacity=".85"/>`;
+  s+=`<circle cx="${X_E}" cy="${ballY(eulerDist)}" r="14" fill="#38bdf8"/>`;
+  s+=`<text x="240" y="${GROUND-6}" fill="#e2e8f0" font-size="13" text-anchor="middle">t = ${t.toFixed(2)} 秒</text>`;
+  ballSvg.innerHTML=s;
+}
+function resetBall(){ if(ballTimer){clearInterval(ballTimer);ballTimer=null;} drawBall(0,0,0); document.getElementById('ballMsg').textContent=''; }
+function dropBall(){
+  if(ballTimer) return;
+  const dt=(+dtRange.value)/100;
+  let t=0, v=0, y=0;
+  const msg=document.getElementById('ballMsg');
+  ballTimer=setInterval(()=>{
+    v = v + G*dt;          // 歐拉法：速度更新
+    y = y + v*dt;          // 歐拉法：位置更新
+    t += dt;
+    const exact = 0.5*G*t*t; // 精確解
+    drawBall(t, y, exact);
+    const err = Math.abs(y-exact);
+    msg.innerHTML = `第 ${Math.round(t/dt)} 步｜歐拉 ${y.toFixed(1)} m，真實 ${exact.toFixed(1)} m，<span style="color:${err>2?'#fb7185':'#34d399'}">誤差 ${err.toFixed(1)} m</span>`;
+    if(y*PXPM+TOP>=GROUND){ clearInterval(ballTimer); ballTimer=null; msg.innerHTML+=' — 落地！步長越大，誤差越明顯'; }
+  }, 120);
+}
+dtRange.addEventListener('input',()=>{ document.getElementById('dtVal').textContent=((+dtRange.value)/100).toFixed(2); });
+resetBall();
+
+/* ===== 互動二：牛頓冷卻 ===== */
+const coolSvg=document.getElementById('coolSvg');
+const kRange=document.getElementById('kRange');
+let coolTimer=null;
+const ROOM=25, T0=90, CW=480, CH=240, CPAD=36;
+function tempY(T){ return CH-CPAD - ((T-ROOM)/(T0-ROOM))*(CH-2*CPAD); }
+function timeX(step,maxStep){ return CPAD + (step/maxStep)*(CW-2*CPAD); }
+function baseCool(){
+  let s=`<line x1="${CPAD}" y1="${tempY(ROOM)}" x2="${CW-CPAD}" y2="${tempY(ROOM)}" stroke="#475569" stroke-dasharray="4"/>`;
+  s+=`<text x="${CW-CPAD}" y="${tempY(ROOM)-6}" fill="#64748b" font-size="11" text-anchor="end">室溫 25°C</text>`;
+  s+=`<line x1="${CPAD}" y1="${CPAD}" x2="${CPAD}" y2="${CH-CPAD}" stroke="#334155"/>`;
+  s+=`<line x1="${CPAD}" y1="${CH-CPAD}" x2="${CW-CPAD}" y2="${CH-CPAD}" stroke="#334155"/>`;
+  s+=`<text x="${CPAD-6}" y="${tempY(90)+4}" fill="#64748b" font-size="11" text-anchor="end">90°</text>`;
+  s+=`<text x="${CW-CPAD}" y="${CH-CPAD+18}" fill="#64748b" font-size="11" text-anchor="end">時間 →</text>`;
+  return s;
+}
+function resetCooling(){ if(coolTimer){clearInterval(coolTimer);coolTimer=null;} coolSvg.innerHTML=baseCool(); document.getElementById('coolMsg').textContent=''; }
+function runCooling(){
+  if(coolTimer) return;
+  const k=(+kRange.value)/100, dt=0.2, maxStep=120;
+  let T=T0, step=0, path='';
+  const msg=document.getElementById('coolMsg');
+  coolTimer=setInterval(()=>{
+    const x=timeX(step,maxStep), y=tempY(T);
+    path += (step===0?'M':'L')+x.toFixed(1)+' '+y.toFixed(1)+' ';
+    T = T + (-k)*(T-ROOM)*dt;   // 牛頓冷卻更新
+    step++;
+    let s=baseCool();
+    s+=`<path d="${path}" fill="none" stroke="#fbbf24" stroke-width="2.5"/>`;
+    s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#fb7185"/>`;
+    coolSvg.innerHTML=s;
+    msg.textContent=`第 ${step} 步：溫度 ${T.toFixed(1)}°C`;
+    if(step>=maxStep || T<ROOM+0.5){ clearInterval(coolTimer); coolTimer=null; msg.textContent+=' — 已接近室溫，冷卻趨緩'; }
+  }, 60);
+}
+kRange.addEventListener('input',()=>{ document.getElementById('kVal').textContent=((+kRange.value)/100).toFixed(2); });
+resetCooling();
+
+/* ===== 互動三：1D 熱擴散 ===== */
+const N=41;
+let heat=[], heatTimer=null;
+const heatRow=document.getElementById('heatRow');
+const aRange=document.getElementById('aRange');
+function heatColor(T){ // T in 0..1
+  if(T>0.5){ const p=(T-0.5)*2; return `rgb(${Math.round(129+126*p)},${Math.round(140-59*p)},${Math.round(248-136*p)})`; }
+  const p=T*2; return `rgb(${Math.round(56+73*p)},${Math.round(189-49*p)},${Math.round(248)})`;
+}
+function renderHeat(){
+  heatRow.innerHTML=heat.map(T=>`<div style="flex:1;border-radius:3px;background:${heatColor(T)}"></div>`).join('');
+}
+function resetHeat(){
+  if(heatTimer){clearInterval(heatTimer);heatTimer=null; document.getElementById('heatBtn').textContent='▶ 播放';}
+  heat=new Array(N).fill(0);
+  for(let i=Math.floor(N/2)-3;i<=Math.floor(N/2)+3;i++) heat[i]=1;
+  renderHeat();
+  document.getElementById('heatMsg').textContent='紅＝燙，藍＝冷。按播放看熱怎麼擴散。';
+}
+function heatStep(){
+  const a=(+aRange.value)/100;
+  const next=heat.slice();
+  for(let i=1;i<N-1;i++){
+    next[i]=heat[i]+a*(heat[i-1]+heat[i+1]-2*heat[i]); // 二階差分
+  }
+  heat=next;
+  renderHeat();
+}
+function toggleHeat(){
+  const btn=document.getElementById('heatBtn');
+  if(heatTimer){ clearInterval(heatTimer); heatTimer=null; btn.textContent='▶ 播放'; return; }
+  btn.textContent='⏸ 暫停';
+  let steps=0;
+  heatTimer=setInterval(()=>{
+    heatStep(); steps++;
+    document.getElementById('heatMsg').textContent=`第 ${steps} 步：熱正在往兩邊擴散、變均勻`;
+    if(steps>=400){ clearInterval(heatTimer); heatTimer=null; btn.textContent='▶ 播放'; }
+  }, 40);
+}
+aRange.addEventListener('input',()=>{ document.getElementById('aVal').textContent=((+aRange.value)/100).toFixed(2); });
+resetHeat();
+
+/* ===== 互動四：2D 熱擴散（五點差分）===== */
+const M=81;
+let grid=new Array(M*M).fill(0), grid2Timer=null;
+const cv=document.getElementById('heat2dCanvas');
+const ctx=cv.getContext('2d');
+cv.width=M; cv.height=M;
+const img2d=ctx.createImageData(M,M);
+const a2Range=document.getElementById('a2Range');
+function idx(i,j){ return i*M+j; }
+function heatRGB(T){ // 對應 heatColor：0=藍、0.5=紫、1=紅
+  T=Math.max(0,Math.min(1,T));
+  if(T>0.5){ const p=(T-0.5)*2; return [Math.round(129+126*p),Math.round(140-59*p),Math.round(248-136*p)]; }
+  const p=T*2; return [Math.round(56+73*p),Math.round(189-49*p),248];
+}
+function render2d(){
+  const d=img2d.data;
+  for(let k=0;k<M*M;k++){ const c=heatRGB(grid[k]); const p=k*4; d[p]=c[0]; d[p+1]=c[1]; d[p+2]=c[2]; d[p+3]=255; }
+  ctx.putImageData(img2d,0,0);
+}
+function reset2d(){
+  if(grid2Timer){ clearInterval(grid2Timer); grid2Timer=null; document.getElementById('heat2dBtn').textContent='▶ 播放'; }
+  grid=new Array(M*M).fill(0);
+  const c=Math.floor(M/2);
+  for(let i=c-5;i<=c+5;i++) for(let j=c-5;j<=c+5;j++) grid[idx(i,j)]=1; // 中間方形熱源
+  render2d();
+  document.getElementById('heat2dMsg').textContent='中間是熱源。按播放，或用滑鼠在圖上點一點加熱。';
+}
+function step2d(){
+  const a=(+a2Range.value)/100;
+  const next=grid.slice();
+  for(let i=1;i<M-1;i++) for(let j=1;j<M-1;j++){
+    const k=idx(i,j);
+    next[k]=grid[k]+a*(grid[idx(i-1,j)]+grid[idx(i+1,j)]+grid[idx(i,j-1)]+grid[idx(i,j+1)]-4*grid[k]); // 五點差分
+  }
+  grid=next; render2d();
+}
+function toggle2d(){
+  const btn=document.getElementById('heat2dBtn');
+  if(grid2Timer){ clearInterval(grid2Timer); grid2Timer=null; btn.textContent='▶ 播放'; return; }
+  btn.textContent='⏸ 暫停';
+  let steps=0;
+  grid2Timer=setInterval(()=>{
+    step2d(); steps++;
+    document.getElementById('heat2dMsg').textContent=`第 ${steps} 步：熱正往上下左右四個方向擴散`;
+    if(steps>=1200){ clearInterval(grid2Timer); grid2Timer=null; btn.textContent='▶ 播放'; }
+  }, 45);
+}
+function paintHeat(i,j){
+  for(let di=-2;di<=2;di++) for(let dj=-2;dj<=2;dj++){
+    const ii=i+di, jj=j+dj;
+    if(ii>=0&&ii<M&&jj>=0&&jj<M) grid[idx(ii,jj)]=1;
+  }
+  render2d();
+}
+let painting=false;
+function cellFromEvent(e){
+  const r=cv.getBoundingClientRect();
+  const j=Math.floor((e.clientX-r.left)/r.width*M);
+  const i=Math.floor((e.clientY-r.top)/r.height*M);
+  if(i>=0&&i<M&&j>=0&&j<M) paintHeat(i,j);
+}
+cv.addEventListener('pointerdown',e=>{ painting=true; cv.setPointerCapture(e.pointerId); cellFromEvent(e); });
+cv.addEventListener('pointermove',e=>{ if(painting) cellFromEvent(e); });
+cv.addEventListener('pointerup',()=>{ painting=false; });
+a2Range.addEventListener('input',()=>{ document.getElementById('a2Val').textContent=((+a2Range.value)/100).toFixed(2); });
+reset2d();
+</script>
+</body>
+</html>
