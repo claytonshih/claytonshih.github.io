@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>線性水波理論（Airy 波）完整推導｜從流體力學到頻散關係</title>
+<meta name="description" content="波浪力學完整推導：從連續方程、Euler 動量方程、無旋與 Bernoulli，一步步推到自由液面邊界條件與頻散關係 ω²=gk·tanh(kh)。每條式子都附物理意義，並用可調水深的水粒子橢圓軌道動畫輔助。">
+<meta name="keywords" content="線性水波理論, Airy 波, 微小振幅波, 波浪力學, 速度勢, Laplace, Bernoulli, Euler 方程, 無旋, 頻散關係, dispersion relation, 水粒子軌道, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/airy/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="線性水波理論（Airy 波）完整推導">
+<meta property="og:description" content="從流體三大律到頻散關係 ω²=gk·tanh(kh)，每條式子附物理意義，含水粒子橢圓軌道互動。">
+<meta property="og:url" content="https://claytonshih.github.io/airy/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* 本頁自訂：數學式排版（不依賴外部函式庫，維持離線可用） */
+  .eq{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;margin:14px 0;font-family:"Cambria Math","Latin Modern Math","Times New Roman",Georgia,serif;
+    font-size:21px;color:#e2e8f0;text-align:center;overflow-x:auto;line-height:2.1}
+  .eq .lbl{display:block;font-family:"Noto Sans TC",system-ui,sans-serif;font-size:12px;
+    letter-spacing:2px;color:#64748b;margin-bottom:2px;text-transform:uppercase}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;font-size:.92em}
+  .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
+  .frac>span:last-child{padding:2px .35em 0}
+  .eq sub,.eq sup{font-size:.62em}
+  .eq .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl{color:var(--brand)}
+  .eq .hl2{color:var(--warn)}
+  .eq .hl3{color:var(--pink)}
+  .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .steps .row{display:grid;grid-template-columns:150px 1fr;align-items:center;border-top:1px solid var(--line)}
+  .steps .row:first-child{border-top:none}
+  .steps .tag{background:var(--panel2);color:#cbd5e1;font-size:13px;font-weight:700;padding:12px 14px;height:100%;display:flex;align-items:center}
+  .steps .body{padding:10px 16px;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:19px;color:#e2e8f0;overflow-x:auto}
+  .steps .body.code{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#86efac}
+  .steps .body sub,.steps .body sup{font-size:.62em}
+  @media(max-width:640px){ .steps .row{grid-template-columns:104px 1fr} .steps .tag{font-size:12px;padding:10px} }
+</style>
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../numerical/index.html" class="nl">數值模擬</a>
+  <a href="../wave/index.html" class="nl">波動模擬</a>
+  <a href="../airy/index.html" class="nl active">水波理論</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🌊 線性水波理論（Airy 波）</h1>
+  <p class="page-sub">波浪力學怎麼從流體力學一步步推出水波方程——每條式子都附物理意義。</p>
+  <p>把波當成抽象的高度很方便，但<strong>真實的水面波</strong>其實是從流體力學推出來的。這裡用「微小振幅」假設（波高遠小於波長與水深）走一遍經典推導。你會看到一件很反直覺的事：<strong>水體內部的方程根本不會震盪，整個波動的時間動態全藏在水面那條會動的邊界上。</strong></p>
+
+  <h3 id="stage">舞台：座標與符號</h3>
+  <svg id="svgSetup" viewBox="0 0 520 300" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+  <p style="color:var(--muted);font-size:13px;text-align:center;margin-top:6px">η：水面高度　·　H=2a：波高　·　L：波長　·　h：水深　·　φ：速度勢</p>
+  <div class="analogy"><b>三個假設：</b>水<strong>不可壓縮</strong>、<strong>無黏</strong>（理想流體）、運動<strong>無旋</strong>；而且波很小（這是能「線性化」的關鍵）。無旋這條讓我們能定義一個「速度勢」<span style="font-family:Georgia,serif">φ</span>，把三個速度分量濃縮成一個純量：<span style="font-family:Georgia,serif">u = ∂φ/∂x</span>、<span style="font-family:Georgia,serif">w = ∂φ/∂z</span>。</div>
+
+  <h3 id="laws">第 0 步：流體要遵守的三條律</h3>
+  <p>一切從流體力學的三條基本律出發，它們對水裡<strong>每一個微小水團</strong>都成立（<span style="font-family:Georgia,serif">u</span>、<span style="font-family:Georgia,serif">w</span> 是水平、垂直速度，<span style="font-family:Georgia,serif">p</span> 壓力，<span style="font-family:Georgia,serif">ρ</span> 密度）：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">① 質量守恆<br>（連續方程）</div><div class="body">∇·<b style="font-style:italic">u</b> = <span class="frac"><span>∂u</span><span>∂x</span></span> <span class="op">+</span> <span class="frac"><span>∂w</span><span>∂z</span></span> = 0</div></div>
+    <div class="row"><div class="tag">② 動量守恆<br>（Euler 方程）</div><div class="body" style="font-size:17px">ρ<span class="op">(</span><span class="frac"><span>∂<b style="font-style:italic">u</b></span><span>∂t</span></span> <span class="op">+</span> (<b style="font-style:italic">u</b>·∇)<b style="font-style:italic">u</b><span class="op">)</span> = <span class="op">−</span>∇p <span class="op">+</span> ρ<b style="font-style:italic">g</b></div></div>
+    <div class="row"><div class="tag">③ 無旋</div><div class="body">∇ × <b style="font-style:italic">u</b> = 0</div></div>
+  </div>
+  <p><b>①</b> 是「水擠不扁」：流進一個小盒子的水一定等量流出。<b>②</b> 就是<strong>牛頓第二定律 F=ma 用在水團上</strong>——左邊是加速度（<span style="font-family:Georgia,serif">∂u/∂t</span> 是原地變快慢、<span style="font-family:Georgia,serif">(u·∇)u</span> 是被水流「帶」到流速不同的地方），右邊的力只有<strong>壓力差 <span style="font-family:Georgia,serif">−∇p</span></strong> 和<strong>重力 <span style="font-family:Georgia,serif">ρg</span></strong>（理想流體，忽略黏滯）。<b>③</b> 說水團<strong>不自轉</strong>——波從靜止的水面被擾動起來，無黏的水生不出渦度（Kelvin 環流定理），所以整片流場保持無旋。</p>
+  <div class="analogy"><b>「旋度」到底在量什麼？</b>旋度 <span style="font-family:Georgia,serif">∇×u</span> 量的是「一小團水會不會<strong>自己打轉</strong>」。想像丟一片小葉子在水裡：如果它只隨波起伏、朝向不變，就是<strong>無旋</strong>（旋度=0）；如果它像被攪動一樣自轉，就有旋度。理想（無黏）流體沒有摩擦力去「扭」水團，加上波是從靜止起動的，所以旋度從頭到尾都是 0。<br><br><b>無旋送我們一個關鍵數學禮物：</b>「任何梯度的旋度恆為零」（<span style="font-family:Georgia,serif">∇×∇φ ≡ 0</span>）是恆等式；反過來，只要一個場<strong>無旋</strong>，就一定找得到某個純量 <span style="font-family:Georgia,serif">φ</span> 使 <span style="font-family:Georgia,serif">u=∇φ</span>。所以「無旋」＝「存在速度勢 φ」——這就是我們能把三個速度分量塌縮成一個 φ 來解的根本原因。</div>
+
+  <h3 id="potential">第 1 步：兩個假設，各給一條方程</h3>
+  <p><b>無旋（③）</b>有個漂亮的結果：任何無旋場都能寫成一個純量的梯度。於是定義<strong>速度勢</strong> <span style="font-family:Georgia,serif">φ</span>，把三個速度分量濃縮成一個函數（這也是後面能「只解一個 φ」的關鍵）：</p>
+  <div class="eq"><span class="lbl">速度勢（來自無旋 ③）</span> <b style="font-style:italic">u</b> = ∇φ　⇒　u = <span class="frac"><span>∂φ</span><span>∂x</span></span> <span class="op">,</span> w = <span class="frac"><span>∂φ</span><span>∂z</span></span></div>
+  <p>再把它代進<b>質量守恆（①）</b>，馬上得到水體內部的控制方程：</p>
+  <div class="eq"><span class="lbl">控制方程（來自質量守恆 ①）</span> ∇²φ = <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂x<sup>2</sup></span></span> <span class="op">+</span> <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂z<sup>2</sup></span></span> = 0</div>
+  <div class="tip"><b>物理意義：</b>Laplace 方程說 φ 在水體內部「處處平滑、沒有源也沒有匯」。它<strong>不含時間、不會自己震盪</strong>——水波的節奏完全由水面決定，內部只是被動地把水面的擾動傳遞下去。這也是水波跟弦振動最不一樣的地方。</p>
+
+  <h3 id="bernoulli">第 2 步：把動量方程積分成 Bernoulli（壓力從這裡進來）</h3>
+  <p>動量方程（②）看起來兇，但無旋讓它每一項都能寫成「<strong>某個東西的梯度</strong>」，於是能一口氣對空間積分。三個改寫：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">對流項</div><div class="body">(<b style="font-style:italic">u</b>·∇)<b style="font-style:italic">u</b> = ∇<span class="op">(</span>½|<b style="font-style:italic">u</b>|<sup>2</sup><span class="op">)</span> <span class="op">−</span> <b style="font-style:italic">u</b>×(∇×<b style="font-style:italic">u</b>)　<span style="color:#64748b;font-size:14px">無旋 ⇒ 後項 = 0</span></div></div>
+    <div class="row"><div class="tag">局部加速</div><div class="body"><span class="frac"><span>∂<b style="font-style:italic">u</b></span><span>∂t</span></span> = <span class="frac"><span>∂</span><span>∂t</span></span>(∇φ) = ∇<span class="op">(</span><span class="frac"><span>∂φ</span><span>∂t</span></span><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">壓力＋重力</div><div class="body"><span class="op">−</span><span class="frac"><span>1</span><span>ρ</span></span>∇p <span class="op">+</span> <b style="font-style:italic">g</b> = <span class="op">−</span>∇<span class="op">(</span><span class="frac"><span>p</span><span>ρ</span></span> <span class="op">+</span> gz<span class="op">)</span>　<span style="color:#64748b;font-size:14px">ρ 為常數、重力位能 gz</span></div></div>
+  </div>
+  <p>三項都是梯度，Euler 方程整條收成 <span style="font-family:Georgia,serif">∇[ ∂φ/∂t + ½|∇φ|² + p/ρ + gz ] = 0</span>。一個量的梯度<strong>處處為零</strong>，代表它在整個空間是同一個值（最多隨時間變），把這常數記作 <span style="font-family:Georgia,serif">C(t)</span>，就得到非定常 Bernoulli 方程：</p>
+  <div class="eq"><span class="lbl">非定常 Bernoulli（動量方程的積分）</span> <span class="frac"><span>∂φ</span><span>∂t</span></span> <span class="op">+</span> <span class="frac"><span>1</span><span>2</span></span>|∇φ|<sup>2</sup> <span class="op">+</span> <span class="frac"><span>p</span><span>ρ</span></span> <span class="op">+</span> gz = C(t)</div>
+  <p>逐項的物理意義：<span style="font-family:Georgia,serif">∂φ/∂t</span> 是<strong>流場隨時間變化</strong>帶來的加速度貢獻、<span style="font-family:Georgia,serif">½|∇φ|²</span> 是<strong>動能</strong>（每單位質量）、<span style="font-family:Georgia,serif">p/ρ</span> 是<strong>壓力</strong>、<span style="font-family:Georgia,serif">gz</span> 是<strong>重力位能</strong>。整條就是<strong>沿流場的能量帳本</strong>——也是待會把「水面壓力＝大氣壓」翻譯成 φ 條件的橋樑。</p>
+
+  <h3 id="bc">第 3 步：三個邊界條件（各自的物理）</h3>
+  <div class="steps">
+    <div class="row"><div class="tag">海底 z=−h<br>（不透水）</div><div class="body"><span class="frac"><span>∂φ</span><span>∂z</span></span> = 0　<span style="color:#64748b;font-size:14px">底部垂直速度 w=0，水不鑽進海床</span></div></div>
+    <div class="row"><div class="tag">液面·運動學<br>（幾何）</div><div class="body">w = <span class="frac"><span>∂η</span><span>∂t</span></span> <span class="op">+</span> u<span class="frac"><span>∂η</span><span>∂x</span></span>　<span style="color:#64748b;font-size:14px">在 z=η 上</span></div></div>
+    <div class="row"><div class="tag">液面·動力學<br>（受力）</div><div class="body"><span class="frac"><span>∂φ</span><span>∂t</span></span> <span class="op">+</span> <span class="frac"><span>1</span><span>2</span></span>|∇φ|<sup>2</sup> <span class="op">+</span> gη = 0　<span style="color:#64748b;font-size:14px">在 z=η 上（Bernoulli 取 p=0）</span></div></div>
+  </div>
+  <p><b>運動學條件</b>是純幾何：水面上的水團<strong>永遠是水面</strong>，不會突然潛進水裡或飛出去，所以它的垂直速度必須剛好等於水面本身的升降速度。<b>動力學條件</b>是受力：水面正上方是空氣，<strong>水面壓力必須等於大氣壓</strong>（設為 0），把 p=0 代進 Bernoulli 就得到上式。</p>
+  <div class="tip"><b>線性化（微小振幅假設）：</b>波很小 ⇒ 速度很小 ⇒ 帶「平方」的項（<span style="font-family:Georgia,serif">½|∇φ|²</span>、<span style="font-family:Georgia,serif">u·∂η/∂x</span>）都是「小×小」可丟掉；而且水面幾乎貼著 z=0，就把邊界條件從 <span style="font-family:Georgia,serif">z=η</span> 移到 <span style="font-family:Georgia,serif">z=0</span> 上算。兩條液面條件於是簡化成 <span style="font-family:Georgia,serif">∂φ/∂z = ∂η/∂t</span>（運動學）與 <span style="font-family:Georgia,serif">∂φ/∂t + gη = 0</span>（動力學）。</div>
+
+  <h3 id="combine">第 4 步：合併成一條液面條件</h3>
+  <p>兩條線性化的液面條件都含 η。把動力學式 <span style="font-family:Georgia,serif">∂φ/∂t + gη = 0</span> 對時間微分，再用運動學式 <span style="font-family:Georgia,serif">∂η/∂t = ∂φ/∂z</span> 把 η 消掉，就剩一條只含 φ 的式子：</p>
+  <div class="eq"><span class="lbl">合併後的自由液面條件（z=0）</span> <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂t<sup>2</sup></span></span> <span class="op">+</span> g <span class="frac"><span>∂φ</span><span>∂z</span></span> = 0</div>
+  <div class="tip"><b>物理意義：</b>這其實就是水面的「<strong>F = ma</strong>」——<span style="font-family:Georgia,serif">∂²φ/∂t²</span> 對應水面上下振盪的<strong>慣性（加速度）</strong>，<span style="font-family:Georgia,serif">g·∂φ/∂z</span> 對應<strong>重力回復力</strong>。重力想把凸起的水面拉平、慣性又讓它衝過頭，一來一回就振盪成波。</p>
+
+  <h3 id="vertical">第 5 步：代入行進波，解出「垂直結構」</h3>
+  <p>猜一個往 +x 前進的波：<span style="font-family:Georgia,serif">η = a·cos(kx − ωt)</span>、<span style="font-family:Georgia,serif">φ = Z(z)·sin(kx − ωt)</span>（<span style="font-family:Georgia,serif">k = 2π/L</span> 波數、<span style="font-family:Georgia,serif">ω = 2π/T</span> 角頻率）。代進 Laplace 得 <span style="font-family:Georgia,serif">Z″ − k²Z = 0</span>，通解是 <span style="font-family:Georgia,serif">cosh</span>、<span style="font-family:Georgia,serif">sinh</span> 的組合；再用<strong>海底條件</strong> <span style="font-family:Georgia,serif">Z′(−h)=0</span> 砍掉一半，得到：</p>
+  <div class="eq"><span class="lbl">速度勢</span> φ = <span class="frac"><span>a g</span><span>ω</span></span> <span class="op">·</span> <span class="frac"><span>cosh k(z+h)</span><span>cosh kh</span></span> <span class="op">·</span> sin(kx − ωt)</div>
+  <p><b>物理意義：</b><span style="font-family:Georgia,serif">cosh k(z+h)</span> 在水面 (z=0) 最大、往海底 (z=−h) 遞減，就是「<strong>擾動越深越弱</strong>」的數學形狀；它在 z=−h 的斜率為 0，正好滿足「水不鑽進海床」。下面的動畫會直接讓你看到這個遞減。</p>
+
+  <h3 id="dispersion">第 6 步：頻散關係（整段的結晶）</h3>
+  <p>把 φ 記成 <span style="font-family:Georgia,serif">φ = (ag/ω)·F(z)·sin(kx−ωt)</span>，垂直因子 <span style="font-family:Georgia,serif">F(z) = cosh k(z+h) / cosh kh</span>，在水面 <span style="font-family:Georgia,serif">F(0)=1</span>、斜率 <span style="font-family:Georgia,serif">F′(0)=k·tanh(kh)</span>。代進<strong>第 4 步的液面條件</strong> <span style="font-family:Georgia,serif">∂²φ/∂t² + g·∂φ/∂z = 0</span>（在 z=0）逐項算：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">時間二階</div><div class="body"><span class="frac"><span>∂<sup>2</sup>φ</span><span>∂t<sup>2</sup></span></span> = <span class="op">−</span>ω<sup>2</sup>φ　→ 在 z=0：<span class="op">−</span>ω<sup>2</sup><span class="op">·</span><span class="frac"><span>ag</span><span>ω</span></span><span class="op">·</span>sin</div></div>
+    <div class="row"><div class="tag">垂直一階 ×g</div><div class="body">g<span class="frac"><span>∂φ</span><span>∂z</span></span> = g<span class="op">·</span><span class="frac"><span>ag</span><span>ω</span></span><span class="op">·</span>F′(0)<span class="op">·</span>sin = g<span class="op">·</span><span class="frac"><span>ag</span><span>ω</span></span><span class="op">·</span>k·tanh(kh)<span class="op">·</span>sin</div></div>
+    <div class="row"><div class="tag">相加 = 0</div><div class="body"><span class="op">(</span><span class="op">−</span>ω<sup>2</sup> <span class="op">+</span> g k·tanh(kh)<span class="op">)</span><span class="op">·</span><span class="frac"><span>ag</span><span>ω</span></span><span class="op">·</span>sin(kx−ωt) = 0</div></div>
+  </div>
+  <p>括號外的 <span style="font-family:Georgia,serif">(ag/ω)·sin(kx−ωt)</span> 不可能處處為零（否則就沒有波了），所以只能是<strong>括號＝0</strong>，直接得到波浪力學最核心的一條式子：</p>
+  <div class="eq" style="font-size:25px"><span class="lbl">頻散關係 Dispersion Relation</span> <span class="hl3">ω<sup>2</sup></span> = <span class="hl">g k</span> <span class="op">·</span> <span class="hl2">tanh(kh)</span></div>
+  <p><b>物理意義：</b>左邊 <span style="font-family:Georgia,serif">ω²</span> 是<strong>振盪的快慢（慣性）</strong>；右邊 <span style="font-family:Georgia,serif">gk</span> 是<strong>重力回復力</strong>（g 提供回復、k 越大代表水面越彎、回復越急）；<span style="font-family:Georgia,serif">tanh(kh)</span> 是<strong>「有多少水在跟著動」的修正</strong>——深水這層很厚（tanh→1），淺水被海底卡住、能動的水變少（tanh→kh）。它把「波震多快（ω）」跟「波多長（k）」綁在一起，相速度 <span style="font-family:Georgia,serif">c = ω/k = √[(g/k)·tanh(kh)]</span>，於是有兩個經典極限：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">深水 h/L &gt; ½</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">tanh → 1，<span style="font-family:Georgia,serif">ω² = gk</span>，<span style="font-family:Georgia,serif">c = √(g/k) = gT/2π</span>。<strong>波長越長跑越快 → 有頻散</strong>。</div></div>
+    <div class="row"><div class="tag">淺水 h/L &lt; 1/20</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">tanh(kh) ≈ kh，<span style="font-family:Georgia,serif">c = √(gh)</span>。<strong>只跟水深有關 → 無頻散</strong>，正是<a href="../wave/index.html">波動模擬</a>頁那條 <span style="font-family:Georgia,serif">∂²η/∂t² = gh·∂²η/∂x²</span>。</div></div>
+  </div>
+
+  <h3 id="orbits">第 7 步：看得見的結果——水粒子怎麼動</h3>
+  <p>把 φ 微分得速度、再積分回位移，會發現水粒子其實在<strong>繞橢圓</strong>：水平半徑 <span style="font-family:Georgia,serif">∝ cosh k(z+h)</span>、垂直半徑 <span style="font-family:Georgia,serif">∝ sinh k(z+h)</span>。拉動「水深」滑桿，看橢圓怎麼從深水的<strong>圓</strong>一路壓扁成淺水的<strong>扁橢圓</strong>：</p>
+  <div class="card">
+    <h4>互動：波浪下的水粒子軌道</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">相對水深 h/L = <span id="hlVal" class="stat">0.30</span>（<span id="regime">中間水深</span>）</label>
+      <input id="hlRange" type="range" min="8" max="55" value="30" style="flex:1;min-width:160px">
+    </div>
+    <svg id="svgOrbit" viewBox="0 0 520 300" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="orbitMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+  <div class="analogy"><b>直覺：</b>深水裡，往下不到一個波長水就幾乎沒感覺了（潛水艇不怕表面浪）；淺水裡，連貼著海底的水都在前後<strong>來回滑動</strong>——這就是為什麼浪進到淺灘會「摸到底」、變陡、最後捲起來碎掉。</div>
+
+  <svg id="svgCompare" viewBox="0 0 520 210" width="100%" style="background:var(--code-bg);border-radius:10px;margin-top:10px"></svg>
+  <p style="color:var(--muted);font-size:13px;text-align:center;margin-top:6px">左：深水——圓形軌道隨深度指數縮小、很快消失　｜　右：淺水——扁橢圓，越靠海底越只剩水平滑動</p>
+
+  <div class="tip" style="margin-top:22px">想看波怎麼用電腦一步步算（有限差分、矩陣、CFL）？回到 <a href="../wave/index.html">波動模擬</a> 頁。</div>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#stage">舞台：座標與符號</a>
+    <a href="#laws">第 0 步：流體三條律</a>
+    <a href="#potential">第 1 步：速度勢＋Laplace</a>
+    <a href="#bernoulli">第 2 步：Bernoulli</a>
+    <a href="#bc">第 3 步：三個邊界條件</a>
+    <a href="#combine">第 4 步：合併液面條件</a>
+    <a href="#vertical">第 5 步：垂直結構</a>
+    <a href="#dispersion">第 6 步：頻散關係</a>
+    <a href="#orbits">第 7 步：水粒子軌道</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* 圖 1：座標與符號示意（靜態）*/
+(function(){
+  const W=520,swl=95,bed=250,ox=55,rx=W-18,A=16,Lp=150,k=2*Math.PI/Lp;
+  let top='';
+  for(let x=ox;x<=rx;x+=3){ const y=swl-A*Math.sin(k*(x-ox)); top+=(x===ox?'M':'L')+x+' '+y.toFixed(1)+' '; }
+  let s='<defs><marker id="arrH" markerWidth="8" markerHeight="8" refX="5.5" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 z" fill="#cbd5e1"/></marker></defs>';
+  s+=`<path d="${top} L ${rx} ${bed} L ${ox} ${bed} Z" fill="rgba(56,189,248,.10)"/>`;
+  s+=`<path d="${top}" fill="none" stroke="#38bdf8" stroke-width="2.5"/>`;
+  s+=`<line x1="${ox}" y1="${swl}" x2="${rx}" y2="${swl}" stroke="#64748b" stroke-dasharray="5"/>`;
+  s+=`<text x="${rx}" y="${swl-7}" fill="#94a3b8" font-size="12" text-anchor="end">靜水面 z = 0</text>`;
+  s+=`<line x1="${ox}" y1="${bed}" x2="${rx}" y2="${bed}" stroke="#94a3b8" stroke-width="2"/>`;
+  for(let x=ox;x<rx;x+=13){ s+=`<line x1="${x}" y1="${bed}" x2="${x+9}" y2="${bed+9}" stroke="#475569"/>`; }
+  s+=`<text x="${ox+4}" y="${bed+22}" fill="#94a3b8" font-size="12">海底 z = −h　（∂φ/∂z = 0，不透水）</text>`;
+  s+=`<line x1="${ox}" y1="${bed+4}" x2="${ox}" y2="50" stroke="#cbd5e1" stroke-width="1.4" marker-end="url(#arrH)"/>`;
+  s+=`<text x="${ox-6}" y="56" fill="#cbd5e1" font-size="13" text-anchor="end">z</text>`;
+  s+=`<line x1="${ox}" y1="${swl}" x2="${rx+2}" y2="${swl}" stroke="#cbd5e1" stroke-width="1.1" marker-end="url(#arrH)"/>`;
+  s+=`<text x="${rx-2}" y="${swl+16}" fill="#cbd5e1" font-size="13" text-anchor="end">x</text>`;
+  const c1=ox+Lp/4, c2=c1+Lp, cy=swl-A-12;
+  s+=`<line x1="${c1}" y1="${cy}" x2="${c2}" y2="${cy}" stroke="#fbbf24" stroke-width="1.3" marker-start="url(#arrH)" marker-end="url(#arrH)"/>`;
+  s+=`<text x="${(c1+c2)/2}" y="${cy-5}" fill="#fbbf24" font-size="13" text-anchor="middle">L（波長）</text>`;
+  const hx=c2+Lp/4;
+  s+=`<line x1="${hx}" y1="${swl-A}" x2="${hx}" y2="${swl+A}" stroke="#fb7185" stroke-width="1.3" marker-start="url(#arrH)" marker-end="url(#arrH)"/>`;
+  s+=`<text x="${hx+6}" y="${swl+4}" fill="#fb7185" font-size="13">H = 2a</text>`;
+  const dxp=ox+24;
+  s+=`<line x1="${dxp}" y1="${swl}" x2="${dxp}" y2="${bed}" stroke="#a5b4fc" stroke-width="1.3" marker-start="url(#arrH)" marker-end="url(#arrH)"/>`;
+  s+=`<text x="${dxp+6}" y="${(swl+bed)/2}" fill="#a5b4fc" font-size="13">h</text>`;
+  s+=`<text x="${(ox+rx)/2}" y="${(swl+bed)/2+26}" fill="#7dd3fc" font-size="16" text-anchor="middle" opacity=".9">∇²φ = 0</text>`;
+  s+=`<text x="${(ox+rx)/2}" y="${(swl+bed)/2+46}" fill="#64748b" font-size="12" text-anchor="middle">無旋、不可壓縮的理想流體</text>`;
+  document.getElementById('svgSetup').innerHTML=s;
+})();
+
+/* 圖 2：水粒子橢圓軌道（互動動畫）*/
+const svgOrbit=document.getElementById('svgOrbit');
+const hlRange=document.getElementById('hlRange');
+let orbitT=0;
+const O={swl:80,bed:255,ox:30,rx:495,Lp:150,AMP:20};
+function orbitFrame(){
+  const hOverL=(+hlRange.value)/100;
+  const kh=2*Math.PI*hOverL, k=2*Math.PI/O.Lp;
+  const D=O.AMP*Math.tanh(kh), sh=Math.sinh(kh);
+  let top='';
+  for(let x=O.ox;x<=O.rx;x+=3){ const ph=k*(x-O.ox)-orbitT; const y=O.swl-D*Math.cos(ph); top+=(x===O.ox?'M':'L')+x+' '+y.toFixed(1)+' '; }
+  let s=`<path d="${top} L ${O.rx} ${O.bed} L ${O.ox} ${O.bed} Z" fill="rgba(56,189,248,.08)"/>`;
+  s+=`<path d="${top}" fill="none" stroke="#38bdf8" stroke-width="2"/>`;
+  s+=`<line x1="${O.ox}" y1="${O.swl}" x2="${O.rx}" y2="${O.swl}" stroke="#334155" stroke-dasharray="4"/>`;
+  s+=`<line x1="${O.ox}" y1="${O.bed}" x2="${O.rx}" y2="${O.bed}" stroke="#94a3b8" stroke-width="2"/>`;
+  for(let x=O.ox;x<O.rx;x+=13){ s+=`<line x1="${x}" y1="${O.bed}" x2="${x+9}" y2="${O.bed+8}" stroke="#475569"/>`; }
+  const cols=13, rows=6;
+  for(let r=0;r<rows;r++){
+    const f=r/(rows-1), my=O.swl+f*(O.bed-O.swl), arg=kh*(1-f);
+    const Ah=Math.cosh(arg)/sh, Av=Math.sinh(arg)/sh, rxp=D*Ah, ryp=D*Av;
+    for(let c=0;c<cols;c++){
+      const mx=O.ox+22+c*((O.rx-O.ox-44)/(cols-1)), ph=k*(mx-O.ox)-orbitT;
+      s+=`<ellipse cx="${mx}" cy="${my}" rx="${rxp.toFixed(1)}" ry="${ryp.toFixed(1)}" fill="none" stroke="#334155" stroke-width="0.8"/>`;
+      const px=mx-rxp*Math.sin(ph), py=my+ryp*Math.cos(ph);
+      s+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="2.6" fill="#7dd3fc"/>`;
+    }
+  }
+  svgOrbit.innerHTML=s;
+}
+function updateRegime(){
+  const hOverL=(+hlRange.value)/100, kh=2*Math.PI*hOverL, th=Math.tanh(kh);
+  document.getElementById('hlVal').textContent=hOverL.toFixed(2);
+  const label=hOverL>0.5?'深水':(hOverL<0.05?'淺水':'中間水深');
+  document.getElementById('regime').textContent=label;
+  const desc=hOverL>0.5?'軌道≈圓形、隨深度指數縮小':(hOverL<0.05?'扁橢圓、海底只剩水平滑動':'橢圓，越深越扁');
+  document.getElementById('orbitMsg').innerHTML=`kh = ${kh.toFixed(2)}，tanh(kh) = ${th.toFixed(2)} → ${label}：${desc}。`;
+}
+hlRange.addEventListener('input',updateRegime);
+updateRegime();
+setInterval(()=>{ orbitT+=0.12; orbitFrame(); }, 40);
+
+/* 圖 3：深水 vs 淺水軌道對照（靜態）*/
+(function(){
+  const top=48, gap=28;
+  let s=`<line x1="260" y1="12" x2="260" y2="198" stroke="#334155"/>`;
+  s+=`<text x="130" y="30" fill="#7dd3fc" font-size="14" text-anchor="middle">深水　h/L &gt; ½</text>`;
+  s+=`<text x="390" y="30" fill="#7dd3fc" font-size="14" text-anchor="middle">淺水　h/L &lt; 1/20</text>`;
+  for(let r=0;r<5;r++){
+    const y=top+r*gap, rad=17*Math.exp(-r*0.6);
+    s+=`<ellipse cx="130" cy="${y}" rx="${rad.toFixed(1)}" ry="${rad.toFixed(1)}" fill="none" stroke="#38bdf8" stroke-width="1.5"/>`;
+    s+=`<circle cx="130" cy="${(y-rad).toFixed(1)}" r="2.6" fill="#7dd3fc"/>`;
+    const ryy=Math.max(0.6,9*(1-r/4));
+    s+=`<ellipse cx="390" cy="${y}" rx="21" ry="${ryy.toFixed(1)}" fill="none" stroke="#38bdf8" stroke-width="1.5"/>`;
+    s+=`<circle cx="369" cy="${y}" r="2.6" fill="#7dd3fc"/>`;
+  }
+  s+=`<line x1="20" y1="190" x2="240" y2="190" stroke="#94a3b8" stroke-width="2"/>`;
+  s+=`<line x1="280" y1="190" x2="500" y2="190" stroke="#94a3b8" stroke-width="2"/>`;
+  s+=`<text x="130" y="186" fill="#64748b" font-size="11" text-anchor="middle">海底</text>`;
+  s+=`<text x="390" y="186" fill="#64748b" font-size="11" text-anchor="middle">海底</text>`;
+  document.getElementById('svgCompare').innerHTML=s;
+})();
+</script>
+</body>
+</html>
