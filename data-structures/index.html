@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資料結構互動學習｜陣列、鏈結串列、堆疊佇列、雜湊表、BST</title>
+<meta name="description" content="用圖解學資料結構：陣列 Array、鏈結串列 Linked List、堆疊 Stack 與佇列 Queue（可互動）、雜湊表 Hash Table、二元搜尋樹 BST。理解不同結構的操作複雜度取捨。">
+<meta name="keywords" content="資料結構, 陣列, 鏈結串列, 堆疊, 佇列, 雜湊表, 二元搜尋樹, BST, Hash Table, Linked List, Stack, Queue">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/data-structures/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="資料結構互動學習｜陣列、鏈結串列、堆疊佇列、雜湊表、BST">
+<meta property="og:description" content="用圖解學資料結構，理解不同結構的操作複雜度取捨。">
+<meta property="og:url" content="https://claytonshih.github.io/data-structures/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl active">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🗃️ 資料結構</h1>
+  <p class="page-sub">「資料怎麼擺」——擺對地方，找東西、放東西才會快。</p>
+
+<section id="array">
+  <h2>陣列 Array</h2>
+  <p>最基本的結構：一排連續的格子，每格有一個<strong>索引（index）</strong>，從 0 開始。知道索引就能瞬間拿到值。</p>
+  <div class="idxrow"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span></div>
+  <div class="cells">
+    <div class="cell">12</div><div class="cell">7</div><div class="cell">9</div><div class="cell">4</div><div class="cell">15</div>
+  </div>
+  <div class="analogy"><b>比喻：</b>像一排編號的信箱。要拿 3 號信箱的信，直接走過去開＝<code class="inline">O(1)</code>；但若要在中間「插一格」，後面全部信箱都得往後搬＝<code class="inline">O(n)</code>。</div>
+  <table>
+    <tr><th>操作</th><th>複雜度</th><th>為什麼</th></tr>
+    <tr><td>用索引讀取 <code class="inline">arr[i]</code></td><td><span class="badge b-time">O(1)</span></td><td>直接算出位置</td></tr>
+    <tr><td>尾端加入 <code class="inline">push</code></td><td><span class="badge b-time">O(1)</span></td><td>放最後即可</td></tr>
+    <tr><td>中間插入／刪除</td><td><span class="badge b-time">O(n)</span></td><td>後面元素要整批位移</td></tr>
+    <tr><td>搜尋某個值</td><td><span class="badge b-time">O(n)</span></td><td>可能要看完整排</td></tr>
+  </table>
+  <pre><span class="kw">const</span> arr = [<span class="num">12</span>, <span class="num">7</span>, <span class="num">9</span>, <span class="num">4</span>, <span class="num">15</span>];
+arr[<span class="num">2</span>];          <span class="com">// 9  ← 直接取，O(1)</span>
+arr.<span class="fn">push</span>(<span class="num">20</span>);   <span class="com">// 尾端加入，O(1)</span>
+arr.<span class="fn">splice</span>(<span class="num">1</span>, <span class="num">0</span>, <span class="num">99</span>); <span class="com">// 在索引 1 插入 99，O(n)</span></pre>
+</section>
+
+<section id="linkedlist">
+  <h2>鏈結串列 Linked List</h2>
+  <p>每個節點（node）存<strong>資料</strong>＋一個<strong>指向下一個節點的箭頭</strong>。節點在記憶體不必連續，靠箭頭串起來。</p>
+  <svg viewBox="0 0 620 90" width="100%" style="background:var(--code-bg);border-radius:10px">
+    <g font-size="15" fill="#e2e8f0" text-anchor="middle">
+      <rect x="20" y="25" width="90" height="40" rx="8" fill="#273449" stroke="#334155"/>
+      <text x="50" y="50">12</text><line x1="80" y1="25" x2="80" y2="65" stroke="#334155"/><text x="95" y="50" fill="#38bdf8">→</text>
+      <rect x="150" y="25" width="90" height="40" rx="8" fill="#273449" stroke="#334155"/>
+      <text x="180" y="50">7</text><line x1="210" y1="25" x2="210" y2="65" stroke="#334155"/><text x="225" y="50" fill="#38bdf8">→</text>
+      <rect x="280" y="25" width="90" height="40" rx="8" fill="#273449" stroke="#334155"/>
+      <text x="310" y="50">9</text><line x1="340" y1="25" x2="340" y2="65" stroke="#334155"/><text x="355" y="50" fill="#38bdf8">→</text>
+      <rect x="410" y="25" width="90" height="40" rx="8" fill="#273449" stroke="#334155"/>
+      <text x="440" y="50">4</text><line x1="470" y1="25" x2="470" y2="65" stroke="#334155"/><text x="490" y="50" fill="#64748b">∅</text>
+      <text x="65" y="18" font-size="11" fill="#94a3b8">head</text>
+    </g>
+  </svg>
+  <div class="analogy"><b>比喻：</b>像尋寶遊戲的紙條——每張紙條寫著寶物＋「下一張在哪」。想找第 4 張，只能從第一張開始一路跟著箭頭走。</div>
+  <div class="grid2">
+    <div class="card"><h4>✅ 優點</h4><p>頭尾插入／刪除只要改箭頭，<span class="badge b-time">O(1)</span>，不必像陣列整批搬移。</p></div>
+    <div class="card"><h4>⚠️ 缺點</h4><p>不能用索引直接跳，要找第 i 個得從頭走，<span class="badge b-time">O(n)</span>；且多花記憶體存箭頭。</p></div>
+  </div>
+  <pre><span class="kw">class</span> <span class="fn">Node</span> {
+  <span class="fn">constructor</span>(value) {
+    <span class="kw">this</span>.value = value;
+    <span class="kw">this</span>.next = <span class="kw">null</span>;  <span class="com">// 指向下一個節點</span>
+  }
+}
+<span class="kw">const</span> a = <span class="kw">new</span> <span class="fn">Node</span>(<span class="num">12</span>);
+a.next = <span class="kw">new</span> <span class="fn">Node</span>(<span class="num">7</span>); <span class="com">// 12 → 7</span></pre>
+</section>
+
+<section id="stackqueue">
+  <h2>堆疊 Stack 與 佇列 Queue</h2>
+  <p>兩者都是「限制進出方式」的串列。差別只在——<strong>從哪一端拿東西</strong>。</p>
+  <div class="grid2">
+    <div class="card">
+      <h4>堆疊 Stack · 後進先出 (LIFO)</h4>
+      <div class="analogy" style="margin-top:0"><b>比喻：</b>一疊盤子。最後放上去的最先被拿走。</div>
+      <div class="controls">
+        <button onclick="stackPush()">push 放入</button>
+        <button class="ghost" onclick="stackPop()">pop 取出</button>
+      </div>
+      <div id="stackView" style="display:flex;flex-direction:column-reverse;gap:5px;min-height:160px;justify-content:flex-start"></div>
+      <p id="stackMsg" style="color:var(--muted);font-size:13px;min-height:18px"></p>
+    </div>
+    <div class="card">
+      <h4>佇列 Queue · 先進先出 (FIFO)</h4>
+      <div class="analogy" style="margin-top:0"><b>比喻：</b>排隊買飲料。先排先買，從隊伍前面出。</div>
+      <div class="controls">
+        <button onclick="queueEnq()">enqueue 入列</button>
+        <button class="ghost" onclick="queueDeq()">dequeue 出列</button>
+      </div>
+      <div id="queueView" style="display:flex;gap:5px;min-height:160px;align-items:flex-start;flex-wrap:wrap"></div>
+      <p id="queueMsg" style="color:var(--muted);font-size:13px;min-height:18px"></p>
+    </div>
+  </div>
+  <div class="tip">用途舉例：堆疊 ➜ 瀏覽器「上一頁」、程式的呼叫堆疊、括號比對；佇列 ➜ 印表工作排程、<a href="../algorithms/index.html#graph">BFS 走訪</a>。</div>
+</section>
+
+<section id="hash">
+  <h2>雜湊表 Hash Table</h2>
+  <p>又叫「字典」或「map」。用一個<strong>鍵（key）</strong>直接對應到<strong>值（value）</strong>，查找幾乎是 <span class="badge b-time">O(1)</span>。</p>
+  <div class="analogy"><b>比喻：</b>像通訊錄——你不必一頁頁翻，直接用「名字」就查到電話。背後靠一個「雜湊函式」把 key 算成一個位置，直接跳過去拿。</div>
+  <pre><span class="kw">const</span> stock = <span class="kw">new</span> <span class="fn">Map</span>();
+stock.<span class="fn">set</span>(<span class="str">"apple"</span>, <span class="num">5</span>);   <span class="com">// 放入 key→value</span>
+stock.<span class="fn">get</span>(<span class="str">"apple"</span>);      <span class="com">// 5  ← 幾乎瞬間，O(1)</span>
+stock.<span class="fn">has</span>(<span class="str">"banana"</span>);    <span class="com">// false</span></pre>
+  <div class="tip">雜湊表超適合「查存在與否」「計次數」「去重複」。缺點：資料沒有順序，且極少數情況會「碰撞」需要處理。</div>
+</section>
+
+<section id="tree">
+  <h2>二元樹與二元搜尋樹 BST</h2>
+  <p>樹是「一對多」的分層結構：一個根（root），每個節點往下長出子節點。<strong>二元樹</strong>每個節點最多兩個小孩（左、右）。</p>
+  <svg viewBox="0 0 520 240" width="100%" style="background:var(--code-bg);border-radius:10px">
+    <g stroke="#334155" stroke-width="2">
+      <line x1="260" y1="45" x2="150" y2="115"/><line x1="260" y1="45" x2="370" y2="115"/>
+      <line x1="150" y1="115" x2="90" y2="185"/><line x1="150" y1="115" x2="210" y2="185"/>
+      <line x1="370" y1="115" x2="430" y2="185"/>
+    </g>
+    <g font-size="16" text-anchor="middle" fill="#04283a" font-weight="700">
+      <circle cx="260" cy="45" r="24" fill="#38bdf8"/><text x="260" y="51">8</text>
+      <circle cx="150" cy="115" r="24" fill="#818cf8"/><text x="150" y="121">3</text>
+      <circle cx="370" cy="115" r="24" fill="#818cf8"/><text x="370" y="121">10</text>
+      <circle cx="90" cy="185" r="24" fill="#34d399"/><text x="90" y="191">1</text>
+      <circle cx="210" cy="185" r="24" fill="#34d399"/><text x="210" y="191">6</text>
+      <circle cx="430" cy="185" r="24" fill="#34d399"/><text x="430" y="191">14</text>
+    </g>
+    <text x="300" y="42" font-size="12" fill="#94a3b8">← 根 root</text>
+  </svg>
+  <div class="analogy"><b>比喻：</b>家譜或公司組織圖——一個人（節點）底下有下屬，層層往下分。</div>
+  <p><strong>二元搜尋樹 (BST)</strong> 多一條規則：<strong>左邊子樹全部比自己小、右邊全部比自己大</strong>。因此找一個數時，每一步就能決定往左或往右，跟二分搜尋一樣快 <span class="badge b-time">O(log n)</span>（樹平衡時）。</p>
+  <div class="tip">上圖就是一棵 BST：以根 8 為例，左邊 3、1、6 都 &lt; 8，右邊 10、14 都 &gt; 8。要找 6？8→往左到 3→往右到 6，只三步。想看跟它一樣快的搜尋法，讀 <a href="../algorithms/index.html#binarysearch">二分搜尋</a>。</div>
+  <pre><span class="kw">function</span> <span class="fn">searchBST</span>(node, target){
+  <span class="kw">if</span> (!node) <span class="kw">return</span> <span class="kw">false</span>;
+  <span class="kw">if</span> (node.value === target) <span class="kw">return</span> <span class="kw">true</span>;
+  <span class="kw">return</span> target &lt; node.value
+    ? <span class="fn">searchBST</span>(node.left, target)   <span class="com">// 比較小 → 往左</span>
+    : <span class="fn">searchBST</span>(node.right, target); <span class="com">// 比較大 → 往右</span>
+}</pre>
+</section>
+
+<section>
+  <h2>📋 複雜度速查表</h2>
+  <table>
+    <tr><th>結構 / 操作</th><th>存取</th><th>搜尋</th><th>插入</th><th>刪除</th></tr>
+    <tr><td>陣列 Array</td><td>O(1)</td><td>O(n)</td><td>O(n)</td><td>O(n)</td></tr>
+    <tr><td>鏈結串列 Linked List</td><td>O(n)</td><td>O(n)</td><td>O(1)*</td><td>O(1)*</td></tr>
+    <tr><td>堆疊 / 佇列</td><td>O(n)</td><td>O(n)</td><td>O(1)</td><td>O(1)</td></tr>
+    <tr><td>雜湊表 Hash Table</td><td>—</td><td>O(1)</td><td>O(1)</td><td>O(1)</td></tr>
+    <tr><td>二元搜尋樹 BST（平衡）</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td><td>O(log n)</td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted)">* 已握有該節點位置時。雜湊表為平均情況，最壞可能退化。</p>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#array">陣列 Array</a>
+    <a href="#linkedlist">鏈結串列 Linked List</a>
+    <a href="#stackqueue">堆疊與佇列</a>
+    <a href="#hash">雜湊表 Hash Table</a>
+    <a href="#tree">二元樹與 BST</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* Stack */
+let stack=[], scount=0;
+function renderStack(){
+  document.getElementById('stackView').innerHTML=stack.map((v,i)=>
+    `<div style="background:${i===stack.length-1?'#38bdf8':'#273449'};color:${i===stack.length-1?'#04283a':'#e2e8f0'};padding:8px;border-radius:8px;text-align:center;font-weight:700;border:1px solid #334155">${v}</div>`).join('');
+}
+function stackPush(){ if(stack.length>=6){document.getElementById('stackMsg').textContent='疊太高囉，先 pop 幾個';return;} stack.push(++scount*7%20||3); renderStack(); document.getElementById('stackMsg').textContent='push('+stack[stack.length-1]+')：放到最上面';}
+function stackPop(){ if(!stack.length){document.getElementById('stackMsg').textContent='空的，沒東西可 pop';return;} const v=stack.pop(); renderStack(); document.getElementById('stackMsg').textContent='pop() → 拿走最上面的 '+v+'（後進先出）';}
+renderStack();
+
+/* Queue */
+let queue=[], qcount=0;
+function renderQueue(){
+  document.getElementById('queueView').innerHTML=queue.map((v,i)=>
+    `<div style="background:${i===0?'#818cf8':'#273449'};color:${i===0?'#04283a':'#e2e8f0'};padding:12px 10px;border-radius:8px;font-weight:700;border:1px solid #334155">${v}</div>`).join('');
+}
+function queueEnq(){ if(queue.length>=6){document.getElementById('queueMsg').textContent='隊伍滿了，先出列';return;} queue.push(++qcount*5%20||4); renderQueue(); document.getElementById('queueMsg').textContent='enqueue('+queue[queue.length-1]+')：排到最後面';}
+function queueDeq(){ if(!queue.length){document.getElementById('queueMsg').textContent='沒有人在排隊';return;} const v=queue.shift(); renderQueue(); document.getElementById('queueMsg').textContent='dequeue() → 最前面的 '+v+' 先出（先進先出）';}
+renderQueue();
+</script>
+</body>
+</html>
