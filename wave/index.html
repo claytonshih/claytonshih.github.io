@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>波動方程互動教學｜用矩陣（有限差分）求波的近似解</title>
+<meta name="description" content="從撥弦到水波：波動方程是「時間二階」的問題。用有限差分把空間拆成三對角矩陣，時間用蛙跳法一步步推，就能算出波的近似解。含可撥的弦與二維水波互動，並解說 CFL 穩定條件與矩陣的顯式／隱式解法。">
+<meta name="keywords" content="波動方程, 有限差分, 矩陣, 三對角矩陣, 拉普拉斯矩陣, 蛙跳法, CFL, Courant, 弦振動, 水波, wave equation, finite difference, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/wave/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:title" content="波動方程互動教學｜用矩陣求波的近似解">
+<meta property="og:description" content="波動方程是時間二階問題。用有限差分把空間拆成三對角矩陣，時間用蛙跳法推進，就能算出波的近似解。">
+<meta property="og:url" content="https://claytonshih.github.io/wave/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* 本頁自訂：數學式與矩陣排版（不依賴外部函式庫，維持離線可用） */
+  .eq{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;margin:14px 0;font-family:"Cambria Math","Latin Modern Math","Times New Roman",Georgia,serif;
+    font-size:21px;color:#e2e8f0;text-align:center;overflow-x:auto;line-height:2.1}
+  .eq .lbl{display:block;font-family:"Noto Sans TC",system-ui,sans-serif;font-size:12px;
+    letter-spacing:2px;color:#64748b;margin-bottom:2px;text-transform:uppercase}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;font-size:.92em}
+  .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
+  .frac>span:last-child{padding:2px .35em 0}
+  .eq sub,.eq sup{font-size:.62em}
+  .eq .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl{color:var(--brand)}      /* 藍：矩陣／鄰居項 */
+  .eq .hl2{color:var(--warn)}      /* 黃：Courant 數 */
+  .eq .hl3{color:var(--pink)}      /* 粉：時間二階項 */
+  .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .steps .row{display:grid;grid-template-columns:150px 1fr;align-items:center;border-top:1px solid var(--line)}
+  .steps .row:first-child{border-top:none}
+  .steps .tag{background:var(--panel2);color:#cbd5e1;font-size:13px;font-weight:700;padding:12px 14px;height:100%;display:flex;align-items:center}
+  .steps .body{padding:10px 16px;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:19px;color:#e2e8f0;overflow-x:auto}
+  .steps .body.code{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#86efac}
+  .steps .body sub,.steps .body sup{font-size:.62em}
+  @media(max-width:640px){ .steps .row{grid-template-columns:104px 1fr} .steps .tag{font-size:12px;padding:10px} }
+  /* 三對角矩陣視覺 */
+  .mxwrap{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:16px 0}
+  .mx{display:inline-grid;grid-template-columns:repeat(6,38px);gap:5px;font-family:ui-monospace,Menlo,monospace;font-size:15px}
+  .mx b{display:flex;align-items:center;justify-content:center;height:38px;border-radius:7px;background:var(--panel2);color:#475569;font-weight:400}
+  .mx b.d{background:rgba(244,114,182,.18);color:#fb7185;font-weight:700}
+  .mx b.o{background:rgba(56,189,248,.16);color:#38bdf8;font-weight:700}
+  .mxlabel{font-size:13px;color:var(--muted);text-align:center}
+</style>
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../numerical/index.html" class="nl">數值模擬</a>
+  <a href="../wave/index.html" class="nl active">波動模擬</a>
+  <a href="../airy/index.html" class="nl">水波理論</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🌊 波動方程與矩陣解法</h1>
+  <p class="page-sub">撥一根弦、丟一顆石頭——波怎麼算？把空間拆成一排一排的點，你會發現「求波」其實就是「一直做矩陣運算」。</p>
+
+<section id="idea">
+  <h2>波動方程：跟前面差在「時間也是二階」</h2>
+  <p>前面熱擴散的方程對「時間」只有<strong>一階</strong>導數（<span style="font-family:Georgia,serif">∂T/∂t</span>）；波動方程對時間是<strong>二階</strong>（<span style="font-family:Georgia,serif">∂²u/∂t²</span>）。一維（一根弦）長這樣：</p>
+  <div class="eq">
+    <span class="lbl">一維波動方程</span>
+    <span class="frac"><span>∂<sup>2</sup>u</span><span>∂t<sup>2</sup></span></span>
+    <span class="op">=</span>
+    c<sup>2</sup> <span class="frac"><span>∂<sup>2</sup>u</span><span>∂x<sup>2</sup></span></span>
+  </div>
+  <div class="analogy"><b>比喻：</b><span style="font-family:Georgia,serif">u</span> 是弦上每一點的高度，<span style="font-family:Georgia,serif">c</span> 是波速。左邊「時間二階」＝加速度，右邊「空間二階」＝弦的彎曲程度。白話就是：<strong>弦被拉得越彎的地方，回彈的加速度越大</strong>——這就是它會來回振盪、把擾動一路傳出去的原因。</div>
+  <div class="tip"><b>還記得蛙跳法嗎？</b>「時間二階＝由加速度決定運動」正是蛙跳法的主場。這頁時間方向用的就是<strong>中央二階差分（＝蛙跳）</strong>，需要記住「前一刻」和「現在」兩張快照，才能推出「下一刻」。</div>
+</section>
+
+<section id="fd">
+  <h2>兩個方向都用差分：時間 + 空間</h2>
+  <p>把兩邊的二階導數各自換成「中央二階差分」（就是前面熟悉的 <span style="font-family:Georgia,serif">左 − 2×自己 + 右</span>），一個對時間、一個對空間：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">時間二階差分</div><div class="body"><span class="frac"><span>∂<sup>2</sup>u</span><span>∂t<sup>2</sup></span></span> ≈ <span class="frac"><span><span class="hl3">u<sub>i</sub><sup>n+1</sup> <span class="op">−</span> 2u<sub>i</sub><sup>n</sup> + u<sub>i</sub><sup>n−1</sup></span></span><span>Δt<sup>2</sup></span></span></div></div>
+    <div class="row"><div class="tag">空間二階差分</div><div class="body"><span class="frac"><span>∂<sup>2</sup>u</span><span>∂x<sup>2</sup></span></span> ≈ <span class="frac"><span><span class="hl">u<sub>i−1</sub><sup>n</sup> <span class="op">−</span> 2u<sub>i</sub><sup>n</sup> + u<sub>i+1</sub><sup>n</sup></span></span><span>Δx<sup>2</sup></span></span></div></div>
+    <div class="row"><div class="tag">解出下一刻</div><div class="body">u<sub>i</sub><sup>n+1</sup> = 2u<sub>i</sub><sup>n</sup> <span class="op">−</span> u<sub>i</sub><sup>n−1</sup> + <span class="hl2">C<sup>2</sup></span><span class="op">(</span><span class="hl">u<sub>i−1</sub><sup>n</sup> <span class="op">−</span> 2u<sub>i</sub><sup>n</sup> + u<sub>i+1</sub><sup>n</sup></span><span class="op">)</span></div></div>
+    <div class="row"><div class="tag">程式碼</div><div class="body code">next[i] = 2*u[i] - prev[i] + C2*(u[i-1] - 2*u[i] + u[i+1]);</div></div>
+  </div>
+  <p>其中 <span class="eq" style="display:inline-block;padding:2px 10px;font-size:16px;margin:0;vertical-align:middle"><span class="hl2">C</span> = c·Δt / Δx</span> 叫做 <b>Courant 數</b>，等一下講穩定性會用到。注意這裡出現了 <sup>n−1</sup>（前一刻）——這就是蛙跳法「需要兩張快照」的地方。</p>
+</section>
+
+<section id="matrix">
+  <h2>關鍵：空間差分其實是一個矩陣</h2>
+  <p>你的直覺沒錯——<strong>求波的近似解，本質就是矩陣運算</strong>。把弦上所有內部點的高度疊成一個向量 <span style="font-family:Georgia,serif">u</span>，那個「左 − 2×自己 + 右」的動作，對整條向量來說就是<strong>乘上一個三對角矩陣</strong> <span style="font-family:Georgia,serif">K</span>（離散拉普拉斯／剛度矩陣）：</p>
+  <div class="mxwrap">
+    <div>
+      <div class="mx" aria-label="三對角拉普拉斯矩陣">
+        <b class="d">−2</b><b class="o">1</b><b>0</b><b>0</b><b>0</b><b>0</b>
+        <b class="o">1</b><b class="d">−2</b><b class="o">1</b><b>0</b><b>0</b><b>0</b>
+        <b>0</b><b class="o">1</b><b class="d">−2</b><b class="o">1</b><b>0</b><b>0</b>
+        <b>0</b><b>0</b><b class="o">1</b><b class="d">−2</b><b class="o">1</b><b>0</b>
+        <b>0</b><b>0</b><b>0</b><b class="o">1</b><b class="d">−2</b><b class="o">1</b>
+        <b>0</b><b>0</b><b>0</b><b>0</b><b class="o">1</b><b class="d">−2</b>
+      </div>
+      <div class="mxlabel">矩陣 K：<span style="color:#fb7185">對角 −2</span>、<span style="color:#38bdf8">左右鄰居 +1</span>、其餘為 0（其實大部分是 0，稱為稀疏矩陣）</div>
+    </div>
+  </div>
+  <p>於是整條弦「下一刻」的向量，可以一口氣寫成一行矩陣式：</p>
+  <div class="eq">
+    <span class="lbl">向量／矩陣形式（顯式）</span>
+    u<sup>n+1</sup> <span class="op">=</span> <span class="op">(</span>2<b style="font-style:italic">I</b> + <span class="hl2">C<sup>2</sup></span><span class="hl"><b style="font-style:italic">K</b></span><span class="op">)</span> u<sup>n</sup> <span class="op">−</span> u<sup>n−1</sup>
+  </div>
+  <div class="steps">
+    <div class="row"><div class="tag">顯式（Explicit）</div><div class="body" style="font-size:15px;font-family:'Noto Sans TC',system-ui">下一刻 = 已知向量去<strong>乘</strong>矩陣。快、簡單，但步長受 CFL 限制（見下一段）。這頁的互動都用這種。</div></div>
+    <div class="row"><div class="tag">隱式（Implicit）</div><div class="body" style="font-size:15px;font-family:'Noto Sans TC',system-ui">未知量出現在方程<strong>兩邊</strong>，要<strong>解</strong>一個線性系統 <span style="font-family:Georgia,serif">A·u<sup>n+1</sup> = b</span>（等於對矩陣做分解／求逆）。慢一點，但可以用大步長不爆掉。</div></div>
+  </div>
+  <div class="tip"><b>你記得的「用矩陣求近似解」，兩種都算：</b>顯式是「向量乘矩陣」，隱式是「解 <span style="font-family:Georgia,serif">A x = b</span>」。工程上跑大型波場、地震、聲學、結構，多半就是在組這個稀疏矩陣、然後高效地乘它或解它。額外彩蛋：矩陣 <span style="font-family:Georgia,serif">K</span> 的<strong>特徵向量就是駐波（simple modes），特徵值對應各模態的頻率</strong>——這也是為什麼一根弦有基頻與泛音。</div>
+</section>
+
+<section id="string">
+  <h2>互動一：撥一根弦（一維波）</h2>
+  <p>用滑鼠在弦上<strong>往下拉一點再放開</strong>（或按「撥中央」），看擾動怎麼分成兩個波往兩端跑，跑到邊界就<strong>直接穿出去</strong>（吸收邊界，不反射）。每一幀就是上面那條更新式跑一次。</p>
+  <div class="card">
+    <h4>互動：撥弦振動（吸收邊界，可穿透）</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Courant 數 C = <span id="cVal" class="stat">0.60</span></label>
+      <input id="cRange" type="range" min="10" max="140" value="60" style="flex:1;min-width:160px">
+      <button onclick="pluckCenter()">🎸 撥中央</button>
+      <button class="ghost" onclick="resetString()">重置</button>
+    </div>
+    <svg id="strSvg" viewBox="0 0 480 220" width="100%" style="background:var(--code-bg);border-radius:10px;cursor:crosshair;touch-action:none"></svg>
+    <p id="strMsg" style="color:var(--muted);font-size:14px;min-height:20px">在弦上點一下就能撥它。</p>
+  </div>
+  <div class="tip">⚠️ <b>CFL 穩定條件：</b>一維時 <span style="font-family:Georgia,serif">C = cΔt/Δx</span> 必須 <strong>≤ 1</strong>。把滑桿拉過 1.0，你會看到弦瞬間<strong>爆掉亂飛</strong>——這不是 bug，是「波一步跑超過一格」時，差分法必然失控的數值不穩定。這條界限就是在告訴你：<strong>時間步長不能比波穿過一格的時間還大</strong>。</div>
+</section>
+
+<section id="ripple">
+  <h2>互動二：丟石頭進水裡（二維波）</h2>
+  <p>把弦升級成水面：空間差分從「左＋右」變成「上＋下＋左＋右」的五點差分（跟二維熱擴散同一個拉普拉斯，只是這裡時間是二階、會來回振盪而不是單向抹平）。在水面上<strong>點一下丟石頭</strong>，看同心圓波紋擴散、干涉。</p>
+  <div class="card">
+    <h4>互動：水面波紋（點擊丟石頭）</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Courant 數 C = <span id="c2Val" class="stat">0.50</span></label>
+      <input id="c2Range" type="range" min="10" max="80" value="50" style="flex:1;min-width:160px">
+      <button onclick="toggleRipple()" id="rippleBtn">⏸ 暫停</button>
+      <button class="ghost" onclick="resetRipple()">清空水面</button>
+    </div>
+    <canvas id="rippleCanvas" style="width:100%;max-width:360px;aspect-ratio:1;display:block;margin:0 auto;background:var(--code-bg);border-radius:10px;image-rendering:pixelated;cursor:crosshair;touch-action:none"></canvas>
+    <p id="rippleMsg" style="color:var(--muted);font-size:14px;min-height:20px">紅＝水面隆起，藍＝凹陷。點水面丟石頭。</p>
+    <div class="legend">
+      <span><span class="dot" style="background:#fb7185"></span>波峰</span>
+      <span><span class="dot" style="background:#334155"></span>靜止</span>
+      <span><span class="dot" style="background:#38bdf8"></span>波谷</span>
+    </div>
+  </div>
+  <div class="tip">⚠️ 二維的 CFL 更嚴：<span style="font-family:Georgia,serif">C ≤ 1/√2 ≈ 0.707</span>。邊界改用<strong>吸收邊界</strong>，波紋跑到邊緣會直接穿出去、不反射回來（像開放水域而非水池壁）。這裡也加了一點點阻尼模擬能量耗散；拉高 C 一樣會看到畫面開始亂跳。</div>
+</section>
+
+<section id="airy-link">
+  <h2>延伸：波浪力學完整推導（線性 Airy 波）</h2>
+  <p>想知道這些水波方程怎麼從流體力學一步步推出來？我把完整推導（連續方程、Euler、Bernoulli、邊界條件，一路到頻散關係 ω²=gk·tanh(kh)），以及可調水深的水粒子橢圓軌道動畫，獨立成一頁：</p>
+  <a href="../airy/index.html" class="tcard" style="display:block;max-width:440px">
+    <div class="emoji">🌊</div>
+    <h3>線性水波理論（Airy 波）推導 →</h3>
+    <p>從流體三大律到頻散關係，每條式子都附物理意義，含可調水深的水粒子橢圓軌道互動。</p>
+    <span class="go">前往專頁 →</span>
+  </a>
+</section>
+
+<section id="takeaway">
+  <h2>小結：波 = 一直乘（或解）矩陣</h2>
+  <p>把整條線串起來看：</p>
+  <ol>
+    <li><strong>連續</strong>的波動方程（時間、空間都是二階）。</li>
+    <li>兩個方向都換成<strong>二階差分</strong> → 時間用蛙跳、空間變成三對角／五點矩陣 <span style="font-family:Georgia,serif">K</span>。</li>
+    <li>每一步就是 <strong>u<sup>n+1</sup> = (2I + C²K)u<sup>n</sup> − u<sup>n−1</sup></strong>：一次矩陣運算。</li>
+    <li>想用大步長、或更複雜的邊界／材質，就改用<strong>隱式</strong>——解 <span style="font-family:Georgia,serif">Ax = b</span>。</li>
+    <li>別忘了 <strong>CFL 條件</strong>：步長太大，波一步跨過一格，必爆。</li>
+  </ol>
+  <p>所以「求波的近似解」跟你記得的一樣，核心就是把微分算子離散成矩陣，然後<strong>乘它或解它</strong>。真實工程（地震波、聲場、電磁 FDTD、結構振動）差別只在矩陣更大、更稀疏、邊界更講究，心法完全一樣。</p>
+  <div class="tip">想接回時間積分的直覺？回去看 <a href="../numerical/index.html#heat">數值模擬</a> 的一維／二維熱擴散——同一個拉普拉斯矩陣，只是那邊時間一階（單向抹平），這邊時間二階（來回振盪）。</div>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#idea">波動方程：時間二階</a>
+    <a href="#fd">時間 + 空間差分</a>
+    <a href="#matrix">空間差分＝三對角矩陣</a>
+    <a href="#string">互動一：撥弦（一維）</a>
+    <a href="#ripple">互動二：水波（二維）</a>
+    <a href="../airy/index.html">水波理論推導（Airy）↗</a>
+    <a href="#takeaway">小結：波＝乘/解矩陣</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* ===== 互動一：一維撥弦（蛙跳時間 + 三對角空間）===== */
+const NS=161;
+const strSvg=document.getElementById('strSvg');
+const cRange=document.getElementById('cRange');
+let uPrev=new Array(NS).fill(0), uCur=new Array(NS).fill(0);
+let strTimer=null, strBlew=false;
+const SW=480, SH=220, SPAD=20, MIDY=SH/2, AMP=80;
+function sx(i){ return SPAD + i/(NS-1)*(SW-2*SPAD); }
+function sy(u){ let y=MIDY - u*AMP; return Math.max(-40, Math.min(SH+40, y)); }
+function drawString(){
+  let pts='';
+  for(let i=0;i<NS;i++){ pts += sx(i).toFixed(1)+','+sy(uCur[i]).toFixed(1)+' '; }
+  let s='';
+  s+=`<line x1="${SPAD}" y1="${MIDY}" x2="${SW-SPAD}" y2="${MIDY}" stroke="#334155" stroke-dasharray="4"/>`;
+  s+=`<circle cx="${SPAD}" cy="${MIDY}" r="5" fill="#64748b"/>`;
+  s+=`<circle cx="${SW-SPAD}" cy="${MIDY}" r="5" fill="#64748b"/>`;
+  s+=`<polyline points="${pts}" fill="none" stroke="${strBlew?'#fb7185':'#38bdf8'}" stroke-width="2.5" stroke-linejoin="round"/>`;
+  strSvg.innerHTML=s;
+}
+function resetString(){
+  if(strTimer){ clearInterval(strTimer); strTimer=null; }
+  uPrev=new Array(NS).fill(0); uCur=new Array(NS).fill(0); strBlew=false;
+  drawString();
+  document.getElementById('strMsg').textContent='在弦上點一下就能撥它。';
+}
+function pluckAt(p){
+  strBlew=false;
+  const h=1.0;
+  for(let i=0;i<NS;i++){
+    let v = i<=p ? (p>0? i/p : 0) : (NS-1-p>0 ? (NS-1-i)/(NS-1-p) : 0);
+    uCur[i]=h*v;
+  }
+  uCur[0]=0; uCur[NS-1]=0;
+  uPrev=uCur.slice();          // 從靜止放開（初速為 0）
+  runString();
+}
+function pluckCenter(){ pluckAt(Math.floor(NS/2)); }
+function stepString(){
+  const C=(+cRange.value)/100, C2=C*C;
+  const next=new Array(NS).fill(0);
+  for(let i=1;i<NS-1;i++){
+    next[i]=2*uCur[i]-uPrev[i]+C2*(uCur[i-1]-2*uCur[i]+uCur[i+1]); // 蛙跳 + 三對角
+    next[i]*=0.9995;           // 極輕微阻尼
+  }
+  // 吸收邊界（Mur 一階）：波跑到端點直接穿出、不反射
+  const kabc=(C-1)/(C+1);
+  next[0]=uCur[1]+kabc*(next[1]-uCur[0]);
+  next[NS-1]=uCur[NS-2]+kabc*(next[NS-2]-uCur[NS-1]);
+  uPrev=uCur; uCur=next;
+  // 偵測爆掉（CFL 不穩定）
+  if(!strBlew){ for(let i=0;i<NS;i++){ if(Math.abs(uCur[i])>6){ strBlew=true; break; } } }
+}
+function runString(){
+  if(strTimer) clearInterval(strTimer);
+  let k=0;
+  strTimer=setInterval(()=>{
+    stepString(); k++;
+    drawString();
+    const C=(+cRange.value)/100;
+    document.getElementById('strMsg').innerHTML = strBlew
+      ? `<span style="color:#fb7185">數值爆掉了！C = ${C.toFixed(2)} > 1，違反 CFL 穩定條件。</span>`
+      : `第 ${k} 步｜波往兩端傳、跑到邊界直接穿出（吸收邊界，C = ${C.toFixed(2)}）`;
+    if(strBlew || k>=2000){ clearInterval(strTimer); strTimer=null; }
+  }, 16);
+}
+strSvg.addEventListener('pointerdown',e=>{
+  const r=strSvg.getBoundingClientRect();
+  const fx=(e.clientX-r.left)/r.width*SW;
+  let p=Math.round((fx-SPAD)/(SW-2*SPAD)*(NS-1));
+  p=Math.max(2,Math.min(NS-3,p));
+  pluckAt(p);
+});
+cRange.addEventListener('input',()=>{ document.getElementById('cVal').textContent=((+cRange.value)/100).toFixed(2); });
+resetString();
+pluckCenter();
+
+/* ===== 互動二：二維水波（五點差分 + 蛙跳）===== */
+const MW=101;
+let wPrev=new Array(MW*MW).fill(0), wCur=new Array(MW*MW).fill(0);
+let rippleTimer=null;
+const rcv=document.getElementById('rippleCanvas');
+const rctx=rcv.getContext('2d');
+rcv.width=MW; rcv.height=MW;
+const rimg=rctx.createImageData(MW,MW);
+const c2Range=document.getElementById('c2Range');
+function widx(i,j){ return i*MW+j; }
+function waveRGB(t){ // t 已為顯示尺度 (約 -1..1)：藍(谷) - 深(靜) - 紅(峰)
+  t=Math.max(-1,Math.min(1,t));
+  const r=Math.round(15 + 240*Math.max(0,t));
+  const g=Math.round(23 + 70*Math.abs(t));
+  const b=Math.round(35 + 220*Math.max(0,-t));
+  return [r,g,b];
+}
+function renderRipple(){
+  // 自動增益：以當前最大振幅正規化，波紋衰減後仍看得見
+  let mx=1e-6;
+  for(let k=0;k<MW*MW;k++){ const a=Math.abs(wCur[k]); if(a>mx) mx=a; }
+  const g=1/Math.max(mx,0.12);
+  const d=rimg.data;
+  for(let k=0;k<MW*MW;k++){ const c=waveRGB(wCur[k]*g); const p=k*4; d[p]=c[0]; d[p+1]=c[1]; d[p+2]=c[2]; d[p+3]=255; }
+  rctx.putImageData(rimg,0,0);
+}
+function resetRipple(){
+  wPrev=new Array(MW*MW).fill(0); wCur=new Array(MW*MW).fill(0);
+  renderRipple();
+  document.getElementById('rippleMsg').textContent='紅＝水面隆起，藍＝凹陷。點水面丟石頭。';
+}
+function dropStone(ci,cj){
+  const R=4, amp=1.0;
+  for(let di=-R;di<=R;di++) for(let dj=-R;dj<=R;dj++){
+    const i=ci+di, j=cj+dj;
+    if(i<1||i>=MW-1||j<1||j>=MW-1) continue;
+    const d2=di*di+dj*dj;
+    const v=amp*Math.exp(-d2/6);
+    wCur[widx(i,j)]+=v; wPrev[widx(i,j)]+=v; // 隆起後靜止放開
+  }
+  renderRipple();
+}
+function stepRipple(){
+  const C=(+c2Range.value)/100, C2=C*C;
+  const next=new Array(MW*MW).fill(0);
+  for(let i=1;i<MW-1;i++) for(let j=1;j<MW-1;j++){
+    const k=widx(i,j);
+    const lap=wCur[widx(i-1,j)]+wCur[widx(i+1,j)]+wCur[widx(i,j-1)]+wCur[widx(i,j+1)]-4*wCur[k];
+    next[k]=(2*wCur[k]-wPrev[k]+C2*lap)*0.9992; // 蛙跳 + 五點 + 極輕阻尼
+  }
+  // 吸收邊界（Mur 一階）：波跑到邊緣直接穿出、不反射
+  const kabc=(C-1)/(C+1);
+  for(let j=1;j<MW-1;j++){
+    next[widx(0,j)]   =wCur[widx(1,j)]   +kabc*(next[widx(1,j)]   -wCur[widx(0,j)]);
+    next[widx(MW-1,j)]=wCur[widx(MW-2,j)]+kabc*(next[widx(MW-2,j)]-wCur[widx(MW-1,j)]);
+  }
+  for(let i=1;i<MW-1;i++){
+    next[widx(i,0)]   =wCur[widx(i,1)]   +kabc*(next[widx(i,1)]   -wCur[widx(i,0)]);
+    next[widx(i,MW-1)]=wCur[widx(i,MW-2)]+kabc*(next[widx(i,MW-2)]-wCur[widx(i,MW-1)]);
+  }
+  next[widx(0,0)]      =(next[widx(1,0)]      +next[widx(0,1)])/2;
+  next[widx(0,MW-1)]   =(next[widx(1,MW-1)]   +next[widx(0,MW-2)])/2;
+  next[widx(MW-1,0)]   =(next[widx(MW-2,0)]   +next[widx(MW-1,1)])/2;
+  next[widx(MW-1,MW-1)]=(next[widx(MW-2,MW-1)]+next[widx(MW-1,MW-2)])/2;
+  wPrev=wCur; wCur=next;
+}
+function toggleRipple(){
+  const btn=document.getElementById('rippleBtn');
+  if(rippleTimer){ clearInterval(rippleTimer); rippleTimer=null; btn.textContent='▶ 播放'; return; }
+  btn.textContent='⏸ 暫停';
+  rippleTimer=setInterval(()=>{ stepRipple(); renderRipple(); }, 24);
+}
+function rippleCell(e){
+  const r=rcv.getBoundingClientRect();
+  const j=Math.floor((e.clientX-r.left)/r.width*MW);
+  const i=Math.floor((e.clientY-r.top)/r.height*MW);
+  if(i>=0&&i<MW&&j>=0&&j<MW) dropStone(i,j);
+}
+rcv.addEventListener('pointerdown',e=>{ rippleCell(e); });
+c2Range.addEventListener('input',()=>{ document.getElementById('c2Val').textContent=((+c2Range.value)/100).toFixed(2); });
+resetRipple();
+dropStone(Math.floor(MW/2),Math.floor(MW/2));
+toggleRipple();
+</script>
+</body>
+</html>
