@@ -22,6 +22,18 @@
   <script src="../assets/ga.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* 排序圖解：一步一步的方格 */
+  .walk{margin-top:6px}
+  .wrow{display:flex;align-items:center;gap:12px;padding:4px 0;flex-wrap:wrap}
+  .warr{display:flex;gap:5px}
+  .wbox{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#273449;color:#cbd5e1;font-weight:700;font-size:15px;border:1px solid #334155}
+  .wbox.cmp{background:rgba(251,191,36,.18);border-color:#fbbf24;color:#fbbf24}
+  .wbox.swp{background:rgba(251,113,133,.2);border-color:#fb7185;color:#fb7185}
+  .wbox.srt{background:rgba(52,211,153,.18);border-color:#34d399;color:#34d399}
+  .wcap{color:#94a3b8;font-size:14px;line-height:1.4}
+  @media(max-width:560px){.wbox{width:30px;height:30px;font-size:14px}.wcap{font-size:13px}}
+</style>
 </head>
 <body>
 <header class="topnav">
@@ -104,6 +116,8 @@
         <option value="bubble">氣泡排序 Bubble　O(n²)</option>
         <option value="selection">選擇排序 Selection　O(n²)</option>
         <option value="insertion">插入排序 Insertion　O(n²)</option>
+        <option value="merge">合併排序 Merge　O(n log n)</option>
+        <option value="quick">快速排序 Quick　O(n log n)</option>
       </select>
       <button onclick="startSort()">▶ 開始</button>
       <button class="ghost" onclick="shuffleBars()">🔀 打亂</button>
@@ -118,11 +132,41 @@
     </div>
   </div>
   <div id="sortExplain" class="card"><h4>氣泡排序 Bubble Sort</h4><p>相鄰兩個比一比，比較大的往後「冒泡」，一輪把最大的推到最後。簡單但慢，<span class="badge b-time">O(n²)</span>。</p></div>
-  <h3>更快的排序：合併與快速</h3>
-  <p>實務上用 <span class="badge b-time">O(n log n)</span> 的排序，關鍵是「分而治之」——把資料切一半、各自排好、再合起來。</p>
-  <div class="grid2">
-    <div class="card"><h4>合併排序 Merge Sort</h4><p>一直對半切到剩單個，再兩兩「合併」成有序。穩定、最壞也是 O(n log n)。</p></div>
-    <div class="card"><h4>快速排序 Quick Sort</h4><p>選一個「基準 pivot」，比它小的丟左邊、大的丟右邊，再各自遞迴。平均最快。</p></div>
+
+  <h3>一步一步看懂：三種 O(n²) 排序</h3>
+  <p>光看文字不好懂，用同一組數字 <b>[5, 2, 4, 1]</b> 各跑一次就清楚了。顏色：<span style="color:#fbbf24">黃＝正在看／挑選</span>、<span style="color:#fb7185">粉＝在交換或移動</span>、<span style="color:#34d399">綠＝已排好、不再動</span>。</p>
+
+  <div class="card">
+    <h4>🫧 氣泡排序 Bubble — 大的往右「冒」</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">相鄰兩兩比，左邊比較大就交換。每跑完一輪，當前最大的就被一路推到最右邊歸位；下一輪就不用再看它。</p>
+    <div class="walk" id="walkBubble"></div>
+  </div>
+
+  <div class="card">
+    <h4>🎯 選擇排序 Selection — 每輪挑一個最小的</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">每一輪從「還沒排好的部分」掃一遍、找出最小值，換到最前面。比較次數多，但交換次數最少。</p>
+    <div class="walk" id="walkSelection"></div>
+  </div>
+
+  <div class="card">
+    <h4>🃏 插入排序 Insertion — 像整理撲克牌</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">左手維持一段「已排好」的牌；每次拿起下一張，往左找到它該插的位置塞進去。資料近乎排好時特別快。</p>
+    <div class="walk" id="walkInsertion"></div>
+  </div>
+
+  <h3>更快的排序：分而治之（O(n log n)）</h3>
+  <p>上面三種都是「一次只前進一小步」，資料一多就慢。更快的做法是<strong>分而治之</strong>：把大問題切成小問題、各自解決、再合起來，只要 <span class="badge b-time">O(n log n)</span>。</p>
+
+  <div class="card">
+    <h4>🔀 合併排序 Merge Sort — 切到最碎，再兩兩合併</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">先一路對半切到每堆只剩 1 個（單個一定有序），再<strong>兩兩合併</strong>成更大的有序段，直到合回整排。穩定、最壞也是 O(n log n)。</p>
+    <div class="walk" id="walkMerge"></div>
+  </div>
+
+  <div class="card">
+    <h4>⚡ 快速排序 Quick Sort — 選基準，小的左、大的右</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">選一個「基準 <span style="color:#fbbf24">pivot</span>」，把比它小的丟左邊、比它大的丟右邊（pivot 就此歸位），再對左右兩堆各自重複同樣的事。平均最快。</p>
+    <div class="walk" id="walkQuick"></div>
   </div>
 </section>
 
@@ -245,7 +289,7 @@ resetFact();
 /* Sorting */
 let arr=[], animating=false;
 const barsEl=document.getElementById('bars');
-function shuffleBars(){ if(animating)return; arr=Array.from({length:18},()=>Math.floor(Math.random()*95)+8); renderBars(); document.getElementById('cmpCount').textContent=0; document.getElementById('swapCount').textContent=0;}
+function shuffleBars(){ if(animating)return; arr=Array.from({length:40},()=>Math.floor(Math.random()*95)+8); renderBars(); document.getElementById('cmpCount').textContent=0; document.getElementById('swapCount').textContent=0;}
 function renderBars(states={}){ barsEl.innerHTML=arr.map((v,i)=>`<div class="bar ${states[i]||''}" style="height:${v}%"></div>`).join(''); }
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 let cmp=0,swp=0;
@@ -253,18 +297,113 @@ function bump(t){ if(t==='c'){cmp++;document.getElementById('cmpCount').textCont
 async function startSort(){
   if(animating)return; animating=true; cmp=0;swp=0; document.getElementById('cmpCount').textContent=0; document.getElementById('swapCount').textContent=0;
   const algo=document.getElementById('algoSel').value;
-  if(algo==='bubble') await bubble(); else if(algo==='selection') await selection(); else await insertion();
+  if(algo==='bubble') await bubble(); else if(algo==='selection') await selection(); else if(algo==='insertion') await insertion(); else if(algo==='merge') await merge(); else await quick();
   renderBars(Object.fromEntries(arr.map((_,i)=>[i,'done']))); animating=false;
 }
-async function bubble(){ for(let i=0;i<arr.length-1;i++){ for(let j=0;j<arr.length-1-i;j++){ bump('c'); renderBars({[j]:'cmp',[j+1]:'cmp'}); await sleep(45); if(arr[j]>arr[j+1]){ [arr[j],arr[j+1]]=[arr[j+1],arr[j]]; bump('s'); renderBars({[j]:'swap',[j+1]:'swap'}); await sleep(45);} } } }
-async function selection(){ for(let i=0;i<arr.length;i++){ let m=i; for(let j=i+1;j<arr.length;j++){ bump('c'); renderBars({[m]:'cmp',[j]:'cmp'}); await sleep(30); if(arr[j]<arr[m]) m=j; } if(m!==i){ [arr[i],arr[m]]=[arr[m],arr[i]]; bump('s'); renderBars({[i]:'swap',[m]:'swap'}); await sleep(60);} } }
-async function insertion(){ for(let i=1;i<arr.length;i++){ let j=i; while(j>0){ bump('c'); renderBars({[j]:'cmp',[j-1]:'cmp'}); await sleep(45); if(arr[j-1]>arr[j]){ [arr[j-1],arr[j]]=[arr[j],arr[j-1]]; bump('s'); renderBars({[j]:'swap',[j-1]:'swap'}); await sleep(45); j--; } else break; } } }
+async function bubble(){ for(let i=0;i<arr.length-1;i++){ for(let j=0;j<arr.length-1-i;j++){ bump('c'); renderBars({[j]:'cmp',[j+1]:'cmp'}); await sleep(5); if(arr[j]>arr[j+1]){ [arr[j],arr[j+1]]=[arr[j+1],arr[j]]; bump('s'); renderBars({[j]:'swap',[j+1]:'swap'}); await sleep(5);} } } }
+async function selection(){ for(let i=0;i<arr.length;i++){ let m=i; for(let j=i+1;j<arr.length;j++){ bump('c'); renderBars({[m]:'cmp',[j]:'cmp'}); await sleep(4); if(arr[j]<arr[m]) m=j; } if(m!==i){ [arr[i],arr[m]]=[arr[m],arr[i]]; bump('s'); renderBars({[i]:'swap',[m]:'swap'}); await sleep(7);} } }
+async function insertion(){ for(let i=1;i<arr.length;i++){ let j=i; while(j>0){ bump('c'); renderBars({[j]:'cmp',[j-1]:'cmp'}); await sleep(5); if(arr[j-1]>arr[j]){ [arr[j-1],arr[j]]=[arr[j],arr[j-1]]; bump('s'); renderBars({[j]:'swap',[j-1]:'swap'}); await sleep(5); j--; } else break; } } }
+/* 合併排序：對半切、再合併回原位置 */
+async function mergeSort(l,r){
+  if(r-l<1) return;
+  const mid=Math.floor((l+r)/2);
+  await mergeSort(l,mid); await mergeSort(mid+1,r);
+  const tmp=[]; let i=l,j=mid+1;
+  while(i<=mid && j<=r){ bump('c'); renderBars({[i]:'cmp',[j]:'cmp'}); await sleep(10); if(arr[i]<=arr[j]) tmp.push(arr[i++]); else tmp.push(arr[j++]); }
+  while(i<=mid) tmp.push(arr[i++]);
+  while(j<=r) tmp.push(arr[j++]);
+  for(let k=0;k<tmp.length;k++){ arr[l+k]=tmp[k]; bump('s'); renderBars({[l+k]:'swap'}); await sleep(10); }
+}
+async function merge(){ await mergeSort(0,arr.length-1); }
+/* 快速排序：選最右為 pivot，小的往左、大的往右 */
+async function quickSort(l,r){
+  if(l>=r) return;
+  const pivot=arr[r]; let i=l;
+  for(let j=l;j<r;j++){
+    bump('c'); renderBars({[j]:'cmp',[r]:'swap'}); await sleep(10);
+    if(arr[j]<pivot){ if(i!==j){ [arr[i],arr[j]]=[arr[j],arr[i]]; bump('s'); renderBars({[i]:'swap',[j]:'swap'}); await sleep(10); } i++; }
+  }
+  [arr[i],arr[r]]=[arr[r],arr[i]]; bump('s'); renderBars({[i]:'swap',[r]:'swap'}); await sleep(10);
+  await quickSort(l,i-1); await quickSort(i+1,r);
+}
+async function quick(){ await quickSort(0,arr.length-1); }
 document.getElementById('algoSel').addEventListener('change',e=>{
-  const map={bubble:['氣泡排序 Bubble Sort','相鄰兩個比一比，比較大的往後「冒泡」，一輪把最大的推到最後。簡單但慢，'],selection:['選擇排序 Selection Sort','每一輪從未排區找出「最小的」，換到前面。交換次數少，但比較次數仍是 '],insertion:['插入排序 Insertion Sort','像整理撲克牌：拿一張往左邊已排好的位置插進去。資料近乎排好時很快，一般 ']};
-  const [t,d]=map[e.target.value];
-  document.getElementById('sortExplain').innerHTML=`<h4>${t}</h4><p>${d}<span class="badge b-time">O(n²)</span>。</p>`;
+  const map={
+    bubble:['氣泡排序 Bubble Sort','相鄰兩個比一比，比較大的往後「冒泡」，一輪把最大的推到最後。簡單但慢，','O(n²)'],
+    selection:['選擇排序 Selection Sort','每一輪從未排區找出「最小的」，換到前面。交換次數少，但比較次數仍是 ','O(n²)'],
+    insertion:['插入排序 Insertion Sort','像整理撲克牌：拿一張往左邊已排好的位置插進去。資料近乎排好時很快，一般 ','O(n²)'],
+    merge:['合併排序 Merge Sort','對半切到剩單個，再兩兩合併成有序。穩定，最壞也是 ','O(n log n)'],
+    quick:['快速排序 Quick Sort','選一個 pivot，小的丟左、大的丟右，再各自遞迴。平均最快，','O(n log n)']
+  };
+  const [t,d,o]=map[e.target.value];
+  document.getElementById('sortExplain').innerHTML=`<h4>${t}</h4><p>${d}<span class="badge b-time">${o}</span>。</p>`;
 });
 shuffleBars();
+
+/* ===== 排序圖解：一步一步走 ===== */
+function renderWalk(id, steps){
+  const el=document.getElementById(id); if(!el) return;
+  el.innerHTML = steps.map(s=>{
+    const boxes = s.arr.map((v,i)=>{
+      let c='wbox';
+      if(s.srt&&s.srt.includes(i)) c+=' srt';
+      else if(s.swp&&s.swp.includes(i)) c+=' swp';
+      else if(s.cmp&&s.cmp.includes(i)) c+=' cmp';
+      return `<span class="${c}">${v}</span>`;
+    }).join('');
+    return `<div class="wrow"><div class="warr">${boxes}</div><div class="wcap">${s.note}</div></div>`;
+  }).join('');
+}
+renderWalk('walkBubble',[
+  {arr:[5,2,4,1],cmp:[0,1],note:'比 5 和 2：左邊較大 → 交換'},
+  {arr:[2,5,4,1],cmp:[1,2],note:'比 5 和 4 → 交換'},
+  {arr:[2,4,5,1],cmp:[2,3],note:'比 5 和 1 → 交換（5 一路冒到最右）'},
+  {arr:[2,4,1,5],srt:[3],note:'✅ 第一輪結束，最大的 5 歸位'},
+  {arr:[2,4,1,5],cmp:[1,2],srt:[3],note:'第二輪：2,4 不用換；比 4 和 1 → 交換'},
+  {arr:[2,1,4,5],srt:[2,3],note:'✅ 4 歸位'},
+  {arr:[2,1,4,5],cmp:[0,1],srt:[2,3],note:'第三輪：比 2 和 1 → 交換'},
+  {arr:[1,2,4,5],srt:[0,1,2,3],note:'✅ 完成！大的像氣泡一路往右浮'},
+]);
+renderWalk('walkSelection',[
+  {arr:[5,2,4,1],cmp:[3],note:'第一輪：掃整排找最小 → 1'},
+  {arr:[1,2,4,5],swp:[0],srt:[0],note:'把最小的 1 換到最前 → 歸位'},
+  {arr:[1,2,4,5],cmp:[1],srt:[0],note:'第二輪：剩 2,4,5 找最小 → 2（剛好已在位）'},
+  {arr:[1,2,4,5],srt:[0,1],note:'✅ 2 歸位'},
+  {arr:[1,2,4,5],cmp:[2],srt:[0,1],note:'第三輪：剩 4,5 找最小 → 4，也在位'},
+  {arr:[1,2,4,5],srt:[0,1,2,3],note:'✅ 完成！每輪選一個最小值放到最前'},
+]);
+renderWalk('walkInsertion',[
+  {arr:[5,2,4,1],srt:[0],cmp:[1],note:'左邊 [5] 當已排好；拿起下一張 2'},
+  {arr:[2,5,4,1],srt:[0,1],note:'2 比 5 小 → 插到前面。已排好 [2,5]'},
+  {arr:[2,5,4,1],srt:[0,1],cmp:[2],note:'拿起 4，往左找位置：4<5、4>2'},
+  {arr:[2,4,5,1],srt:[0,1,2],note:'插在 2 和 5 中間。已排好 [2,4,5]'},
+  {arr:[2,4,5,1],srt:[0,1,2],cmp:[3],note:'拿起 1，一路往左：比誰都小'},
+  {arr:[1,2,4,5],srt:[0,1,2,3],note:'✅ 插到最前，完成！像整理手上的牌'},
+]);
+/* merge / quick：分組圖 */
+function capLine(t){ return `<div class="wcap" style="margin:8px 0 2px">${t}</div>`; }
+function grpLine(groups){
+  return `<div class="wrow" style="justify-content:flex-start"><div style="display:flex;gap:16px;flex-wrap:wrap">`+
+    groups.map(g=>`<div class="warr">`+g.vals.map((v,i)=>{ let c='wbox'; if(g.green)c+=' srt'; if(g.pivot===i)c+=' cmp'; return `<span class="${c}">${v}</span>`; }).join('')+`</div>`).join('')+
+    `</div></div>`;
+}
+document.getElementById('walkMerge').innerHTML =
+  capLine('① 一路對半切，直到每堆只剩 1 個（單個一定有序）↓')
+  + grpLine([{vals:[5,2,4,1]}])
+  + grpLine([{vals:[5,2]},{vals:[4,1]}])
+  + grpLine([{vals:[5]},{vals:[2]},{vals:[4]},{vals:[1]}])
+  + capLine('② 兩兩合併：每次比兩堆最前面、挑小的先放 → 合成有序 ↑')
+  + grpLine([{vals:[2,5],green:true},{vals:[1,4],green:true}])
+  + grpLine([{vals:[1,2,4,5],green:true}]);
+document.getElementById('walkQuick').innerHTML =
+  capLine('① 陣列 [3,1,4,2]，選最右邊的 2 當 pivot（黃色）')
+  + grpLine([{vals:[3,1,4,2],pivot:3}])
+  + capLine('② 掃一遍：比 2 小的丟左、比 2 大的丟右，pivot 夾中間 → 2 歸位')
+  + grpLine([{vals:[1]},{vals:[2],green:true},{vals:[3,4]}])
+  + capLine('③ 對右邊 [3,4] 再重複：pivot=4，3 比 4 小 → 放左邊')
+  + grpLine([{vals:[3]},{vals:[4],green:true}])
+  + capLine('④ 全部歸位，完成 ✅')
+  + grpLine([{vals:[1,2,3,4],green:true}]);
 
 /* Binary search */
 const bsArr=Array.from({length:20},(_,i)=>i+1);
