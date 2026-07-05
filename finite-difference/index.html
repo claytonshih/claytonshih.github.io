@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>有限差分是什麼、為什麼需要｜把微積分變成加減乘除（互動圖解）</title>
+<meta name="description" content="自然律都寫成導數，但多數解不出公式、電腦也不會算無限小。有限差分把「無限小的 dx」換成「小但真實的 Δx」，讓微積分變成電腦會做的加減乘除。用可拉的割線→切線、前向/後向/中央差分對照，把有限差分講到直覺好懂。">
+<meta name="keywords" content="有限差分, finite difference, 前向差分, 後向差分, 中央差分, 導數, 數值方法, 泰勒展開, 誤差, Δx, JavaScript">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/finite-difference/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="直覺科學互動學習">
+<meta property="og:title" content="有限差分是什麼、為什麼需要｜把微積分變成加減乘除">
+<meta property="og:description" content="用可拉的割線→切線與前向/後向/中央差分對照，把有限差分講到直覺好懂。">
+<meta property="og:url" content="https://claytonshih.github.io/finite-difference/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .eq{background:var(--code-bg);border:1px solid var(--line);border-radius:10px;
+    padding:14px 18px;margin:14px 0;font-family:"Cambria Math","Latin Modern Math","Times New Roman",Georgia,serif;
+    font-size:21px;color:#e2e8f0;text-align:center;overflow-x:auto;line-height:2.1}
+  .eq .lbl{display:block;font-family:"Noto Sans TC",system-ui,sans-serif;font-size:12px;
+    letter-spacing:2px;color:#64748b;margin-bottom:2px;text-transform:uppercase}
+  .frac{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 .18em;font-size:.92em}
+  .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
+  .frac>span:last-child{padding:2px .35em 0}
+  .eq sub,.eq sup{font-size:.62em}
+  .eq .op,.steps .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl,.steps .hl{color:var(--brand)}
+  .eq .hl2,.steps .hl2{color:var(--warn)}
+  .eq .hl3,.steps .hl3{color:var(--pink)}
+  .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .steps .row{display:grid;grid-template-columns:150px 1fr;align-items:center;border-top:1px solid var(--line)}
+  .steps .row:first-child{border-top:none}
+  .steps .tag{background:var(--panel2);color:#cbd5e1;font-size:13px;font-weight:700;padding:12px 14px;height:100%;display:flex;align-items:center}
+  .steps .body{padding:10px 16px;font-family:"Cambria Math","Times New Roman",Georgia,serif;font-size:18px;color:#e2e8f0;overflow-x:auto}
+  .steps .body.code{font-family:ui-monospace,Menlo,monospace;font-size:14px;color:#86efac}
+  .steps .body sub,.steps .body sup{font-size:.62em}
+  @media(max-width:640px){ .steps .row{grid-template-columns:104px 1fr} .steps .tag{font-size:12px;padding:10px} }
+</style>
+</head>
+<body>
+<header class="topnav">
+  <a href="../index.html" class="logo">📚 直覺科學互動學習</a>
+  <a href="../index.html" class="nl">首頁</a>
+  <a href="../algorithms/index.html" class="nl">演算法</a>
+  <a href="../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../finite-difference/index.html" class="nl active">有限差分</a>
+  <a href="../numerical/index.html" class="nl">數值模擬</a>
+  <a href="../wave/index.html" class="nl">波動模擬</a>
+  <a href="../airy/index.html" class="nl">水波理論</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">➗ 有限差分：把微積分變成加減乘除</h1>
+  <p class="page-sub">一句話：把「無限小的 dx」換成「小但真實的 Δx」，導數就退化成減法，電腦就會算了。</p>
+
+<section id="why">
+  <h2>為什麼需要它？（先講這個）</h2>
+  <p>大自然的規律，幾乎都是用<strong>「變化率」</strong>寫成的——也就是導數：速度是位置的變化率、加速度是速度的變化率、熱往哪裡流是溫度<strong>「彎」</strong>的程度。這些式子叫<strong>微分方程</strong>，描述的是「連續」的世界。</p>
+  <p>但要真的算出答案，會撞到兩道牆：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">牆一：沒公式</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">絕大多數微分方程<strong>解不出漂亮的公式</strong>。能用紙筆算出封閉解的，是少數幸運的特例。</div></div>
+    <div class="row"><div class="tag">牆二：不會無限小</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">導數的定義是「Δx <strong>趨近 0</strong>」的極限，但<strong>電腦不會算無限小</strong>，它只認得一格一格的離散數字。</div></div>
+  </div>
+  <p>有限差分的破解法很直接：<strong>不要真的趨近 0，就用一個「小但不為 0」的 Δx</strong>。這麼一換，導數（一個極限）就變成兩個數字相減——<strong>微積分變成加減乘除</strong>，電腦立刻就會做了。</p>
+  <div class="eq">
+    <span class="lbl">核心一步：極限 → 減法</span>
+    <span class="frac"><span>dy</span><span>dx</span></span>
+    <span class="op">=</span>
+    <span style="font-size:14px;color:#64748b">lim<sub>Δx→0</sub></span>
+    <span class="frac"><span>y(x+<span class="hl2">Δx</span>) <span class="op">−</span> y(x)</span><span><span class="hl2">Δx</span></span></span>
+    <span class="op">≈</span>
+    <span class="frac"><span>y(x+<span class="hl2">Δx</span>) <span class="op">−</span> y(x)</span><span><span class="hl2">Δx</span></span></span>
+    <span style="font-size:13px;color:#64748b">（Δx 不趨近 0，就取一小段）</span>
+  </div>
+  <div class="analogy"><b>比喻：翻頁動畫。</b>你沒辦法「拍下連續的運動」，但可以拍很多張靜態照片，快速播放看起來就連續了。有限差分就是把連續的世界，切成一張張「小但真實」的快照——切得越密，看起來越滑順、越準。</div>
+
+  <h3>親眼看「Δx 越小，割線越貼近切線」</h3>
+  <p>導數就是曲線在某點的<strong>切線斜率</strong>。有限差分算的是<strong>割線斜率</strong>（拿旁邊一個點連過來）。拉滑桿把 Δx 縮小，看那條黃色割線怎麼一路轉到跟綠色切線重合——這就是「Δx→0 時，有限差分 → 導數」的畫面。</p>
+  <div class="card">
+    <h4>互動：割線 → 切線</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Δx = <span id="faVal" class="stat">2.00</span></label>
+      <input id="faDx" type="range" min="15" max="300" value="200" style="flex:1;min-width:160px">
+    </div>
+    <svg id="faSvg" viewBox="0 0 480 260" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="faMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+    <div class="legend">
+      <span><span class="dot" style="background:#34d399"></span>切線（真導數）</span>
+      <span><span class="dot" style="background:#fbbf24"></span>割線（有限差分）</span>
+    </div>
+  </div>
+</section>
+
+<section id="first">
+  <h2>一階差分：斜率（有三種取法）</h2>
+  <p>要估一點的斜率，看你「往哪邊借點」，有三種常見取法。它們都對，但準度不一樣：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">前向差分</div><div class="body"><span class="frac"><span>f(x+Δx) <span class="op">−</span> f(x)</span><span>Δx</span></span>　<span style="color:#64748b;font-size:13px">往右借一點</span></div></div>
+    <div class="row"><div class="tag">後向差分</div><div class="body"><span class="frac"><span>f(x) <span class="op">−</span> f(x−Δx)</span><span>Δx</span></span>　<span style="color:#64748b;font-size:13px">往左借一點</span></div></div>
+    <div class="row"><div class="tag">中央差分</div><div class="body"><span class="frac"><span>f(x+Δx) <span class="op">−</span> f(x−Δx)</span><span>2Δx</span></span>　<span style="color:#64748b;font-size:13px">左右各借一點、取平均</span></div></div>
+  </div>
+  <p><strong>中央差分通常最準</strong>，因為它左右對稱，把「偏一邊」的誤差消掉了（進階版在最後一段用泰勒展開解釋）。拉滑桿比比看三條割線誰貼切線最緊：</p>
+  <div class="card">
+    <h4>互動：前向 vs 後向 vs 中央</h4>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">Δx = <span id="fbVal" class="stat">2.00</span></label>
+      <input id="fbDx" type="range" min="20" max="300" value="200" style="flex:1;min-width:160px">
+    </div>
+    <svg id="fbSvg" viewBox="0 0 480 260" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="fbMsg" style="color:var(--muted);font-size:14px;min-height:40px"></p>
+    <div class="legend">
+      <span><span class="dot" style="background:#34d399"></span>真導數</span>
+      <span><span class="dot" style="background:#fbbf24"></span>前向</span>
+      <span><span class="dot" style="background:#fb7185"></span>後向</span>
+      <span><span class="dot" style="background:#818cf8"></span>中央</span>
+    </div>
+  </div>
+  <div class="tip">把一階差分套進「下一刻 ＝ 現在 ＋ 變化率 × Δt」，就是最基本的<strong>歐拉法</strong>——用斜率往前踏一小步。動手玩落體、冷卻的版本在 <a href="../numerical/index.html#falling">數值模擬</a>。</div>
+</section>
+
+<section id="second">
+  <h2>二階差分：彎曲</h2>
+  <p>一階是斜率，<strong>二階是「斜率的斜率」＝彎不彎</strong>。對應的差分長這樣：</p>
+  <div class="eq">
+    <span class="lbl">二階（中央）差分</span>
+    <span class="frac"><span>d<sup>2</sup>y</span><span>dx<sup>2</sup></span></span>
+    <span class="op">≈</span>
+    <span class="frac"><span><span class="hl3">f(x−Δx) <span class="op">−</span> 2f(x) <span class="op">+</span> f(x+Δx)</span></span><span>Δx<sup>2</sup></span></span>
+  </div>
+  <p>那個 <span style="color:var(--pink)">−2</span> 不是硬湊的，它的白話意思是「<strong>我比左右鄰居的平均高還是低</strong>」——低就升、高就降，所以熱會慢慢抹平。<strong>−2 怎麼一步步冒出來、二維為什麼變 −4</strong>，在數值模擬頁有完整的帳本推導與互動：</p>
+  <div class="tip">深入看「為什麼是左 + 右 − 2×自己」的逐步拆解、以及二維的「上+下+左+右−4×自己」，請到 <a href="../numerical/index.html#heat">數值模擬 · 熱擴散</a>。那裡可以拉滑桿看每一項怎麼來。</div>
+</section>
+
+<section id="assemble">
+  <h2>把它組起來：空間切格 + 時間切步</h2>
+  <p>有了「一階＝斜率、二階＝彎」這兩塊積木，模擬一個真實系統就只剩三步：</p>
+  <ol>
+    <li><strong>把空間切成一格一格</strong>（每格 Δx），用差分把 <span style="font-family:Georgia,serif">∂²/∂x²</span> 之類的項換成鄰居的加減。</li>
+    <li><strong>把時間切成一步一步</strong>（每步 Δt），用「下一刻 ＝ 現在 ＋ 變化率 × Δt」往前推。</li>
+    <li><strong>用迴圈重複、把每一步畫出來</strong>，就成了動畫。</li>
+  </ol>
+  <p>同一套心法，換不同的方程就是不同的模擬：</p>
+  <div class="cards" style="margin:16px 0">
+    <a href="../numerical/index.html" class="tcard"><div class="emoji">🔢</div><h3>數值模擬</h3><p>歐拉法、落體、冷卻、一維／二維熱擴散。時間一階、空間二階。</p><span class="go">前往 →</span></a>
+    <a href="../wave/index.html" class="tcard"><div class="emoji">🌊</div><h3>波動模擬</h3><p>撥弦與水波：時間也是二階，空間差分變成三對角／五點矩陣。</p><span class="go">前往 →</span></a>
+    <a href="../airy/index.html" class="tcard"><div class="emoji">🌊</div><h3>水波理論</h3><p>從流體力學一路推到頻散關係的線性水波（Airy）完整推導。</p><span class="go">前往 →</span></a>
+  </div>
+</section>
+
+<section id="accuracy">
+  <h2>準不準？精準 vs 成本</h2>
+  <p>Δx（或 Δt）是一把雙面刃：</p>
+  <div class="steps">
+    <div class="row"><div class="tag">切越細 → 越準</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">前向／後向差分的誤差大約 <strong>∝ Δx</strong>；中央差分更神，誤差 <strong>∝ Δx²</strong>（Δx 減半，誤差變 1/4）。</div></div>
+    <div class="row"><div class="tag">切越細 → 越貴</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">格子和步數變多，要算的次數暴增。這就是所有數值方法的核心取捨：<strong>精準度 vs 計算量</strong>。</div></div>
+    <div class="row"><div class="tag">別太貪心 → 會爆</div><div class="body" style="font-family:'Noto Sans TC',system-ui;font-size:15px">時間步長太大，數值會「爆掉」亂跳（<strong>數值不穩定</strong>，如 CFL 條件）。所以不是越大越省事。</div></div>
+  </div>
+  <div class="tip"><b>進階：為什麼中央差分準到 Δx²？</b>把 <span style="font-family:Georgia,serif">f(x+Δx)</span> 和 <span style="font-family:Georgia,serif">f(x−Δx)</span> 用<strong>泰勒展開</strong>：<br>
+  <span style="font-family:Georgia,serif">f(x±Δx) = f ± f′Δx + ½f″Δx² ± ⅙f‴Δx³ + …</span><br>
+  相減算中央差分時，帶偶數次方的項（f、½f″Δx²…）會<strong>抵消</strong>，一階項留下、三階項變成誤差，除以 2Δx 後誤差 ∝ Δx²。前向差分只用單邊、少了這層對稱抵消，所以誤差只到 Δx。<strong>對稱，就是中央差分準的秘密。</strong></div>
+</section>
+
+<section id="takeaway">
+  <h2>小結</h2>
+  <p>有限差分不難，一句話收尾：<strong>因為多數微分方程沒公式、電腦又不會無限小，所以我們把 dx 換成小而真實的 Δx，讓導數變成鄰居之間的加減乘除，再一步步往前算。</strong></p>
+  <p>接著就可以動手了：先看 <a href="../numerical/index.html">數值模擬</a> 把這套心法跑起來，再進到 <a href="../wave/index.html">波動模擬</a> 看它怎麼變成矩陣運算。</p>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#why">為什麼需要它？</a>
+    <a href="#first">一階差分：斜率</a>
+    <a href="#second">二階差分：彎曲</a>
+    <a href="#assemble">組起來：空間+時間</a>
+    <a href="#accuracy">準不準？精準 vs 成本</a>
+    <a href="#takeaway">小結</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../about/index.html">關於本站</a>
+    <a href="../privacy/index.html">隱私權政策</a>
+    <a href="../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 直覺科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+/* 共用：曲線 f(x)=0.3x²、映射、畫線 */
+const FDf=x=>0.3*x*x, FDfp=x=>0.6*x;
+const FX0=52, FX1=440, FXS=8, FyB=225, FyS=8;
+const fxScale=(FX1-FX0)/FXS;
+const fpx=x=>FX0 + x/FXS*(FX1-FX0);
+const fpy=v=>FyB - v*FyS;
+function fdCurve(){ let p=''; for(let i=0;i<=120;i++){ const x=FXS*i/120; p+=(i===0?'M':'L')+fpx(x).toFixed(1)+' '+fpy(FDf(x)).toFixed(1)+' '; } return p; }
+function lineAcross(px,py,m,stroke,w,dash){ const mp=-(FyS*m)/fxScale; const y0=py+mp*(FX0-px), y1=py+mp*(FX1-px); return `<line x1="${FX0}" y1="${y0.toFixed(1)}" x2="${FX1}" y2="${y1.toFixed(1)}" stroke="${stroke}" stroke-width="${w}"${dash?` stroke-dasharray="${dash}"`:''}/>`; }
+function seg(xa,xb,stroke,w){ return `<line x1="${fpx(xa).toFixed(1)}" y1="${fpy(FDf(xa)).toFixed(1)}" x2="${fpx(xb).toFixed(1)}" y2="${fpy(FDf(xb)).toFixed(1)}" stroke="${stroke}" stroke-width="${w}"/>`; }
+function dot(x,r,fill){ return `<circle cx="${fpx(x).toFixed(1)}" cy="${fpy(FDf(x)).toFixed(1)}" r="${r}" fill="${fill}"/>`; }
+
+/* 互動一：割線 → 切線 */
+const faDx=document.getElementById('faDx'), faSvg=document.getElementById('faSvg');
+const FA_X0=2.5;
+function drawFA(){
+  const dx=(+faDx.value)/100, xq=FA_X0+dx;
+  const sec=(FDf(xq)-FDf(FA_X0))/dx, tru=FDfp(FA_X0);
+  const pPx=fpx(FA_X0), pPy=fpy(FDf(FA_X0));
+  let s=`<line x1="42" y1="${FyB}" x2="446" y2="${FyB}" stroke="#334155"/>`;
+  s+=`<path d="${fdCurve()}" fill="none" stroke="#38bdf8" stroke-width="2"/>`;
+  s+=lineAcross(pPx,pPy,tru,'#34d399',2,'');
+  s+=lineAcross(pPx,pPy,sec,'#fbbf24',2,'6');
+  s+=dot(FA_X0,6,'#e2e8f0')+dot(xq,6,'#fbbf24');
+  s+=`<text x="${pPx-8}" y="${(pPy-10).toFixed(1)}" fill="#e2e8f0" font-size="12" text-anchor="end">x</text>`;
+  s+=`<text x="${(fpx(xq)+6).toFixed(1)}" y="${(fpy(FDf(xq))-6).toFixed(1)}" fill="#fbbf24" font-size="12">x+Δx</text>`;
+  faSvg.innerHTML=s;
+  document.getElementById('faMsg').innerHTML=`Δx = ${dx.toFixed(2)}　｜　<span style="color:#fbbf24">割線 ${sec.toFixed(2)}</span> vs <span style="color:#34d399">切線 ${tru.toFixed(2)}</span> → 誤差 <b>${Math.abs(sec-tru).toFixed(2)}</b>（Δx 越小越貼）`;
+}
+faDx.addEventListener('input',()=>{ document.getElementById('faVal').textContent=((+faDx.value)/100).toFixed(2); drawFA(); });
+drawFA();
+
+/* 互動二：前向 / 後向 / 中央 */
+const fbDx=document.getElementById('fbDx'), fbSvg=document.getElementById('fbSvg');
+const FB_X0=4;
+function drawFB(){
+  const dx=(+fbDx.value)/100, xf=FB_X0+dx, xb=FB_X0-dx;
+  const fwd=(FDf(xf)-FDf(FB_X0))/dx, bwd=(FDf(FB_X0)-FDf(xb))/dx, cen=(FDf(xf)-FDf(xb))/(2*dx), tru=FDfp(FB_X0);
+  const pPx=fpx(FB_X0), pPy=fpy(FDf(FB_X0));
+  let s=`<line x1="42" y1="${FyB}" x2="446" y2="${FyB}" stroke="#334155"/>`;
+  s+=`<path d="${fdCurve()}" fill="none" stroke="#38bdf8" stroke-width="2"/>`;
+  s+=lineAcross(pPx,pPy,tru,'#34d399',2,'4');       // 真導數（參考）
+  s+=seg(FB_X0,xf,'#fbbf24',2.5);                    // 前向
+  s+=seg(xb,FB_X0,'#fb7185',2.5);                    // 後向
+  s+=seg(xb,xf,'#818cf8',2.5);                       // 中央
+  s+=dot(xb,5,'#94a3b8')+dot(xf,5,'#94a3b8')+dot(FB_X0,6,'#e2e8f0');
+  fbSvg.innerHTML=s;
+  const eF=Math.abs(fwd-tru), eB=Math.abs(bwd-tru), eC=Math.abs(cen-tru);
+  document.getElementById('fbMsg').innerHTML=
+    `真導數 <span style="color:#34d399">${tru.toFixed(2)}</span>　｜　`+
+    `<span style="color:#fbbf24">前向 ${fwd.toFixed(2)}（誤差 ${eF.toFixed(2)}）</span>　`+
+    `<span style="color:#fb7185">後向 ${bwd.toFixed(2)}（誤差 ${eB.toFixed(2)}）</span>　`+
+    `<span style="color:#818cf8">中央 ${cen.toFixed(2)}（誤差 ${eC.toFixed(2)}）</span><br>`+
+    `<b>中央差分誤差最小</b>——左右對稱把偏誤消掉了。`;
+}
+fbDx.addEventListener('input',()=>{ document.getElementById('fbVal').textContent=((+fbDx.value)/100).toFixed(2); drawFB(); });
+drawFB();
+</script>
+</body>
+</html>
