@@ -22,6 +22,18 @@
   <script src="../assets/ga.js"></script>
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* 雜湊表桶 */
+  .hbk{display:flex;flex-direction:column;gap:5px;margin:10px 0}
+  .hbk .hrow{display:flex;align-items:center;gap:10px}
+  .hidx{width:30px;height:30px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:7px;background:#1e293b;color:#94a3b8;font-family:ui-monospace,monospace;font-weight:700;font-size:13px;border:1px solid #334155}
+  .hslot{flex:1;min-height:34px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:4px 6px;border-radius:8px;background:#0f1729;border:1px dashed #334155}
+  .hslot.hit{border-color:#fbbf24;background:rgba(251,191,36,.08)}
+  .pill{background:#273449;color:#e2e8f0;border:1px solid #334155;border-radius:20px;padding:3px 11px;font-size:13px;font-weight:600}
+  .pill.new{background:rgba(56,189,248,.18);border-color:#38bdf8;color:#38bdf8}
+  .pill.chain{background:rgba(251,113,133,.16);border-color:#fb7185;color:#fb7185}
+  #bstSvg text{font-weight:700}
+</style>
 </head>
 <body>
 <header class="topnav">
@@ -135,7 +147,27 @@ a.next = <span class="kw">new</span> <span class="fn">Node</span>(<span class="n
 stock.<span class="fn">set</span>(<span class="str">"apple"</span>, <span class="num">5</span>);   <span class="com">// 放入 key→value</span>
 stock.<span class="fn">get</span>(<span class="str">"apple"</span>);      <span class="com">// 5  ← 幾乎瞬間，O(1)</span>
 stock.<span class="fn">has</span>(<span class="str">"banana"</span>);    <span class="com">// false</span></pre>
-  <div class="tip">雜湊表超適合「查存在與否」「計次數」「去重複」。缺點：資料沒有順序，且極少數情況會「碰撞」需要處理。</div>
+  <div class="card">
+    <h4>互動：親手把 key 丟進雜湊表</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">這裡的雜湊函式：把 key 每個字母的碼加起來，再 <code class="inline">% 8</code>，得到「該去第幾個桶」。同一個桶就用<strong>串接</strong>掛在一起——這就是「碰撞」。</p>
+    <div class="controls">
+      <input id="hkey" placeholder="輸入 key（如 apple）" onkeydown="if(event.key==='Enter')hashPut()" style="padding:7px 10px;border-radius:8px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);min-width:150px">
+      <button onclick="hashPut()">放入 →</button>
+      <button class="ghost" onclick="hashGet()">查詢</button>
+      <button class="ghost" onclick="hashReset()">清空</button>
+    </div>
+    <div style="margin:6px 0 2px"><span style="color:var(--muted);font-size:13px">快速加入：</span>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('apple')">apple</button>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('grape')">grape</button>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('lime')">lime</button>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('melon')">melon</button>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('fig')">fig</button>
+      <button class="ghost" style="padding:4px 10px" onclick="quickPut('date')">date</button>
+    </div>
+    <div class="hbk" id="hashView"></div>
+    <p id="hashMsg" style="color:var(--muted);font-size:14px;min-height:20px">試試看：grape 和 lime 會算到同一個桶 → 碰撞、串接在一起。</p>
+  </div>
+  <div class="tip">雜湊表超適合「查存在與否」「計次數」「去重複」。缺點：資料沒有順序，且極少數情況會「碰撞」需要處理（如上：同桶就掛成一串）。</div>
 </section>
 
 <section id="tree">
@@ -167,6 +199,24 @@ stock.<span class="fn">has</span>(<span class="str">"banana"</span>);    <span c
     ? <span class="fn">searchBST</span>(node.left, target)   <span class="com">// 比較小 → 往左</span>
     : <span class="fn">searchBST</span>(node.right, target); <span class="com">// 比較大 → 往右</span>
 }</pre>
+  <div class="card">
+    <h4>互動：自己種一棵 BST、看搜尋怎麼走</h4>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">插入時從根往下比：比較小往左、比較大往右，找到空位掛上去。搜尋走同一條路——所以每一步都能砍掉一半，很快。</p>
+    <div class="controls">
+      <input id="bstIn" type="number" placeholder="數字" onkeydown="if(event.key==='Enter')bstInsertUser()" style="width:90px;padding:7px;border-radius:8px;background:var(--panel2);color:var(--ink);border:1px solid var(--line)">
+      <button onclick="bstInsertUser()">插入</button>
+      <button class="ghost" onclick="bstRandom()">🎲 隨機插入</button>
+      <button class="ghost" onclick="bstSearchUser()">🔎 搜尋這個數</button>
+      <button class="ghost" onclick="bstReset()">重置示範樹</button>
+    </div>
+    <svg id="bstSvg" viewBox="0 0 640 300" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="bstMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+    <div class="legend">
+      <span><span class="dot" style="background:#38bdf8"></span>節點</span>
+      <span><span class="dot" style="background:#fbbf24"></span>搜尋經過</span>
+      <span><span class="dot" style="background:#34d399"></span>找到</span>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -228,6 +278,64 @@ function renderQueue(){
 function queueEnq(){ if(queue.length>=6){document.getElementById('queueMsg').textContent='隊伍滿了，先出列';return;} queue.push(++qcount*5%20||4); renderQueue(); document.getElementById('queueMsg').textContent='enqueue('+queue[queue.length-1]+')：排到最後面';}
 function queueDeq(){ if(!queue.length){document.getElementById('queueMsg').textContent='沒有人在排隊';return;} const v=queue.shift(); renderQueue(); document.getElementById('queueMsg').textContent='dequeue() → 最前面的 '+v+' 先出（先進先出）';}
 renderQueue();
+
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+/* ===== 雜湊表 ===== */
+const HB=8;
+let buckets=Array.from({length:HB},()=>[]);
+function hashCode(k){ let s=0; for(let i=0;i<k.length;i++) s+=k.charCodeAt(i); return s; }
+function hIndex(k){ return hashCode(k)%HB; }
+function renderHash(hit=-1, newKey=null){
+  document.getElementById('hashView').innerHTML = buckets.map((b,i)=>{
+    const pills=b.map((k,j)=>`<span class="pill ${k===newKey?'new':(j>0?'chain':'')}">${k}</span>`).join('');
+    return `<div class="hrow"><div class="hidx">${i}</div><div class="hslot ${i===hit?'hit':''}">${pills||'<span style="color:#475569;font-size:12px">空</span>'}</div></div>`;
+  }).join('');
+}
+function doPut(k){
+  const i=hIndex(k), msg=document.getElementById('hashMsg');
+  if(buckets[i].includes(k)){ renderHash(i,k); msg.innerHTML=`「${k}」雜湊 = ${hashCode(k)} % 8 = <b>${i}</b>，桶 ${i} 裡已經有它了`; return; }
+  const collide=buckets[i].length>0;
+  buckets[i].push(k); renderHash(i,k);
+  msg.innerHTML=`「${k}」雜湊 = ${hashCode(k)} % 8 = <b>${i}</b> → 放進桶 ${i}`+(collide?`（桶 ${i} 已有東西 → <span style="color:#fb7185">碰撞！串接掛上</span>）`:'');
+}
+function hashPut(){ const el=document.getElementById('hkey'); const k=el.value.trim().toLowerCase(); if(!k)return; doPut(k); el.value=''; }
+function quickPut(k){ doPut(k); }
+function hashGet(){
+  const k=document.getElementById('hkey').value.trim().toLowerCase(); if(!k){document.getElementById('hashMsg').textContent='輸入要查的 key';return;}
+  const i=hIndex(k), found=buckets[i].includes(k); renderHash(i);
+  document.getElementById('hashMsg').innerHTML=`查「${k}」：直接算雜湊 = <b>${i}</b> → 跳到桶 ${i} → ${found?'<span style="color:#34d399">找到 ✅</span>':'<span style="color:#fb7185">不在裡面</span>'}（不必一個個找，這就是 O(1)）`;
+}
+function hashReset(){ buckets=Array.from({length:HB},()=>[]); renderHash(); document.getElementById('hashMsg').textContent=''; }
+renderHash();
+
+/* ===== 二元搜尋樹 BST ===== */
+let bstRoot=null;
+function bstIns(node,v){ if(!node) return {v,l:null,r:null}; if(v<node.v) node.l=bstIns(node.l,v); else if(v>node.v) node.r=bstIns(node.r,v); return node; }
+function renderBST(path=[], foundNode=null){
+  const svg=document.getElementById('bstSvg');
+  if(!bstRoot){ svg.innerHTML=`<text x="320" y="150" fill="#64748b" font-size="14" text-anchor="middle">（空樹）插入數字，或按「重置示範樹」</text>`; return; }
+  let idx=0, maxd=0;
+  (function assign(n,d){ if(!n)return; assign(n.l,d+1); n._x=idx++; n._y=d; if(d>maxd)maxd=d; assign(n.r,d+1); })(bstRoot,0);
+  const count=idx, W=640, padX=34, padY=38, rowH=Math.min(68,(300-2*padY)/(maxd||1));
+  const px=x=>padX+(count>1?x/(count-1):0.5)*(W-2*padX);
+  const py=d=>padY+d*rowH;
+  let lines='', nodes='';
+  (function walk(n){ if(!n)return; [n.l,n.r].forEach(c=>{ if(c) lines+=`<line x1="${px(n._x).toFixed(1)}" y1="${py(n._y).toFixed(1)}" x2="${px(c._x).toFixed(1)}" y2="${py(c._y).toFixed(1)}" stroke="#334155" stroke-width="2"/>`; }); walk(n.l); walk(n.r); })(bstRoot);
+  (function walk(n){ if(!n)return; walk(n.l); const fill=(n===foundNode)?'#34d399':(path.includes(n)?'#fbbf24':'#38bdf8'); const cx=px(n._x).toFixed(1), cy=py(n._y).toFixed(1); nodes+=`<circle cx="${cx}" cy="${cy}" r="18" fill="${fill}"/><text x="${cx}" y="${(+cy+5).toFixed(1)}" fill="#04283a" font-size="14" text-anchor="middle">${n.v}</text>`; walk(n.r); })(bstRoot);
+  svg.innerHTML=lines+nodes;
+}
+function bstInsert(v){ bstRoot=bstIns(bstRoot,v); renderBST(); }
+function bstInsertUser(){ const el=document.getElementById('bstIn'); const v=parseInt(el.value,10); if(isNaN(v)){document.getElementById('bstMsg').textContent='請輸入一個數字';return;} bstInsert(v); document.getElementById('bstMsg').innerHTML=`插入 ${v}：從根往下比，一路找到空位掛上`; el.value=''; }
+function bstRandom(){ const v=Math.floor(Math.random()*99)+1; bstInsert(v); document.getElementById('bstMsg').textContent=`隨機插入 ${v}`; }
+async function bstSearchUser(){
+  const v=parseInt(document.getElementById('bstIn').value,10); if(isNaN(v)){document.getElementById('bstMsg').textContent='輸入要搜尋的數字';return;}
+  let n=bstRoot; const path=[], msg=document.getElementById('bstMsg');
+  while(n){ path.push(n); renderBST(path); if(n.v===v){ renderBST(path,n); msg.innerHTML=`找到 ${v} ✅ 只走了 <b>${path.length}</b> 步`; return; } msg.innerHTML=`比 ${v} 和 ${n.v}：${v<n.v?'比較小 → 往左 ⬋':'比較大 → 往右 ⬊'}`; await sleep(700); n=v<n.v?n.l:n.r; }
+  renderBST(path); msg.innerHTML=`走到底了，<b>${v}</b> 不在這棵樹裡`;
+}
+function bstReset(){ bstRoot=null; [8,3,10,1,6,14,4,7,13].forEach(v=>bstRoot=bstIns(bstRoot,v)); renderBST(); document.getElementById('bstMsg').textContent='示範樹已放入：8, 3, 10, 1, 6, 14, 4, 7, 13'; }
+bstReset();
 </script>
 </body>
 </html>
