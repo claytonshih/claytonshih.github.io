@@ -9,7 +9,7 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://claytonshih.github.io/wave/">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:site_name" content="直覺科學互動學習">
 <meta property="og:title" content="波動方程互動教學｜用矩陣求波的近似解">
 <meta property="og:description" content="波動方程是時間二階問題。用有限差分把空間拆成三對角矩陣，時間用蛙跳法推進，就能算出波的近似解。">
 <meta property="og:url" content="https://claytonshih.github.io/wave/">
@@ -32,10 +32,10 @@
   .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
   .frac>span:last-child{padding:2px .35em 0}
   .eq sub,.eq sup{font-size:.62em}
-  .eq .op{color:#94a3b8;margin:0 .12em}
-  .eq .hl{color:var(--brand)}      /* 藍：矩陣／鄰居項 */
-  .eq .hl2{color:var(--warn)}      /* 黃：Courant 數 */
-  .eq .hl3{color:var(--pink)}      /* 粉：時間二階項 */
+  .eq .op,.steps .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl,.steps .hl{color:var(--brand)}      /* 藍：矩陣／鄰居項 */
+  .eq .hl2,.steps .hl2{color:var(--warn)}     /* 黃：Courant 數 */
+  .eq .hl3,.steps .hl3{color:var(--pink)}     /* 粉：時間二階項 */
   .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .steps .row{display:grid;grid-template-columns:150px 1fr;align-items:center;border-top:1px solid var(--line)}
   .steps .row:first-child{border-top:none}
@@ -55,11 +55,12 @@
 </head>
 <body>
 <header class="topnav">
-  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="logo">📚 直覺科學互動學習</a>
   <a href="../index.html" class="nl">首頁</a>
   <a href="../algorithms/index.html" class="nl">演算法</a>
   <a href="../data-structures/index.html" class="nl">資料結構</a>
   <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../finite-difference/index.html" class="nl">有限差分</a>
   <a href="../numerical/index.html" class="nl">數值模擬</a>
   <a href="../wave/index.html" class="nl active">波動模擬</a>
   <a href="../airy/index.html" class="nl">水波理論</a>
@@ -218,7 +219,7 @@
     <a href="../privacy/index.html">隱私權政策</a>
     <a href="../contact/index.html">聯絡我們</a>
   </div>
-  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+  © 2026 直覺科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
 </footer>
 
 <script>
