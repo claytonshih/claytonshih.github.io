@@ -9,7 +9,7 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://claytonshih.github.io/numerical/">
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="資訊科學互動學習">
+<meta property="og:site_name" content="直覺科學互動學習">
 <meta property="og:title" content="數值模擬互動教學｜用「一小步一小步」看懂差分">
 <meta property="og:description" content="數值模擬其實就是重複一條簡單的更新規則。用可調步長、可播放的動畫理解歐拉法與有限差分。">
 <meta property="og:url" content="https://claytonshih.github.io/numerical/">
@@ -32,10 +32,10 @@
   .frac>span:first-child{border-bottom:1.6px solid #94a3b8;padding:0 .35em}
   .frac>span:last-child{padding:2px .35em 0}
   .eq sub,.eq sup{font-size:.62em}
-  .eq .op{color:#94a3b8;margin:0 .12em}
-  .eq .hl{color:var(--brand)}      /* 藍：更新項 */
-  .eq .hl2{color:var(--warn)}      /* 黃：步長 */
-  .eq .hl3{color:var(--pink)}      /* 粉：差分項 */
+  .eq .op,.steps .op{color:#94a3b8;margin:0 .12em}
+  .eq .hl,.steps .hl{color:var(--brand)}      /* 藍：更新項 */
+  .eq .hl2,.steps .hl2{color:var(--warn)}     /* 黃：步長 */
+  .eq .hl3,.steps .hl3{color:var(--pink)}     /* 粉：差分項 */
   /* 對照卡：微分方程 → 差分 → 程式碼 */
   .steps{display:grid;grid-template-columns:1fr;gap:0;margin:16px 0;border:1px solid var(--line);border-radius:12px;overflow:hidden}
   .steps .row{display:grid;grid-template-columns:130px 1fr;align-items:center;border-top:1px solid var(--line)}
@@ -49,11 +49,12 @@
 </head>
 <body>
 <header class="topnav">
-  <a href="../index.html" class="logo">📚 資訊科學互動學習</a>
+  <a href="../index.html" class="logo">📚 直覺科學互動學習</a>
   <a href="../index.html" class="nl">首頁</a>
   <a href="../algorithms/index.html" class="nl">演算法</a>
   <a href="../data-structures/index.html" class="nl">資料結構</a>
   <a href="../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../finite-difference/index.html" class="nl">有限差分</a>
   <a href="../numerical/index.html" class="nl active">數值模擬</a>
   <a href="../wave/index.html" class="nl">波動模擬</a>
   <a href="../airy/index.html" class="nl">水波理論</a>
@@ -163,7 +164,43 @@
     <div class="row"><div class="tag">更新式</div><div class="body">T<sub>i</sub><sup>n+1</sup> = T<sub>i</sub><sup>n</sup> + α<span class="op">(</span><span class="hl3">T<sub>i−1</sub><sup>n</sup> <span class="op">−</span> 2T<sub>i</sub><sup>n</sup> + T<sub>i+1</sub><sup>n</sup></span><span class="op">)</span></div></div>
     <div class="row"><div class="tag">程式碼</div><div class="body code">next[i] = T[i] + a*(T[i-1] + T[i+1] - 2*T[i]);</div></div>
   </div>
-  <p>那條粉紅色的 <span style="font-family:Georgia,serif">T<sub>i−1</sub> − 2T<sub>i</sub> + T<sub>i+1</sub></span> 就是「二階差分」，數學上對應 <span style="font-family:Georgia,serif">∂²T/∂x²</span>（拉普拉斯項）。它的意思很直白：<b>比左右鄰居的平均低就升溫、高就降溫</b>，所以熱會慢慢抹平。</p>
+  <p>那條粉紅色的 <span style="font-family:Georgia,serif;color:var(--pink)">T<sub>i−1</sub> − 2T<sub>i</sub> + T<sub>i+1</sub></span> 就是「二階差分」，數學上對應 <span style="font-family:Georgia,serif">∂²T/∂x²</span>（拉普拉斯項）。它的意思很直白：<b>比左右鄰居的平均低就升溫、高就降溫</b>，所以熱會慢慢抹平。</p>
+
+  <div class="card" style="border-color:#3b3f5c">
+    <h4>📈 先搞懂二階導數：從「一階」爬到「二階」</h4>
+    <p style="margin-top:0">一句話串起來：<strong>值 →（取變化率）一階導數 →（再取一次變化率）二階導數</strong>。最有感的版本就是 <span style="color:#38bdf8">位置</span> →（斜率）<span style="color:#fbbf24">速度</span> →（斜率的斜率）<span style="color:#fb7185">加速度</span>。拉滑桿讓游標沿著曲線走，看這三張圖怎麼<strong>連動</strong>：</p>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">位置 x = <span id="d2xVal" class="stat">1.2</span></label>
+      <input id="d2x" type="range" min="2" max="626" value="120" style="flex:1;min-width:160px">
+    </div>
+    <svg id="d2svg" viewBox="0 0 480 430" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="d2msg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+  <div class="tip">三張圖的連動關係：<b>②的高度</b>＝①那條白色切線有多斜；<b>③的高度</b>＝②正在往上爬還是往下掉。當②衝到最高（斜率最大）時，③剛好穿過 0；<b>③為正的地方，①就凹朝上 ∪；③為負，①凹朝下 ∩</b>。這就是「一階＝斜率、二階＝斜率的斜率」最直接的畫面——不是背的，是看得到的。</div>
+
+  <div class="card" style="border-color:#3b3f5c">
+    <h4>💡 為什麼剛好是「左 + 右 − 2×自己」？（不用背，用想的）</h4>
+    <p style="margin-top:0">這條式子不是硬湊的。二階導數的白話就是<strong>「你彎不彎」</strong>——而電腦手上只有幾顆點，量彎曲最省事的辦法就是問一句：<strong>「我，比左右鄰居的平均，高還是低？」</strong></p>
+    <p>把式子重排就看得出來：</p>
+    <div class="eq" style="font-size:18px">T<sub>左</sub> <span class="op">−</span> 2T<sub>中</sub> <span class="op">+</span> T<sub>右</sub> <span class="op">=</span> 2 <span class="op">×</span> <span class="op">[</span> <span class="frac"><span>T<sub>左</sub> + T<sub>右</sub></span><span>2</span></span> <span class="op">−</span> T<sub>中</sub> <span class="op">]</span></div>
+    <p>括號裡就是「<strong>鄰居平均 − 我</strong>」。所以：低於鄰居平均 → 正 → <span style="color:#34d399">升溫</span>；高於 → 負 → <span style="color:#fb7185">降溫</span>；剛好落在鄰居連線上（直線、不彎）→ 0 → 不變。</p>
+    <p style="margin-bottom:6px"><strong>那中間的「−2」到底怎麼來的？</strong>把「斜率的斜率」硬算一遍就露餡了。先寫出「我」左右兩段的坡度，再相減：</p>
+    <div class="steps">
+      <div class="row"><div class="tag">① 右斜率</div><div class="body">(T<sub>右</sub> <span class="op">−</span> T<sub>中</sub>) / Δx　<span style="color:#64748b;font-size:13px">我是這段起點 → 被減（<span class="hl3">−T<sub>中</sub></span>）</span></div></div>
+      <div class="row"><div class="tag">② 左斜率</div><div class="body">(T<sub>中</sub> <span class="op">−</span> T<sub>左</sub>) / Δx　<span style="color:#64748b;font-size:13px">我是這段終點 → 是加的（+T<sub>中</sub>）</span></div></div>
+      <div class="row"><div class="tag">③ 二階 ＝ ①−②</div><div class="body">(T<sub>右</sub> <span class="op">−</span> T<sub>中</sub>) <span class="op">−</span> (T<sub>中</sub> <span class="op">−</span> T<sub>左</sub>)</div></div>
+      <div class="row"><div class="tag">④ 拆掉括號</div><div class="body">= T<sub>右</sub> <span class="hl3">− T<sub>中</sub></span> <span class="hl3">− T<sub>中</sub></span> + T<sub>左</sub>　<span style="color:#64748b;font-size:13px">②前面是減號，+T<sub>中</sub> 翻成 −T<sub>中</sub></span></div></div>
+      <div class="row"><div class="tag">⑤ 把「我」收在一起</div><div class="body">= T<sub>左</sub> <span class="hl3">− 2T<sub>中</sub></span> + T<sub>右</sub></div></div>
+    </div>
+    <p>關鍵在第 ④ 步：「我」<strong>被扣了兩次 −1</strong>——<strong>第一次</strong>在右斜率裡當起點（<span style="color:var(--pink)">−T<sub>中</sub></span>）；<strong>第二次</strong>是左斜率本來 +T<sub>中</sub>，卻被「③ 減掉左斜率」那個減號翻成 <span style="color:var(--pink)">−T<sub>中</sub></span>。兩個 −1 疊起來就是 <span style="color:var(--pink);font-weight:700">−2</span>。而左鄰、右鄰各只出現一次、都是 +1，所以最後長成 <span style="font-family:Georgia,serif;color:var(--pink)">T<sub>左</sub> − 2T<sub>中</sub> + T<sub>右</sub></span>。（兩段坡度各除一次 Δx、最後再除一次，就湊成式子裡的 Δx²。）</p>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">把中間那點上下拉：我的高度 = <span id="sdVal" class="stat">2.0</span>（左鄰固定 4、右鄰固定 6）</label>
+      <input id="sdMid" type="range" min="0" max="100" value="20" style="flex:1;min-width:160px">
+    </div>
+    <svg id="sdSvg" viewBox="0 0 480 260" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="sdMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+  <div class="tip"><b>嚴謹版（進階）：</b>把左右兩點用<strong>泰勒展開</strong>在中間點附近展開再<strong>相加</strong>，帶奇數次方的誤差項（一階、三階…）會一正一負<strong>互相抵消</strong>，乾淨留下二階導數。這就是為什麼要「左右對稱」取點——對稱才消得掉誤差，也讓這條式子特別準。所以無論從<b>直覺</b>（離鄰居平均多遠）還是<b>數學</b>（泰勒相消）出發，都指向同一條式子，真的不用背。</div>
   <pre><span class="com">// 每一步，每一格 i：</span>
 新溫度[i] = 溫度[i] + α * (溫度[i-1] + 溫度[i+1] - 2*溫度[i]);</pre>
   <div class="card">
@@ -196,6 +233,20 @@
     <div class="row"><div class="tag">程式碼</div><div class="body code">next[i][j] = T[i][j] + a*(T[i-1][j]+T[i+1][j]+T[i][j-1]+T[i][j+1] - 4*T[i][j]);</div></div>
   </div>
   <p>看出規律了嗎？一維是「左 ＋ 右 <b>− 2×</b>自己」，二維就是「上 ＋ 下 ＋ 左 ＋ 右 <b>− 4×</b>自己」。<strong>多一個維度，就多兩個鄰居，中間的係數也從 2 變成 4。</strong>這個 <span style="font-family:Georgia,serif">T<sub>上</sub>+T<sub>下</sub>+T<sub>左</sub>+T<sub>右</sub>−4T<sub>中</sub></span> 叫做「五點差分」，是二維拉普拉斯項 <span style="font-family:Georgia,serif">∇²T</span> 的離散版。這裡的 <span style="font-family:Georgia,serif">i</span> 是「第幾列」、<span style="font-family:Georgia,serif">j</span> 是「第幾行」，<span style="font-family:Georgia,serif">n</span> 一樣是「第幾步（時間）」。</p>
+
+  <div class="card" style="border-color:#3b3f5c">
+    <h4>💡 那二維的「−4×自己」是怎麼來的？（就是 x 的彎 ＋ y 的彎）</h4>
+    <p style="margin-top:0">二維的「彎不彎」很單純——<strong>把 x 方向的彎和 y 方向的彎加起來</strong>，這就是拉普拉斯：<span style="font-family:Georgia,serif">∇²T = ∂²T/∂x² + ∂²T/∂y²</span>。各自套上一維那條二階差分（左−2我+右）：</p>
+    <div class="eq" style="font-size:17px">(左<span class="op">−</span>2我<span class="op">+</span>右) <span class="op">+</span> (上<span class="op">−</span>2我<span class="op">+</span>下) <span class="op">=</span> 上<span class="op">+</span>下<span class="op">+</span>左<span class="op">+</span>右 <span class="op">−</span> <span class="hl3">4</span>我</div>
+    <p>那個 <strong>−4</strong> 一點都不神祕：<strong>橫向扣 2、縱向扣 2，加起來就是 −4</strong>。重排後意義跟一維一模一樣，只是鄰居從 2 個變 4 個：<span style="font-family:Georgia,serif">上+下+左+右 − 4我 = 4 ×〔(4 個鄰居的平均) − 我〕</span>。拉中間那格的溫度看看它是升是降：</p>
+    <div class="controls">
+      <label style="color:var(--muted);font-size:14px">中間格溫度 = <span id="lapVal" class="stat">3.0</span>（上下左右 4 個鄰居都固定 6）</label>
+      <input id="lapMid" type="range" min="0" max="100" value="30" style="flex:1;min-width:160px">
+    </div>
+    <svg id="lapSvg" viewBox="0 0 480 250" width="100%" style="background:var(--code-bg);border-radius:10px"></svg>
+    <p id="lapMsg" style="color:var(--muted);font-size:14px;min-height:20px"></p>
+  </div>
+
   <div class="card">
     <h4>互動：中間發熱的鐵板，看熱怎麼往四面八方散開</h4>
     <div class="controls">
@@ -252,7 +303,7 @@
     <a href="../privacy/index.html">隱私權政策</a>
     <a href="../contact/index.html">聯絡我們</a>
   </div>
-  © 2026 資訊科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+  © 2026 直覺科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
 </footer>
 
 <script>
@@ -372,6 +423,105 @@ function toggleHeat(){
 }
 aRange.addEventListener('input',()=>{ document.getElementById('aVal').textContent=((+aRange.value)/100).toFixed(2); });
 resetHeat();
+
+/* ===== 說明：為什麼是「左 + 右 − 2×自己」 ===== */
+const sdMid=document.getElementById('sdMid');
+const sdSvg=document.getElementById('sdSvg');
+const SD_L=4, SD_R=6;                 // 左右鄰居固定
+function sdY(v){ return 225 - v*15; } // 高度 → 螢幕 y
+function drawSD(){
+  const Tm=(+sdMid.value)/10;
+  const XL=90, XM=240, XR=390;
+  const yl=sdY(SD_L), yr=sdY(SD_R), ym=sdY(Tm);
+  const avg=(SD_L+SD_R)/2, yavg=sdY(avg);      // 鄰居連線在中間的高度＝鄰居平均
+  const d2=SD_L-2*Tm+SD_R;
+  const col=d2>0.05?'#34d399':(d2<-0.05?'#fb7185':'#94a3b8');
+  let s='';
+  s+=`<line x1="40" y1="225" x2="440" y2="225" stroke="#334155"/>`;
+  // 鄰居連線（若中間點在這條線上就是直線、不彎）
+  s+=`<line x1="${XL}" y1="${yl}" x2="${XR}" y2="${yr}" stroke="#64748b" stroke-dasharray="5"/>`;
+  s+=`<text x="${XR+6}" y="${yr-4}" fill="#64748b" font-size="11">鄰居連線</text>`;
+  // 我 → 鄰居平均 的落差
+  s+=`<line x1="${XM}" y1="${ym}" x2="${XM}" y2="${yavg}" stroke="${col}" stroke-width="2.5"/>`;
+  s+=`<circle cx="${XM}" cy="${yavg}" r="3" fill="#64748b"/>`;
+  // 三顆點
+  s+=`<circle cx="${XL}" cy="${yl}" r="7" fill="#38bdf8"/>`;
+  s+=`<circle cx="${XR}" cy="${yr}" r="7" fill="#38bdf8"/>`;
+  s+=`<circle cx="${XM}" cy="${ym}" r="9" fill="#fbbf24"/>`;
+  s+=`<text x="${XL}" y="${yl+22}" fill="#94a3b8" font-size="12" text-anchor="middle">左鄰 ${SD_L}</text>`;
+  s+=`<text x="${XR}" y="${yr+22}" fill="#94a3b8" font-size="12" text-anchor="middle">右鄰 ${SD_R}</text>`;
+  s+=`<text x="${XM}" y="${ym-15}" fill="#fbbf24" font-size="12" text-anchor="middle">我 ${Tm.toFixed(1)}</text>`;
+  sdSvg.innerHTML=s;
+  const label=d2>0.05?'升溫（被鄰居往上拉）':(d2<-0.05?'降溫（被鄰居往下拉）':'不變（正好在直線上）');
+  document.getElementById('sdMsg').innerHTML=`左 − 2×我 + 右 = ${SD_L} − 2×${Tm.toFixed(1)} + ${SD_R} = <b style="color:${col}">${d2.toFixed(1)}</b> → <b style="color:${col}">${label}</b>`;
+}
+sdMid.addEventListener('input',()=>{ document.getElementById('sdVal').textContent=((+sdMid.value)/10).toFixed(1); drawSD(); });
+drawSD();
+
+/* ===== 從一階到二階：曲線 / 斜率 / 斜率的斜率 三張圖連動 ===== */
+const d2x=document.getElementById('d2x');
+const d2svg=document.getElementById('d2svg');
+const D2={x0:44,x1:440,span:2*Math.PI,yA:80,yB:220,yC:360,amp:50};
+const d2f=x=>Math.sin(x), d2fp=x=>Math.cos(x), d2fpp=x=>-Math.sin(x);
+function d2px(x){ return D2.x0 + x/D2.span*(D2.x1-D2.x0); }
+function d2curve(fn,zero){ let p=''; for(let i=0;i<=140;i++){ const x=D2.span*i/140; const px=d2px(x), py=zero-fn(x)*D2.amp; p+=(i===0?'M':'L')+px.toFixed(1)+' '+py.toFixed(1)+' '; } return p; }
+function drawD2(){
+  const xp=(+d2x.value)/100, pxp=d2px(xp), xScale=(D2.x1-D2.x0)/D2.span;
+  const bands=[
+    {zero:D2.yA, fn:d2f,   col:'#38bdf8', name:'① 曲線本身（位置）'},
+    {zero:D2.yB, fn:d2fp,  col:'#fbbf24', name:'② 一階導數 ＝ 斜率（速度）'},
+    {zero:D2.yC, fn:d2fpp, col:'#fb7185', name:'③ 二階導數 ＝ 斜率的斜率（加速度）'}
+  ];
+  let s=`<line x1="${pxp.toFixed(1)}" y1="20" x2="${pxp.toFixed(1)}" y2="418" stroke="#475569" stroke-dasharray="4"/>`;
+  bands.forEach(b=>{
+    s+=`<line x1="${D2.x0}" y1="${b.zero}" x2="${D2.x1}" y2="${b.zero}" stroke="#334155"/>`;
+    s+=`<text x="${D2.x0-4}" y="${b.zero-56}" fill="${b.col}" font-size="12">${b.name}</text>`;
+    s+=`<path d="${d2curve(b.fn,b.zero)}" fill="none" stroke="${b.col}" stroke-width="2"/>`;
+    const py=b.zero-b.fn(xp)*D2.amp;
+    s+=`<circle cx="${pxp.toFixed(1)}" cy="${py.toFixed(1)}" r="5" fill="${b.col}"/>`;
+  });
+  // ① 上的切線（斜率）
+  const yAp=D2.yA-d2f(xp)*D2.amp, mPix=-(D2.amp*d2fp(xp))/xScale, dx=46;
+  s+=`<line x1="${(pxp-dx).toFixed(1)}" y1="${(yAp-mPix*dx).toFixed(1)}" x2="${(pxp+dx).toFixed(1)}" y2="${(yAp+mPix*dx).toFixed(1)}" stroke="#e2e8f0" stroke-width="1.6"/>`;
+  d2svg.innerHTML=s;
+  const sl=d2fp(xp), cc=d2fpp(xp);
+  const sld=sl>0.05?'往上斜':(sl<-0.05?'往下斜':'幾乎水平');
+  const cd=cc>0.05?'凹朝上 ∪（斜率正在變大）':(cc<-0.05?'凹朝下 ∩（斜率正在變小）':'轉折點（曲線最直的瞬間，二階≈0）');
+  document.getElementById('d2msg').innerHTML=`此刻斜率 ＝ <b style="color:#fbbf24">${sl.toFixed(2)}</b>（${sld}）　｜　二階 ＝ <b style="color:#fb7185">${cc.toFixed(2)}</b> → <b style="color:#fb7185">${cd}</b>`;
+}
+d2x.addEventListener('input',()=>{ document.getElementById('d2xVal').textContent=((+d2x.value)/100).toFixed(1); drawD2(); });
+drawD2();
+
+/* ===== 二維二階導數：五點差分「上+下+左+右−4×自己」 ===== */
+const lapMid=document.getElementById('lapMid');
+const lapSvg=document.getElementById('lapSvg');
+const LAP_N=6;                        // 4 個鄰居固定
+function lapColor(v){ const t=Math.max(0,Math.min(1,v/10)); return `rgb(${Math.round(56+195*t)},${Math.round(150-30*Math.abs(t-.5)*2)},${Math.round(248-115*t)})`; }
+function lapCell(cx,cy,val,tag){
+  let s=`<rect x="${cx-27}" y="${cy-27}" width="54" height="54" rx="9" fill="${lapColor(val)}" stroke="#0f172a" stroke-width="1.5"/>`;
+  s+=`<text x="${cx}" y="${cy+6}" fill="#0f172a" font-size="18" font-weight="700" text-anchor="middle">${val.toFixed(1)}</text>`;
+  if(tag) s+=`<text x="${cx}" y="${cy-33}" fill="#94a3b8" font-size="11" text-anchor="middle">${tag}</text>`;
+  return s;
+}
+function drawLap(){
+  const c=(+lapMid.value)/10;
+  const CX=240, CY=125;
+  let s='';
+  // 連到四個鄰居的線
+  [[CX,CY-64],[CX,CY+64],[CX-72,CY],[CX+72,CY]].forEach(p=>{ s+=`<line x1="${CX}" y1="${CY}" x2="${p[0]}" y2="${p[1]}" stroke="#334155" stroke-width="1.5"/>`; });
+  s+=lapCell(CX,CY-64,LAP_N,'上');
+  s+=lapCell(CX,CY+64,LAP_N,'下');
+  s+=lapCell(CX-72,CY,LAP_N,'左');
+  s+=lapCell(CX+72,CY,LAP_N,'右');
+  s+=lapCell(CX,CY,c,'我');
+  lapSvg.innerHTML=s;
+  const lap=4*LAP_N-4*c;               // 上+下+左+右 − 4×我
+  const col=lap>0.1?'#34d399':(lap<-0.1?'#fb7185':'#94a3b8');
+  const label=lap>0.1?'升溫（低於鄰居平均，被四面拉高）':(lap<-0.1?'降溫（高於鄰居平均，被四面拉低）':'不變（正好等於鄰居平均）');
+  document.getElementById('lapMsg').innerHTML=`上+下+左+右 − 4×我 = 6+6+6+6 − 4×${c.toFixed(1)} = <b style="color:${col}">${lap.toFixed(1)}</b> → <b style="color:${col}">${label}</b>`;
+}
+lapMid.addEventListener('input',()=>{ document.getElementById('lapVal').textContent=((+lapMid.value)/10).toFixed(1); drawLap(); });
+drawLap();
 
 /* ===== 互動四：2D 熱擴散（五點差分）===== */
 const M=81;
