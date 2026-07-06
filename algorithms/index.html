@@ -107,7 +107,26 @@
     <div class="controls"><button onclick="stepFact()">▶ 展開一層</button><button class="ghost" onclick="resetFact()">重置</button></div>
     <div id="factView" style="font-family:ui-monospace,monospace;font-size:15px;line-height:2"></div>
   </div>
-  <div class="tip">寫遞迴的口訣：<strong>①先寫終止條件 ②再讓問題「變小」呼叫自己。</strong>缺了終止條件就是無限迴圈。</div>
+
+  <h3>呼叫堆疊：一層層疊下去，再一層層收回來</h3>
+  <p>上面看的是「式子怎麼展開」，但電腦實際是用一個<strong>呼叫堆疊（call stack）</strong>在跑：每次呼叫自己，就把一個「還沒算完的框」疊上去；直到碰到終止條件才開始<strong>從最上面往下</strong>把答案一個個回傳。按播放看它疊起來、又收回去。</p>
+  <div class="card">
+    <h4>親眼看 factorial(5) 的堆疊怎麼動</h4>
+    <div class="controls">
+      <button onclick="playCallStack()">▶ 播放</button>
+      <button class="ghost" onclick="resetCallStack()">重置</button>
+      <span style="color:var(--muted);font-size:13px">綠色＝正在回傳的值往上冒</span>
+    </div>
+    <div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">
+      <div style="flex:1;min-width:240px">
+        <div style="color:var(--muted);font-size:12px;margin-bottom:4px">↑ 堆疊頂（最後呼叫、最先返回）</div>
+        <div id="csFrames" style="display:flex;flex-direction:column-reverse;gap:6px;min-height:210px;justify-content:flex-start;padding:10px;background:var(--code-bg);border:1px solid var(--line);border-radius:10px"></div>
+        <div style="color:var(--muted);font-size:12px;margin-top:4px">↓ 堆疊底（最先呼叫、最後返回）</div>
+      </div>
+    </div>
+    <p id="csMsg" style="color:var(--warn);font-size:14px;min-height:22px;margin-top:10px">按「播放」開始。</p>
+  </div>
+  <div class="tip">寫遞迴的口訣：<strong>①先寫終止條件 ②再讓問題「變小」呼叫自己。</strong>缺了終止條件就是無限迴圈。看懂堆疊也就懂了：<strong>後呼叫的先返回</strong>，這也是遞迴太深會「爆堆疊 (stack overflow)」的原因。</div>
 </section>
 
 <section id="sort">
@@ -288,6 +307,50 @@ function stepFact(){
     `<div style="color:${i===factStep-1?'#fbbf24':'#e2e8f0'}">${l}</div>`).join('');
 }
 resetFact();
+
+/* Recursion call stack */
+const csSleep=ms=>new Promise(r=>setTimeout(r,ms));
+let csRunning=false;
+function renderCS(stack, opts={}){
+  const framesEl=document.getElementById('csFrames'); if(!framesEl) return;
+  let html=stack.map((n,i)=>{
+    const isTop=i===stack.length-1;
+    let bg='#273449', col='#e2e8f0', bd='#334155';
+    if(isTop && opts.mode==='call'){ bg='rgba(56,189,248,.18)'; col='#7dd3fc'; bd='#38bdf8'; }
+    if(isTop && opts.mode==='base'){ bg='rgba(52,211,153,.2)'; col='#6ee7b7'; bd='#34d399'; }
+    if(isTop && opts.mode==='return'){ bg='rgba(52,211,153,.2)'; col='#6ee7b7'; bd='#34d399'; }
+    const label=`factorial(${n})`+(n===1?'  ← 終止條件':'');
+    return `<div style="padding:8px 12px;border-radius:8px;text-align:center;font-weight:700;font-family:ui-monospace,monospace;background:${bg};color:${col};border:1px solid ${bd}">${label}</div>`;
+  }).join('');
+  if(opts.returned!==undefined){
+    html+=`<div style="padding:6px 12px;border-radius:8px;text-align:center;font-weight:700;font-family:ui-monospace,monospace;background:rgba(52,211,153,.12);color:#34d399;border:1px dashed #34d399">回傳 ${opts.returned} ↑</div>`;
+  }
+  framesEl.innerHTML=html;
+}
+function resetCallStack(){ csRunning=false; renderCS([]); document.getElementById('csMsg').textContent='按「播放」開始。'; }
+async function playCallStack(){
+  if(csRunning) return; csRunning=true;
+  const msg=document.getElementById('csMsg'); const stack=[];
+  for(let n=5;n>=1;n--){
+    if(!csRunning) return; stack.push(n); renderCS(stack,{mode:n===1?'base':'call'});
+    msg.innerHTML=n>1?`呼叫 <b>factorial(${n})</b>：要先知道 factorial(${n-1})，先把自己疊上堆疊、暫停等結果。`
+                      :`呼叫 <b>factorial(1)</b>：n = 1，碰到<span style="color:#34d399">終止條件</span>，可以直接回傳 1，不再往下疊。`;
+    await csSleep(1000);
+  }
+  let ret=1;
+  for(let n=1;n<=5;n++){
+    if(!csRunning) return;
+    const prev=ret; ret=(n===1)?1:n*ret;
+    stack.pop(); renderCS(stack,{mode:'return',returned:ret});
+    msg.innerHTML=(n===1)?`<b>factorial(1)</b> 回傳 <span style="color:#34d399">1</span>，彈出堆疊 → 換上一層繼續算。`
+                         :`<b>factorial(${n})</b> 拿到 factorial(${n-1}) = ${prev} → 回傳 ${n} × ${prev} = <span style="color:#34d399">${ret}</span>，彈出堆疊。`;
+    await csSleep(1100);
+  }
+  renderCS([],{});
+  msg.innerHTML=`堆疊清空，最終 <b>factorial(5) = <span style="color:#34d399">120</span></b>。看出來了嗎——<strong>先疊到底、再從頂往下收，後呼叫的先返回</strong>。`;
+  csRunning=false;
+}
+resetCallStack();
 
 /* Sorting */
 let arr=[], animating=false;

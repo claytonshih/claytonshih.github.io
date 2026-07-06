@@ -152,7 +152,13 @@ stock.<span class="fn">get</span>(<span class="str">"apple"</span>);      <span 
 stock.<span class="fn">has</span>(<span class="str">"banana"</span>);    <span class="com">// false</span></pre>
   <div class="card">
     <h4>互動：親手把 key 丟進雜湊表</h4>
-    <p style="color:var(--muted);font-size:14px;margin-top:0">這裡的雜湊函式：把 key 每個字母的碼加起來，再 <code class="inline">% 8</code>，得到「該去第幾個桶」。同一個桶就用<strong>串接</strong>掛在一起——這就是「碰撞」。</p>
+    <p style="color:var(--muted);font-size:14px;margin-top:0">這裡的雜湊函式：把 key 每個字母的碼加起來，再 <code class="inline">% 8</code>，得到「該去第幾個桶」。兩個 key 算到同一個桶就是<strong>碰撞</strong>——底下可切換兩種常見的處理法。</p>
+    <div class="controls" style="margin-bottom:4px">
+      <span style="color:var(--muted);font-size:13px">碰撞處理：</span>
+      <button id="mChain" onclick="setHashMethod('chain')">鏈結法 Chaining</button>
+      <button id="mProbe" class="ghost" onclick="setHashMethod('probe')">線性探測 Linear Probing</button>
+    </div>
+    <div id="hMethodNote" class="analogy" style="margin:4px 0 10px"></div>
     <div class="controls">
       <input id="hkey" placeholder="輸入 key（如 apple）" onkeydown="if(event.key==='Enter')hashPut()" style="padding:7px 10px;border-radius:8px;background:var(--panel2);color:var(--ink);border:1px solid var(--line);min-width:150px">
       <button onclick="hashPut()">放入 →</button>
@@ -286,31 +292,82 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 
 /* ===== 雜湊表 ===== */
 const HB=8;
-let buckets=Array.from({length:HB},()=>[]);
+let hMethod='chain';                          // 'chain' 鏈結法 | 'probe' 線性探測
+let buckets=Array.from({length:HB},()=>[]);   // 鏈結法：每桶一串
+let slots=Array(HB).fill(null);               // 線性探測：每格最多一個
 function hashCode(k){ let s=0; for(let i=0;i<k.length;i++) s+=k.charCodeAt(i); return s; }
 function hIndex(k){ return hashCode(k)%HB; }
-function renderHash(hit=-1, newKey=null){
-  document.getElementById('hashView').innerHTML = buckets.map((b,i)=>{
-    const pills=b.map((k,j)=>`<span class="pill ${k===newKey?'new':(j>0?'chain':'')}">${k}</span>`).join('');
-    return `<div class="hrow"><div class="hidx">${i}</div><div class="hslot ${i===hit?'hit':''}">${pills||'<span style="color:#475569;font-size:12px">空</span>'}</div></div>`;
-  }).join('');
+
+function renderHash(hit=-1, newKey=null, path=[]){
+  const view=document.getElementById('hashView');
+  if(hMethod==='chain'){
+    view.innerHTML = buckets.map((b,i)=>{
+      const pills=b.map((k,j)=>`<span class="pill ${k===newKey?'new':(j>0?'chain':'')}">${k}</span>`).join('');
+      return `<div class="hrow"><div class="hidx">${i}</div><div class="hslot ${i===hit?'hit':''}">${pills||'<span style="color:#475569;font-size:12px">空</span>'}</div></div>`;
+    }).join('');
+  } else {
+    view.innerHTML = slots.map((k,i)=>{
+      const onPath=path.includes(i);
+      const idxStyle=onPath?'border-color:#fbbf24;color:#fbbf24':'';
+      const pill=k?`<span class="pill ${k===newKey?'new':''}">${k}</span>`:'<span style="color:#475569;font-size:12px">空</span>';
+      return `<div class="hrow"><div class="hidx" style="${idxStyle}">${i}</div><div class="hslot ${i===hit?'hit':''}">${pill}</div></div>`;
+    }).join('');
+  }
 }
-function doPut(k){
+
+function setHashMethod(m){
+  hMethod=m; hashReset();
+  document.getElementById('mChain').className = m==='chain'?'':'ghost';
+  document.getElementById('mProbe').className = m==='probe'?'':'ghost';
+  document.getElementById('hMethodNote').innerHTML = m==='chain'
+    ? '<b>鏈結法：</b>同一個桶就把新 key <strong>串接</strong>掛在一起（像同一格信箱塞多封信）。桶不會滿，但同桶太多會退化成一條長串。'
+    : '<b>線性探測：</b>桶被佔了就<strong>往下一格找空位</strong>（黃框是探測經過的格子）。整齊、快取友善，但東西一多容易「擠成一團」。';
+}
+
+/* ---- 鏈結法 ---- */
+function putChain(k){
   const i=hIndex(k), msg=document.getElementById('hashMsg');
   if(buckets[i].includes(k)){ renderHash(i,k); msg.innerHTML=`「${k}」雜湊 = ${hashCode(k)} % 8 = <b>${i}</b>，桶 ${i} 裡已經有它了`; return; }
   const collide=buckets[i].length>0;
   buckets[i].push(k); renderHash(i,k);
   msg.innerHTML=`「${k}」雜湊 = ${hashCode(k)} % 8 = <b>${i}</b> → 放進桶 ${i}`+(collide?`（桶 ${i} 已有東西 → <span style="color:#fb7185">碰撞！串接掛上</span>）`:'');
 }
+function getChain(k){
+  const i=hIndex(k), found=buckets[i].includes(k); renderHash(i);
+  document.getElementById('hashMsg').innerHTML=`查「${k}」：算雜湊 = <b>${i}</b> → 跳到桶 ${i} → ${found?'<span style="color:#34d399">找到 ✅</span>':'<span style="color:#fb7185">不在裡面</span>'}（同桶最多掃那一小串）`;
+}
+
+/* ---- 線性探測 ---- */
+function putProbe(k){
+  const msg=document.getElementById('hashMsg'), start=hIndex(k);
+  let i=start, path=[], steps=0;
+  while(slots[i]!==null && slots[i]!==k){ path.push(i); i=(i+1)%HB; steps++; if(steps>=HB){ renderHash(-1,null,path); msg.innerHTML=`表已滿，<b>${k}</b> 放不進去了（線性探測的桶數固定）`; return; } }
+  path.push(i);
+  if(slots[i]===k){ renderHash(i,k,path); msg.innerHTML=`「${k}」雜湊 = ${start}，格 ${start} 起已經有它了`; return; }
+  slots[i]=k; renderHash(i,k,path);
+  msg.innerHTML=steps>0
+    ? `「${k}」雜湊 = ${start}，但 ${start} 被佔 → <span style="color:#fb7185">碰撞！</span>往下探測 ${steps} 格，放到 <b>${i}</b>`
+    : `「${k}」雜湊 = ${start} → 該格是空的，直接放進 <b>${i}</b>`;
+}
+function getProbe(k){
+  const msg=document.getElementById('hashMsg'), start=hIndex(k);
+  let i=start, path=[], steps=0;
+  while(slots[i]!==null){ path.push(i); if(slots[i]===k){ renderHash(i,null,path); msg.innerHTML=`查「${k}」：從格 ${start} 起探測 ${steps} 步 → <span style="color:#34d399">找到 ✅</span> 在格 ${i}`; return; } i=(i+1)%HB; steps++; if(steps>=HB) break; }
+  path.push(i); renderHash(-1,null,path);
+  msg.innerHTML=`查「${k}」：從格 ${start} 起探測，碰到空格就停 → <span style="color:#fb7185">不在裡面</span>`;
+}
+
+/* ---- 共用入口 ---- */
+function doPut(k){ hMethod==='chain'?putChain(k):putProbe(k); }
 function hashPut(){ const el=document.getElementById('hkey'); const k=el.value.trim().toLowerCase(); if(!k)return; doPut(k); el.value=''; }
 function quickPut(k){ doPut(k); }
 function hashGet(){
   const k=document.getElementById('hkey').value.trim().toLowerCase(); if(!k){document.getElementById('hashMsg').textContent='輸入要查的 key';return;}
-  const i=hIndex(k), found=buckets[i].includes(k); renderHash(i);
-  document.getElementById('hashMsg').innerHTML=`查「${k}」：直接算雜湊 = <b>${i}</b> → 跳到桶 ${i} → ${found?'<span style="color:#34d399">找到 ✅</span>':'<span style="color:#fb7185">不在裡面</span>'}（不必一個個找，這就是 O(1)）`;
+  hMethod==='chain'?getChain(k):getProbe(k);
 }
-function hashReset(){ buckets=Array.from({length:HB},()=>[]); renderHash(); document.getElementById('hashMsg').textContent=''; }
-renderHash();
+function hashReset(){ buckets=Array.from({length:HB},()=>[]); slots=Array(HB).fill(null); renderHash(); document.getElementById('hashMsg').textContent=''; }
+setHashMethod('chain');
+document.getElementById('hashMsg').innerHTML='試試看：依序加入 grape 和 lime（會算到同一個桶）→ 觀察兩種方法怎麼處理碰撞。';
 
 /* ===== 二元搜尋樹 BST ===== */
 let bstRoot=null;

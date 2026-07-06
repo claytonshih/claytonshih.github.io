@@ -178,6 +178,7 @@
       <button class="ghost" onclick="resetObserver()">重置</button>
     </div>
     <div style="margin-bottom:8px">目前訂閱者：<span id="subList"><span class="pill" style="opacity:.5">（尚無）</span></span></div>
+    <svg id="obsSvg" viewBox="0 0 480 230" width="100%" style="background:var(--code-bg);border-radius:10px;margin-bottom:8px"></svg>
     <div id="observerOut" class="out"></div>
   </div>
 </section>
@@ -187,6 +188,31 @@
   <p class="lead">把「可以互換的演算法」各自包成一個策略，執行時再決定要用哪一個——不必寫一堆 if/else。</p>
   <div class="analogy"><b>比喻：</b>導航 App 的「最快 / 最短 / 避開收費」。目的地不變，你隨時切換「怎麼走」的策略，路線就跟著換。</div>
   <div class="when"><b>什麼時候用：</b>同一件事有多種做法要動態切換時（不同運費計算、不同排序規則、不同折扣方案）。</div>
+
+  <p style="margin-top:18px">「執行時再決定用哪一個、不必寫一堆 if/else」是什麼意思？拿結帳折扣來對照最清楚。</p>
+  <p style="color:var(--muted);font-size:14px;margin:6px 0"><b style="color:var(--bad)">❌ 沒有策略：</b>把每種做法塞進一個大函式的 if/else 裡。每多一種優惠，就得回來改這個函式。</p>
+  <pre><span class="kw">function</span> <span class="fn">checkout</span>(price, type) {
+  <span class="kw">if</span> (type === <span class="str">'一般'</span>)      <span class="kw">return</span> price;
+  <span class="kw">else if</span> (type === <span class="str">'VIP'</span>)  <span class="kw">return</span> price * <span class="num">0.8</span>;
+  <span class="kw">else if</span> (type === <span class="str">'清倉'</span>)  <span class="kw">return</span> price * <span class="num">0.5</span>;
+  <span class="kw">else if</span> (type === <span class="str">'會員日'</span>) <span class="kw">return</span> price * <span class="num">0.65</span>;
+  <span class="com">// 每多一種優惠，就得回來這裡再插一段 else if…</span>
+}</pre>
+  <p style="color:var(--muted);font-size:14px;margin:14px 0 6px"><b style="color:var(--ok)">✅ 用策略：</b>每種做法各包成一個小函式收在一起，<code class="inline">checkout</code> 只在被呼叫的那一刻用 <code class="inline">type</code> 去挑一個來跑。</p>
+  <pre><span class="kw">const</span> strategies = {
+  一般:   price => price,
+  VIP:    price => price * <span class="num">0.8</span>,
+  清倉:   price => price * <span class="num">0.5</span>,
+  會員日: price => price * <span class="num">0.65</span>,
+};
+
+<span class="kw">function</span> <span class="fn">checkout</span>(price, type) {
+  <span class="kw">return</span> strategies[type](price);  <span class="com">// 執行時才用 type 挑一個來跑</span>
+}
+<span class="com">// 想加「雙11 三折」？多一行就好，完全不用動 checkout：</span>
+strategies[<span class="str">'雙11'</span>] = price => price * <span class="num">0.3</span>;</pre>
+  <div class="tip">重點就兩句：<strong>「執行時再決定」</strong>＝ <code class="inline">checkout</code> 不在乎有哪些優惠，傳什麼 <code class="inline">type</code> 就挑哪個；<strong>「不必一堆 if/else」</strong>＝ 加新做法用<b>新增</b>（多一個策略），不是<b>改舊</b>（動到大函式）。這正是 SOLID 的<a href="#solid">開放封閉原則</a>。</div>
+
   <div class="card">
     <h4>互動：切換結帳策略（原價 $1000）</h4>
     <div class="controls">
@@ -195,6 +221,7 @@
       <button class="ghost" onclick="applyStrategy('清倉五折',0.5)">清倉</button>
       <button class="ghost" onclick="applyStrategy('會員日 65 折',0.65)">會員日</button>
     </div>
+    <svg id="stratSvg" viewBox="0 0 480 220" width="100%" style="background:var(--code-bg);border-radius:10px;margin-bottom:8px"></svg>
     <div id="strategyOut" class="out"></div>
   </div>
 </section>
@@ -298,17 +325,90 @@ function watchMovie(){
 }
 
 /* Observer */
-let subs=[];
-function subUser(name){ if(subs.includes(name)){return;} subs.push(name); renderSubs(); document.getElementById('observerOut').textContent=`${name} 已訂閱 ✅`; }
+const dpSleep=ms=>new Promise(r=>setTimeout(r,ms));
+let subs=[], obsBusy=false;
+const OBS_SUBJ=[95,115];
+const OBS_POS={'小明':[365,50],'小華':[365,115],'小美':[365,180]};
+function subUser(name){ if(subs.includes(name)){return;} subs.push(name); renderSubs(); renderObs(); document.getElementById('observerOut').textContent=`${name} 已訂閱 ✅（多了一條連線）`; }
 function renderSubs(){ document.getElementById('subList').innerHTML=subs.length?subs.map(s=>`<span class="pill">🔔 ${s}</span>`).join(''):'<span class="pill" style="opacity:.5">（尚無）</span>'; }
-function publishVideo(){
-  if(!subs.length){ document.getElementById('observerOut').textContent='還沒有人訂閱，發片沒人收到 😅'; return; }
-  document.getElementById('observerOut').textContent='📢 頻道發布新片！自動通知所有訂閱者：\n'+subs.map(s=>`  → ${s} 收到通知`).join('\n');
+function renderObs(opts={}){
+  const svg=document.getElementById('obsSvg'); if(!svg) return;
+  const lit=opts.lit||new Set(), hot=opts.subjectHot; const [sx,sy]=OBS_SUBJ;
+  let s='';
+  Object.entries(OBS_POS).forEach(([name,[x,y]])=>{
+    if(subs.includes(name)){
+      const on=lit.has(name);
+      s+=`<line x1="${sx+70}" y1="${sy}" x2="${x-28}" y2="${y}" stroke="${on?'#34d399':'#334155'}" stroke-width="${on?3:2}" ${on?'':'stroke-dasharray="5"'} marker-end="url(#${on?'obsArrowOn':'obsArrow'})"/>`;
+    }
+  });
+  s+=`<rect x="${sx-70}" y="${sy-32}" width="140" height="64" rx="12" fill="${hot?'#38bdf8':'#273449'}" stroke="#38bdf8" stroke-width="2"/>`;
+  s+=`<text x="${sx}" y="${sy-6}" text-anchor="middle" font-size="14" font-weight="700" fill="${hot?'#04283a':'#e2e8f0'}">📺 頻道 Subject</text>`;
+  s+=`<text x="${sx}" y="${sy+14}" text-anchor="middle" font-size="12" fill="${hot?'#04283a':'#94a3b8'}">${hot?'狀態改變！':'狀態來源'}</text>`;
+  Object.entries(OBS_POS).forEach(([name,[x,y]])=>{
+    if(subs.includes(name)){
+      const on=lit.has(name);
+      s+=`<circle cx="${x}" cy="${y}" r="27" fill="${on?'#34d399':'#273449'}" stroke="#818cf8" stroke-width="2"/>`;
+      s+=`<text x="${x}" y="${y-2}" text-anchor="middle" font-size="14" font-weight="700" fill="${on?'#04283a':'#e2e8f0'}">${on?'🔔':'👤'}</text>`;
+      s+=`<text x="${x}" y="${y+15}" text-anchor="middle" font-size="11" fill="${on?'#04283a':'#94a3b8'}">${name}</text>`;
+    } else {
+      s+=`<circle cx="${x}" cy="${y}" r="27" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="4"/>`;
+      s+=`<text x="${x}" y="${y+4}" text-anchor="middle" font-size="11" fill="#475569">未訂閱</text>`;
+    }
+  });
+  svg.innerHTML=`<defs><marker id="obsArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#334155"/></marker><marker id="obsArrowOn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#34d399"/></marker></defs>`+s;
 }
-function resetObserver(){ subs=[]; renderSubs(); document.getElementById('observerOut').textContent=''; }
+async function publishVideo(){
+  const out=document.getElementById('observerOut');
+  if(!subs.length){ out.textContent='還沒有人訂閱，發片沒人收到 😅'; return; }
+  if(obsBusy) return; obsBusy=true;
+  out.textContent='📢 頻道發布新片！通知沿著箭頭一個個傳出去…';
+  renderObs({subjectHot:true}); await dpSleep(550);
+  const lit=new Set();
+  for(const name of subs){ lit.add(name); renderObs({subjectHot:true, lit:new Set(lit)}); await dpSleep(650); }
+  renderObs({lit:new Set(subs)});
+  out.textContent='📢 頻道發布新片！自動通知所有訂閱者：\n'+subs.map(s=>`  → ${s} 收到通知 🔔`).join('\n');
+  obsBusy=false;
+}
+function resetObserver(){ subs=[]; obsBusy=false; renderSubs(); renderObs(); document.getElementById('observerOut').textContent=''; }
+renderObs();
 
 /* Strategy */
-function applyStrategy(label,rate){ const price=Math.round(1000*rate); document.getElementById('strategyOut').textContent=`套用策略「${label}」\n$1000 → $${price}`; }
+const STRATS=[
+  {key:'原價', short:'一般 ×1.0', rate:1},
+  {key:'VIP 八折', short:'VIP ×0.8', rate:0.8},
+  {key:'清倉五折', short:'清倉 ×0.5', rate:0.5},
+  {key:'會員日 65 折', short:'會員日 ×0.65', rate:0.65},
+];
+function renderStrat(sel=-1){
+  const svg=document.getElementById('stratSvg'); if(!svg) return;
+  const inX=70,inY=110,outX=410,outY=110, boxX=175,boxW=132,boxH=38, ys=[30,80,130,180];
+  let s=`<defs><marker id="stArrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#334155"/></marker><marker id="stArrowOn" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#38bdf8"/></marker></defs>`;
+  STRATS.forEach((st,i)=>{
+    const cy=ys[i]+boxH/2, on=i===sel;
+    s+=`<line x1="${inX+50}" y1="${inY}" x2="${boxX-4}" y2="${cy}" stroke="${on?'#38bdf8':'#2a3a52'}" stroke-width="${on?2.5:1.5}" ${on?'':'stroke-dasharray="4"'}/>`;
+    s+=`<line x1="${boxX+boxW+4}" y1="${cy}" x2="${outX-54}" y2="${outY}" stroke="${on?'#38bdf8':'#2a3a52'}" stroke-width="${on?2.5:1.5}" ${on?'':'stroke-dasharray="4"'} marker-end="url(#${on?'stArrowOn':'stArrow'})"/>`;
+  });
+  s+=`<rect x="${inX-50}" y="${inY-26}" width="100" height="52" rx="10" fill="#273449" stroke="#818cf8" stroke-width="2"/>`;
+  s+=`<text x="${inX}" y="${inY-4}" text-anchor="middle" font-size="12" fill="#94a3b8">原價</text>`;
+  s+=`<text x="${inX}" y="${inY+15}" text-anchor="middle" font-size="15" font-weight="700" fill="#e2e8f0">$1000</text>`;
+  STRATS.forEach((st,i)=>{
+    const on=i===sel;
+    s+=`<rect x="${boxX}" y="${ys[i]}" width="${boxW}" height="${boxH}" rx="8" fill="${on?'#38bdf8':'#1e293b'}" stroke="${on?'#38bdf8':'#334155'}" stroke-width="2"/>`;
+    s+=`<text x="${boxX+boxW/2}" y="${ys[i]+boxH/2+5}" text-anchor="middle" font-size="13" font-weight="700" fill="${on?'#04283a':'#94a3b8'}">${st.short}</text>`;
+  });
+  const price=sel>=0?Math.round(1000*STRATS[sel].rate):null;
+  s+=`<rect x="${outX-54}" y="${outY-26}" width="108" height="52" rx="10" fill="${sel>=0?'#34d399':'#273449'}" stroke="#34d399" stroke-width="2"/>`;
+  s+=`<text x="${outX}" y="${outY-4}" text-anchor="middle" font-size="12" fill="${sel>=0?'#04283a':'#94a3b8'}">結帳金額</text>`;
+  s+=`<text x="${outX}" y="${outY+15}" text-anchor="middle" font-size="15" font-weight="700" fill="${sel>=0?'#04283a':'#e2e8f0'}">${price!=null?'$'+price:'—'}</text>`;
+  svg.innerHTML=s;
+}
+function applyStrategy(label,rate){
+  const i=STRATS.findIndex(s=>s.key===label);
+  renderStrat(i);
+  const price=Math.round(1000*rate);
+  document.getElementById('strategyOut').textContent=`套用策略「${label}」——輸入一樣是 $1000，只換了中間那個盒子：\n$1000 → $${price}`;
+}
+renderStrat();
 
 /* Iterator */
 let iterData=['🍎','🍌','🍇','🍑','🍊'], iterIdx=0;
