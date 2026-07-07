@@ -60,6 +60,7 @@
   <a href="../finite-difference/index.html" class="nl">有限差分</a>
   <a href="../numerical/index.html" class="nl">數值模擬</a>
   <a href="../wave/index.html" class="nl">波動模擬</a>
+  <a href="../fluid-mechanics/index.html" class="nl">流體力學</a>
   <a href="../airy/index.html" class="nl active">水波理論</a>
 </header>
 
@@ -81,6 +82,7 @@
   <div class="analogy"><b>三個假設：</b>水<strong>不可壓縮</strong>、<strong>無黏</strong>（理想流體）、運動<strong>無旋</strong>；而且波很小（這是能「線性化」的關鍵）。無旋這條讓我們能定義一個「速度勢」<span style="font-family:Georgia,serif">φ</span>，把三個速度分量濃縮成一個純量：<span style="font-family:Georgia,serif">u = ∂φ/∂x</span>、<span style="font-family:Georgia,serif">w = ∂φ/∂z</span>。</div>
 
   <h3 id="laws">第 0 步：流體要遵守的三條律</h3>
+  <div class="tip">這三條律不是憑空給的——它們可以從連續體假設、隨體導數與牛頓第二定律一步步推出來（包含 <span style="font-family:Georgia,serif">(u·∇)u</span> 對流項的來源）。想先打好這層地基，可先讀 <a href="../fluid-mechanics/index.html">流體力學基礎</a>，再回到這頁的推導。</div>
   <p>一切從流體力學的三條基本律出發，它們對水裡<strong>每一個微小水團</strong>都成立（<span style="font-family:Georgia,serif">u</span>、<span style="font-family:Georgia,serif">w</span> 是水平、垂直速度，<span style="font-family:Georgia,serif">p</span> 壓力，<span style="font-family:Georgia,serif">ρ</span> 密度）：</p>
   <div class="steps">
     <div class="row"><div class="tag">① 質量守恆<br>（連續方程）</div><div class="body">∇·<b style="font-style:italic">u</b> = <span class="frac"><span>∂u</span><span>∂x</span></span> <span class="op">+</span> <span class="frac"><span>∂w</span><span>∂z</span></span> = 0</div></div>
