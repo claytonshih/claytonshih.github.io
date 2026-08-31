@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>營業稅重點整理｜零稅率與免稅、進項扣抵、統一發票、罰則（記帳士考試）</title>
+<meta name="description" content="加值型及非加值型營業稅完整重點：零稅率與免稅差在哪、進項不得扣抵五款、二聯式發票稅額還原、兼營營業人不得扣抵比例、退稅三種情形與滯報怠報金，附可操作計算機。">
+<meta name="keywords" content="營業稅, 記帳士, 零稅率, 免稅, 進項稅額, 統一發票, 兼營營業人, 滯報金, 怠報金, 401 403 申報書, 加值型營業稅">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://claytonshih.github.io/bookkeeper/business-tax/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"記帳士考試","item":"https://claytonshih.github.io/bookkeeper/"},{"@type":"ListItem","position":3,"name":"營業稅","item":"https://claytonshih.github.io/bookkeeper/business-tax/"}]},{"@type":"TechArticle","headline":"營業稅重點整理｜零稅率與免稅、進項扣抵、統一發票、罰則","description":"加值型及非加值型營業稅的體系、稅額計算、稽徵程序與罰則，用圖解與互動計算機理解。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-08-31T00:00:00+08:00","dateModified":"2026-08-31T00:00:00+08:00","author":{"@type":"Organization","name":"直覺科學互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"直覺科學互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/bookkeeper/business-tax/"}}]}
+</script>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="直覺科學互動學習">
+<meta property="og:title" content="營業稅重點整理｜零稅率與免稅、進項扣抵、統一發票、罰則">
+<meta property="og:description" content="零稅率與免稅差在哪、進項不得扣抵五款、發票稅額還原、退稅三種情形與滯報怠報金，附可操作計算機。">
+<meta property="og:url" content="https://claytonshih.github.io/bookkeeper/business-tax/">
+<meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://claytonshih.github.io/og-cover.png">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E">
+  <script src="../../assets/ga.js"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="../../assets/style.css">
+<style>
+  /* 稅務頁專用小元件 */
+  .subnav{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+  .subnav a{text-decoration:none;font-size:13.5px;font-weight:700;padding:6px 14px;border-radius:20px;
+    background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
+  .subnav a.on{background:var(--brand);border-color:var(--brand);color:#04283a}
+  .flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0}
+  .box{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px;text-align:center;min-width:110px}
+  .box b{display:block;color:#fff;font-size:15px}
+  .box.good{border-color:var(--ok);background:rgba(52,211,153,.10)}
+  .box.bad{border-color:var(--bad);background:rgba(251,113,133,.10)}
+  .arw{color:var(--muted);font-size:20px;font-weight:700}
+  .num{font-family:ui-monospace,Menlo,monospace;color:var(--warn);font-weight:700}
+  .calc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:18px 0}
+  .calc label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+  .calc input[type=number],.calc select{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+    background:var(--code-bg);color:var(--ink);font-family:ui-monospace,Menlo,monospace;font-size:14px}
+  .calc .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .res{margin-top:14px;background:var(--code-bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px;line-height:2}
+  .res .k{color:var(--muted);display:inline-block;min-width:170px}
+  .qbtn{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .qbtn button{font-size:13px;padding:7px 13px}
+  .verdict{margin-top:10px;border-radius:10px;padding:12px 16px;font-size:14.5px;display:none}
+  .verdict.yes{display:block;border-left:4px solid var(--ok);background:rgba(52,211,153,.10)}
+  .verdict.no{display:block;border-left:4px solid var(--bad);background:rgba(251,113,133,.10)}
+  .verdict b{color:#fff}
+  .mn{font-family:ui-monospace,Menlo,monospace}
+  .key{color:var(--warn);font-weight:700}
+</style>
+</head>
+<body>
+<header class="topnav">
+  <a href="../../index.html" class="logo">📚 直覺科學互動學習</a>
+  <a href="../../index.html" class="nl">首頁</a>
+  <a href="../../algorithms/index.html" class="nl">演算法</a>
+  <a href="../../data-structures/index.html" class="nl">資料結構</a>
+  <a href="../../design-patterns/index.html" class="nl">設計模式</a>
+  <a href="../../finite-difference/index.html" class="nl">有限差分</a>
+  <a href="../../numerical/index.html" class="nl">數值模擬</a>
+  <a href="../../wave/index.html" class="nl">波動模擬</a>
+  <a href="../../fluid-mechanics/index.html" class="nl">流體力學</a>
+  <a href="../../airy/index.html" class="nl">水波理論</a>
+  <a href="../index.html" class="nl active">記帳士考試</a>
+</header>
+
+<!-- ===== 廣告版位：頂部橫幅 ===== -->
+<div class="ad-slot ad-leaderboard" role="complementary" aria-label="廣告版位">
+  <span class="ad-tag">Advertisement</span>
+  <span>頂部橫幅廣告版位 · AdSense 核准後在此貼上廣告單元</span>
+</div>
+
+<div class="page">
+<main class="content">
+  <h1 class="page-title">🧾 營業稅</h1>
+  <p class="page-sub">加值型及非加值型營業稅——一條商品鏈上，每個人只繳自己「加上去的那一段」的稅。</p>
+
+  <nav class="subnav">
+    <a href="../index.html">記帳士考試總覽</a>
+    <a href="index.html" class="on">營業稅</a>
+    <a href="../income-tax/index.html">所得稅</a>
+  </nav>
+
+  <p class="lead">營業稅是<strong>消費稅、間接稅、國稅</strong>：法律上向營業人課徵，經濟上卻由最終消費者負擔。整部法七章六十條，考題幾乎集中在四個地方——第二章的減免、第四章的稅額計算、第五章的稽徵、第六章的罰則。這一頁就照這個順序走，先把「加值」這個核心觀念說清楚，再逐章補上細節與數字。</p>
+
+<section id="overview">
+  <h2>體系與速覽</h2>
+
+  <p>先理解「加值型」三個字。一件商品從原料到零售會經過好幾手，如果每一手都按售價全額課稅，稅就會疊在稅上面（重複課稅）。加值型的作法是：每個環節都按售價開出<strong>銷項稅額</strong>，同時把上游開給自己的<strong>進項稅額</strong>扣掉，只把差額繳給國庫。</p>
+
+  <div class="analogy"><b>比喻：</b>像接力賽交棒。每一棒的選手只跑自己那一段，前一段的距離已經有人跑完了。營業人繳的稅＝<span class="key">自己這一段的加值 × 5%</span>，前面幾段的稅由上游繳過，用發票證明後就能扣掉。全鏈加總起來，剛好等於最終售價的 5%，一分不多、一分不少。</div>
+
+  <div class="flow">
+    <div class="box">原料商<b>售 100</b><span class="mn">稅 5</span></div>
+    <span class="arw">→</span>
+    <div class="box">製造商<b>售 300</b><span class="mn">15 − 5 = 10</span></div>
+    <span class="arw">→</span>
+    <div class="box">零售商<b>售 500</b><span class="mn">25 − 15 = 10</span></div>
+    <span class="arw">→</span>
+    <div class="box good">消費者<b>付 525</b><span class="mn">實際負擔 25</span></div>
+  </div>
+  <div class="legend">每一格的第二行是該環節實際入庫的稅額：5 + 10 + 10 = 25 = 500 × 5%。</div>
+
+  <h3>法規層級</h3>
+  <table>
+    <tr><th>層級</th><th>法規</th><th>授權依據</th></tr>
+    <tr><td>母法</td><td>加值型及非加值型營業稅法</td><td>—</td></tr>
+    <tr><td>細則</td><td>施行細則</td><td>法 59</td></tr>
+    <tr><td>子法</td><td>統一發票使用辦法</td><td>法 32 Ⅳ</td></tr>
+    <tr><td>子法</td><td>兼營營業人營業稅額計算辦法</td><td>法 19 Ⅲ、36 Ⅰ</td></tr>
+    <tr><td>附表</td><td>營業人開立銷售憑證時限表</td><td>法 32 Ⅰ</td></tr>
+  </table>
+
+  <h3>兩套稅制</h3>
+  <p>並不是所有營業人都用上面那套「銷項減進項」。第四章分成兩節：第一節是加值型，第二節是非加值型，後者按銷售額直接乘稅率，進項<strong>不能扣</strong>。</p>
+  <table>
+    <tr><th>項目</th><th>加值型（第一節）</th><th>非加值型（第二節）</th></tr>
+    <tr><td>對象</td><td>一般營業人</td><td>金融保險業、特種飲食業、小規模營業人</td></tr>
+    <tr><td>計稅</td><td>銷項稅額 − 進項稅額</td><td>銷售額 × 稅率（不得扣抵進項）</td></tr>
+    <tr><td>稅率</td><td>5%</td><td>0.1 / 1 / 2 / 5 / 15 / 25%</td></tr>
+    <tr><td>發票</td><td>三聯式、二聯式、電子發票</td><td>特種發票或免用</td></tr>
+    <tr><td>申報書</td><td>401（專營應稅）／403（兼營）</td><td>查定者由稽徵機關填發繳款書</td></tr>
+    <tr><td>進項優惠</td><td>全額扣抵（除法 19 五款）</td><td>查定者僅得以進項稅額 <span class="key">10%</span> 扣減（法 25）</td></tr>
+  </table>
+
+  <h3>五個必背數字</h3>
+  <div class="grid3">
+    <div class="card"><h4>15 日</h4><p style="color:var(--muted);font-size:14px;margin:0">申報、變更／註銷登記、合併解散申報</p></div>
+    <div class="card"><h4>3 年</h4><p style="color:var(--muted);font-size:14px;margin:0">放棄免稅、查定改核實、直接扣抵法，核准後不得變更</p></div>
+    <div class="card"><h4>10 年</h4><p style="color:var(--muted);font-size:14px;margin:0">進項憑證申報扣抵最長期限（細則 29）</p></div>
+    <div class="card"><h4>5 倍</h4><p style="color:var(--muted);font-size:14px;margin:0">漏稅罰上限（法 51、52）</p></div>
+    <div class="card"><h4>9 個月</h4><p style="color:var(--muted);font-size:14px;margin:0">兼營營業人當年度營業未滿 9 個月，免辦年度調整</p></div>
+  </div>
+</section>
+
+<section id="scope">
+  <h2>課稅範圍與納稅義務人</h2>
+
+  <p>法 1 只給三個課稅客體：<strong>境內銷售貨物、境內銷售勞務、進口貨物</strong>。所有題目的第一步都是先確認事實落在哪一個客體裡，落不進去就談不上稅率與扣抵。</p>
+
+  <h3>什麼叫「銷售」（法 3）</h3>
+  <ul>
+    <li>銷售貨物：移轉貨物<strong>所有權</strong>而取得代價。</li>
+    <li>銷售勞務：提供勞務，或提供貨物與他人<strong>使用、收益</strong>而取得代價。</li>
+    <li><strong>排除</strong>：執行業務者之專業性勞務、個人受僱提供勞務。</li>
+  </ul>
+  <div class="tip">細則 6 的執行業務者包含律師、會計師、建築師、技師、醫師、<span class="key">記帳士</span>、地政士、記帳及報稅代理人、著作人、經紀人、表演人等。記帳士本身執業收取的報酬<strong>不屬於銷售勞務</strong>，這一點常被拿來當選擇題的陷阱。</div>
+
+  <h3>視為銷售五款（法 3 Ⅲ）</h3>
+  <p>有些行為沒有實際收錢，但貨物已經離開了課稅的鏈條，如果不補一筆銷項，前面扣掉的進項就會平白流失。法律因此把五種情形「視為銷售」。口訣是<strong>自用、餘存、代購、委銷、受銷</strong>。</p>
+  <table>
+    <tr><th>款</th><th>情形</th><th>銷售額（細則 19）</th></tr>
+    <tr><td>一</td><td>供銷售之貨物轉供自用；貨物<strong>無償移轉</strong>他人</td><td>時價</td></tr>
+    <tr><td>二</td><td>解散廢止時<strong>餘存貨物</strong>；抵償債務、分配股東</td><td>時價</td></tr>
+    <tr><td>三</td><td>以自己名義<strong>代購</strong>交付委託人</td><td>代購實際價格</td></tr>
+    <tr><td>四</td><td><strong>委託</strong>他人代銷</td><td>約定代銷價格</td></tr>
+    <tr><td>五</td><td><strong>銷售</strong>代銷貨物</td><td>約定代銷價格</td></tr>
+  </table>
+  <p>第 4 項於勞務準用；代購代銷雙方應訂立書面契約。兩個排除要一起記：法 3-1 信託的成立、受託人變更、不成立無效解除撤銷消滅，<strong>均不視為銷售</strong>；法 3-2 非營利事業及專營免稅營業人，第 1、2 款情形且<strong>進項未申報扣抵</strong>者，也不視為銷售——因為它們本來就沒扣過，不需要補回來。</p>
+
+  <h3>境內的判斷（法 4）</h3>
+  <table>
+    <tr><th>類型</th><th>標準</th></tr>
+    <tr><td>銷售貨物・須移運</td><td><strong>起運地</strong>在境內</td></tr>
+    <tr><td>銷售貨物・無須移運</td><td><strong>所在地</strong>在境內</td></tr>
+    <tr><td>銷售勞務</td><td>境內<strong>提供</strong>或<strong>使用</strong>（二擇一即可）</td></tr>
+    <tr><td>國際運輸</td><td>自境內載運客貨出境</td></tr>
+    <tr><td>再保險</td><td>外國保險業自境內保險業承保再保險</td></tr>
+  </table>
+  <p>進口（法 5）指貨物自國外進入境內，<strong>但進入保稅區之保稅貨物除外</strong>；保稅貨物自保稅區進入境內其他地區也算進口。保稅區包括科技產業園區、科學園區、農業科技園區、自由貿易港區、保稅工廠、保稅倉庫與物流中心，以外為課稅區（法 6-1）。</p>
+
+  <h3>誰是納稅義務人（法 2）</h3>
+  <ol>
+    <li>銷售貨物或勞務之<strong>營業人</strong>。</li>
+    <li>進口貨物之<strong>收貨人或持有人</strong>（收貨人＝提單或艙單記載之人，細則 3）。</li>
+    <li>境內無固定營業場所之外國事業，其銷售勞務之<strong>買受人</strong>；外國國際運輸事業有代理人者為<strong>代理人</strong>。</li>
+    <li>農業用油、漁業用油<strong>轉讓或移作他用</strong>不符免稅規定者（不明時為貨物持有人）。</li>
+  </ol>
+  <div class="when"><b>特別注意：</b>跨境電商 B2C（法 2-1、法 6 ④）是上面第 3 款的例外。外國事業經網際網路銷售<strong>電子勞務予境內自然人</strong>者，<strong>自己就是納稅義務人</strong>，年銷售額逾一定基準應辦稅籍登記（法 28-1），並應開立<strong>雲端發票</strong>。買受人是自然人時不必自己去繳稅，這與 B2B 的情形完全相反。</div>
+
+  <p>法 6 的營業人有四種：①營利事業　②非營利機關團體<strong>有銷售</strong>貨物或勞務者　③外國事業境內<strong>固定營業場所</strong>　④外國事業銷售電子勞務予境內自然人。固定營業場所（細則 4）包含總機構、管理處、分公司、事務所、工廠、倉棧、礦場、建築工程場所、展售場所、辦事處、門市部、拍賣場等。</p>
+</section>
+
+<section id="zero-exempt">
+  <h2>零稅率與免稅 ★核心</h2>
+
+  <p>這一節是整部營業稅法最常出、也最容易混淆的地方。兩者中文都像「不用繳稅」，法律效果卻完全相反。差別只在一個問題：<strong>進項稅額怎麼辦？</strong></p>
+
+  <div class="analogy"><b>比喻：</b>零稅率像是把水管的出口關上、但入口的水讓你<strong>倒回去</strong>；免稅則是連水管都拆掉，入口的水只能<strong>留在桶子裡變成成本</strong>。所以零稅率是完全免稅，免稅只是部分免稅。</div>
+
+  <table>
+    <tr><th>比較</th><th>零稅率（法 7）</th><th>免稅（法 8）</th></tr>
+    <tr><td>性質</td><td>在課稅範圍內，稅率 0%</td><td>排除於課稅之外</td></tr>
+    <tr><td>進項稅額</td><td><strong>可扣抵並退還</strong></td><td><strong>不得扣抵、不得退還</strong>（法 19 Ⅱ）</td></tr>
+    <tr><td>結果</td><td><strong>完全免稅</strong></td><td><strong>部分免稅</strong>（進項沉澱為成本）</td></tr>
+    <tr><td>申報頻率</td><td>得申請<strong>按月</strong>（法 35 Ⅱ）</td><td>按期 2 個月</td></tr>
+    <tr><td>可否放棄</td><td>不生問題</td><td><strong>得申請放棄</strong>，核准後 3 年不得變更（法 8 Ⅱ）</td></tr>
+  </table>
+
+  <h4>動手比一比：同樣一筆生意，兩種身分差多少</h4>
+  <p>調整下面兩個數字，看同一家公司在「零稅率」與「免稅」兩種身分下，最後拿回多少、又有多少變成成本。零稅率的退還還有一道上限——<span class="key">零稅率銷售額 × 5%</span>（細則 42），超過的部分只能留抵。</p>
+
+  <div class="calc">
+    <div class="row">
+      <div>
+        <label for="zSales">當期銷售額（元）</label>
+        <input type="number" id="zSales" value="2000000" min="0" step="10000">
+      </div>
+      <div>
+        <label for="zInput">當期進項稅額（元）</label>
+        <input type="number" id="zInput" value="120000" min="0" step="1000">
+      </div>
+    </div>
+    <div class="controls"><button onclick="calcZero()">計算</button><button class="ghost" onclick="document.getElementById('zSales').value=2000000;document.getElementById('zInput').value=120000;calcZero()">還原</button></div>
+    <div class="grid2">
+      <div class="res" id="zeroBox"></div>
+      <div class="res" id="exemptBox"></div>
+    </div>
+  </div>
+
+  <h3>零稅率九款（法 7）</h3>
+  <ol>
+    <li>外銷貨物。</li>
+    <li>與外銷有關之勞務，或<strong>在國內提供而在國外使用</strong>之勞務。</li>
+    <li>免稅商店銷售與<strong>過境或出境旅客</strong>之貨物。</li>
+    <li>銷售與<strong>保稅區營業人供營運</strong>之貨物或勞務。</li>
+    <li>國際間之運輸（外國運輸事業以<strong>互惠</strong>為限）。</li>
+    <li>國際運輸用之<strong>船舶、航空器及遠洋漁船</strong>。</li>
+    <li>銷售與上述船舶航空器遠洋漁船所使用之貨物或<strong>修繕勞務</strong>。</li>
+    <li>保稅區營業人銷售與課稅區營業人<strong>未輸往課稅區而直接出口</strong>之貨物。</li>
+    <li>保稅區營業人銷售與課稅區營業人<strong>存入自由港區或保稅倉庫、物流中心以供外銷</strong>之貨物。</li>
+  </ol>
+  <p>證明文件（細則 11）：外銷貨物報經海關出口者免附；郵寄或快遞出口離岸價格 <strong>5 萬元以下</strong>為執據影本（逾 5 萬元仍應報關）；外銷勞務為外匯證明文件；銷售與保稅區營業人為其簽署之<strong>統一發票扣抵聯</strong>；國際運輸為載運國外客貨收入清單。</p>
+
+  <h3>免稅 32 款（法 8 Ⅰ）怎麼記</h3>
+  <p>三十二款硬背很難，但它們其實可以分成六群，每一群背後都有一個政策理由。</p>
+  <table>
+    <tr><th>群組</th><th>款次</th><th>內容</th></tr>
+    <tr><td>土地農漁</td><td>1,2,19,20,21,27,28</td><td>出售土地；農田灌溉用水；飼料及未加工生鮮農林漁牧產物副產物、農漁民自產自銷；漁民自捕魚介；稻米麵粉銷售及碾米加工；肥料、農業畜牧用藥、農耕機器設備、農地搬運車及其用油電；漁船、漁船機器設備、漁網及其用油</td></tr>
+    <tr><td>社會文教</td><td>3,4,5,6,8,31</td><td>醫療勞務藥品病房；社會福利勞務；教育勞務；審定教科書及獎勵學術著作；職校實習商店；學術科技研究機構研究勞務</td></tr>
+    <tr><td>公益互助</td><td>10,11,12,13,14</td><td>合作社銷售與社員；農漁工商業會銷售與會員、農產品批發市場管理費；慈善救濟標售義賣義演；不對外營業員工福利機構；監獄工廠</td></tr>
+    <tr><td>政府相關</td><td>15,16,17,25,26</td><td>郵政電信業務；專賣品；代銷印花稅票郵票；政府標售賸餘廢棄物資；銷售與國防單位之武器艦艇飛機戰車</td></tr>
+    <tr><td>金融證券</td><td>23,24,29,32</td><td>政策性保險及責任準備金；各級政府債券及應課證交稅之證券；銀行總分行往來利息、指定用途信託資金收入、典當業流當品；衍生性金融商品、公司債、金融債券、新臺幣及外幣拆款</td></tr>
+    <tr><td>其他常考</td><td>9,18,22,30</td><td>報社雜誌電視臺本事業收入；肩挑負販沿街叫賣；<strong>第二節營業人銷售非經常買賣之固定資產</strong>；金條金塊金片金幣及純金飾金</td></tr>
+  </table>
+
+  <div class="when"><b>四個但書陷阱：</b>第 9 款報社銷售之<strong>廣告</strong>、電視臺之<strong>廣告播映</strong>應稅；第 30 款純金免稅但<strong>加工費應稅</strong>；第 32 款金融商品免稅但<strong>佣金及手續費應稅</strong>；第 19 款僅屠宰、切割、清洗、去殼、冷凍等簡單處理且非機具裝瓶固封者仍免稅，且農漁民須<strong>自產自銷</strong>（細則 16-3）。</div>
+
+  <h3>周邊條文</h3>
+  <ul>
+    <li>法 8-1　公益信託標售義賣義演免稅，且<strong>不計入受託人銷售額</strong>。</li>
+    <li>法 8-3　農漁用油轉讓或移作他用<strong>應補繳</strong>。</li>
+    <li>法 9　<strong>進口免稅三款</strong>：①法 7 ⑥及法 8 ㉗肥料、㉚金類　②關稅法 49 條貨物　③<strong>本國之古物</strong>。</li>
+    <li>法 9-1　進口<strong>小麥、大麥、玉米、黃豆</strong>得由行政院機動調整。</li>
+    <li>法 7-1　外國事業參展或臨時商務活動<strong>得申請退稅</strong>（互惠；法 19 Ⅰ②～⑤不適用）。</li>
+  </ul>
+</section>
+
+<section id="rate">
+  <h2>稅率結構</h2>
+
+  <p>法 10 只訂了一個區間：稅率<strong>最低 5%、最高 10%</strong>，實際徵收率由<strong>行政院</strong>定之。目前的 5% 是行政院訂的徵收率，不是法律直接寫死的數字——這一句幾乎每年都出現在選擇題裡。</p>
+
+  <table>
+    <tr><th>稅率</th><th>對象</th><th>條號</th></tr>
+    <tr><td>0%</td><td>外銷等九款</td><td>法 7</td></tr>
+    <tr><td>0.1%</td><td>農產品批發市場<strong>承銷人</strong>、銷售農產品之小規模營業人</td><td>法 13 Ⅱ</td></tr>
+    <tr><td>1%</td><td><strong>小規模營業人</strong>、視障按摩業、理髮沐浴計程車業等（細則 10）</td><td>法 13 Ⅰ</td></tr>
+    <tr><td>1%</td><td>保險業<strong>再保費收入</strong></td><td>法 11 Ⅰ②但書</td></tr>
+    <tr><td>2%</td><td>信託投資、證券、期貨、票券、典當業本業</td><td>法 11 Ⅰ③</td></tr>
+    <tr><td>5%</td><td>一般營業人；銀行業保險業<strong>本業</strong></td><td>法 10、11 Ⅰ②</td></tr>
+    <tr><td>5%</td><td>金融業<strong>非專屬本業</strong></td><td>法 11 Ⅰ①</td></tr>
+    <tr><td>15%</td><td>夜總會、有娛樂節目之餐飲店</td><td>法 12 ①</td></tr>
+    <tr><td>25%</td><td>酒家及有陪侍服務之茶室咖啡廳酒吧</td><td>法 12 ②</td></tr>
+  </table>
+
+  <ul>
+    <li><strong>娛樂節目</strong>（細則 8）：①樂器表演<strong>2 人以上</strong>，或②<strong>職業性</strong>演唱表演。</li>
+    <li><strong>小規模營業人</strong>（細則 9）：每月銷售額未達使用統一發票標準者；法 13 Ⅲ另定為按查定課徵者亦屬之。</li>
+    <li>保險業本業銷售額應<strong>扣除財產保險自留賠款</strong>。</li>
+  </ul>
+</section>
+
+<section id="general">
+  <h2>一般稅額計算</h2>
+
+  <p>第一節營業人的核心公式只有三行，但每一行都藏著考點。</p>
+
+  <pre>當期應納或溢付稅額 = 銷項稅額 <span class="kw">−</span> 進項稅額
+銷項稅額 = 銷售額 <span class="kw">×</span> 稅率        <span class="com">// 尾數不滿 1 元四捨五入</span>
+銷售額   = 全部代價 <span class="kw">+</span> 價外收取之一切費用 <span class="kw">−</span> 本次銷售之營業稅額</pre>
+
+  <ul>
+    <li>銷貨退回折讓 → 扣減當期<strong>銷項</strong>；進貨退出折讓 → 扣減當期<strong>進項</strong>（法 15 Ⅱ）。</li>
+    <li>法 16 Ⅱ 應徵<strong>貨物稅、菸酒稅、菸品健康福利捐</strong>者，銷售額<strong>應加計</strong>該等稅捐。</li>
+    <li>法 17 價格顯著偏低而無正當理由者，得依<strong>時價</strong>認定（時價＝當地同時期市場價格，細則 25）。</li>
+    <li>法 20 進口稅基＝關稅完稅價格＋進口稅（＋貨物稅／菸酒稅／菸捐）。</li>
+  </ul>
+
+  <h3>六個常考公式</h3>
+  <pre><span class="com">① 二聯式（細則 32-1）</span>
+   銷項稅額 = 發票總額 ÷ (1 + 徵收率) × 徵收率
+   銷售額   = 發票總額 − 銷項稅額
+
+<span class="com">② 押金設算（細則 24）</span>
+   第一節：銷售額 = 押金 × (郵政 1 年期定儲利率 ÷ 12) ÷ (1 + 徵收率)
+   第二節：銷售額 = 押金 × (利率 ÷ 12)        <span class="com">← 不除 (1+徵收率)</span>
+
+<span class="com">③ 房地合併銷售（細則 21）</span>
+   定著物售價 = 總售價 × [房屋評定標準價格 × (1+徵收率)]
+                     ÷ [土地公告現值 + 房屋評定標準價格 × (1+徵收率)]
+   定著物銷售額 = 定著物售價 ÷ (1 + 徵收率)
+
+<span class="com">④ 貨物交換（細則 18）</span>：換出與換入時價「從高認定」
+<span class="com">⑤ 分期付款（細則 20）</span>：按各期約定價款（第一期全額開立者除外）
+<span class="com">⑥ 舊乘人小汽車、機車（法 15-1）</span>
+   進項稅額 = 購入成本 ÷ (1 + 徵收率) × 徵收率
+   限申報該車銷售額之當期扣抵，且不得超過該車銷項稅額</pre>
+
+  <h4>動手算：二聯式發票的稅額還原</h4>
+  <p>二聯式開給非營業人，發票上只有一個含稅總額，稅額藏在裡面。要把它「拆」出來，就得先除以 1.05 還原成銷售額。輸入一張發票的總額試試看。</p>
+
+  <div class="calc">
+    <div class="row">
+      <div>
+        <label for="tGross">發票總額（含稅，元）</label>
+        <input type="number" id="tGross" value="10500" min="0" step="100">
+      </div>
+      <div>
+        <label for="tRate">徵收率</label>
+        <select id="tRate">
+          <option value="0.05" selected>5%（一般營業人）</option>
+          <option value="0.01">1%（小規模營業人）</option>
+          <option value="0.15">15%（夜總會等）</option>
+          <option value="0.25">25%（酒家等）</option>
+        </select>
+      </div>
+    </div>
+    <div class="controls"><button onclick="calcSplit()">拆解</button></div>
+    <div class="res" id="splitBox"></div>
+  </div>
+
+  <h3>進項不得扣抵五款（法 19 Ⅰ）★必考</h3>
+  <p>能扣抵是原則，不能扣抵是例外，而例外只有五款。判斷的核心問題是：<strong>這筆支出是為了「做生意」，還是為了「享受」？</strong></p>
+  <table>
+    <tr><th>款</th><th>情形</th><th>補充</th></tr>
+    <tr><td>一</td><td>未取得並保存<strong>法 33 憑證</strong></td><td>—</td></tr>
+    <tr><td>二</td><td><strong>非供本業及附屬業務</strong>使用</td><td>但協助國防建設、慰勞軍隊、對政府捐獻<strong>不在此限</strong></td></tr>
+    <tr><td>三</td><td><strong>交際應酬</strong>用</td><td>細則 26 Ⅰ：含宴客及與推廣業務<strong>無關</strong>之餽贈</td></tr>
+    <tr><td>四</td><td><strong>酬勞員工個人</strong></td><td>—</td></tr>
+    <tr><td>五</td><td><strong>自用乘人小汽車</strong></td><td>細則 26 Ⅱ：非供銷售或提供勞務使用之 <strong>9 座以下</strong>乘人小客車</td></tr>
+  </table>
+
+  <h4>動手判斷：這筆進項能不能扣抵？</h4>
+  <p>點一個情境，看它落在哪一款、結論是什麼。</p>
+  <div class="qbtn">
+    <button class="ghost" onclick="judge(0)">宴請客戶的餐費</button>
+    <button class="ghost" onclick="judge(1)">買 5 人座轎車給總經理代步</button>
+    <button class="ghost" onclick="judge(2)">租車公司買 5 人座轎車出租</button>
+    <button class="ghost" onclick="judge(3)">中秋節發給員工的禮盒</button>
+    <button class="ghost" onclick="judge(4)">捐給國防單位的物資</button>
+    <button class="ghost" onclick="judge(5)">工廠生產線用的原料</button>
+    <button class="ghost" onclick="judge(6)">送給經銷商推廣用的樣品</button>
+    <button class="ghost" onclick="judge(7)">只拿到收據、沒有發票</button>
+  </div>
+  <div class="verdict" id="judgeBox"></div>
+
+  <p>另外兩項要一起記：法 19 Ⅱ 專營免稅者進項<strong>不得申請退還</strong>；法 19 Ⅲ 兼營者依財政部訂定之辦法計算不得扣抵比例（見下一節）。</p>
+
+  <h3>扣抵憑證（法 33）</h3>
+  <p>憑證須載明<strong>名稱、地址及統一編號</strong>，並為下列之一：①購買時取得<strong>載有營業稅額</strong>之統一發票　②視為銷售自行開立之發票　③其他經財政部核定載有營業稅額之憑證。</p>
+  <p>細則 38 的常考項目：海關代徵營業稅繳納證扣抵聯、折讓證明單、<strong>員工出差之火（汽）車、高鐵、船舶、飛機收據票根影本</strong>、<strong>水電瓦斯分攤費用稅額證明單</strong>、電子發票證明聯。影本類的稅額用彙總公式還原：</p>
+  <pre>進項稅額 = 憑證總計金額 × 徵收率 ÷ (1 + 徵收率)</pre>
+
+  <div class="tip"><b>扣抵時點三句話：</b>細則 29——未於當期申報者<strong>得延至次期</strong>，次期仍未申報應<strong>敘明理由</strong>，扣抵期間<strong>以 10 年為限</strong>；細則 30——載明<strong>「違章補開」</strong>者不得扣抵，<strong>但因買受人檢舉而補開者不在此限</strong>；細則 30 Ⅱ——進口短報完稅價格有法 51 情形、保稅貨物盤存短少，海關補徵之營業稅不得扣抵。</div>
+</section>
+
+<section id="special">
+  <h2>特種稅額計算</h2>
+
+  <p>第二節處理三類營業人，共同特徵是<strong>不能扣抵進項</strong>，直接按銷售額乘上各自的稅率。</p>
+  <table>
+    <tr><th>條號</th><th>對象</th><th>方式</th></tr>
+    <tr><td>法 21</td><td>銀行、保險、信託投資、證券、期貨、票券、典當業</td><td>銷售額 × 法 11 稅率；<strong>典當業得依查定</strong></td></tr>
+    <tr><td>法 22</td><td>特種飲食業</td><td>銷售額 × 法 12 稅率；<strong>得依查定</strong></td></tr>
+    <tr><td>法 23</td><td>承銷人、銷售農產品小規模營業人、小規模營業人、視障按摩業</td><td>依<strong>查定銷售額</strong> × 法 13 稅率；<strong>得申請改依第一節</strong></td></tr>
+  </table>
+
+  <h3>改按一般稅額（法 24）</h3>
+  <ul>
+    <li>金融三業之<strong>非專屬本業</strong>銷售額，得申請依第一節計算。</li>
+    <li>依法 24 Ⅰ及法 23 申請者，<strong>核准後 3 年內不得變更</strong>。</li>
+    <li>財政部得<strong>核定</strong>小規模營業人依第一節計算。</li>
+    <li>細則 32：稽徵機關<strong>1 個月內核定</strong>；自指定變更之月 1 日起使用發票、設帳、自行申報；原得扣減之進項稅額<strong>留抵</strong>。</li>
+  </ul>
+
+  <h3>10% 扣減（法 25）</h3>
+  <p>查定課徵的營業人不能扣抵進項，但為了鼓勵他們索取憑證，法律給了一個小小的折衷：購買<strong>營業上使用</strong>之貨物勞務，取得載有營業稅額憑證並依規定申報者，按<strong>進項稅額 10%</strong> 在查定稅額內扣減，超過部分<strong>次期繼續扣減</strong>；<strong>查定稅額未達起徵點者不適用</strong>。</p>
+  <div class="when"><b>兩個細節：</b>細則 44——憑證應於 <strong>1、4、7、10 月 5 日前</strong>申報，且限<strong>當期各月份</strong>，逾期或非當期不得扣減；細則 31——查定營業人若有<strong>法 19 Ⅰ</strong>之進項，<strong>不適用</strong>法 25 扣減。</div>
+
+  <h3>開單頻率（法 40）</h3>
+  <ul>
+    <li>典當業（法 21 但書）及法 23 營業人：<strong>每 3 個月</strong>開單（細則 45：1、4、7、10 月<strong>底</strong>前）。</li>
+    <li>特種飲食業（法 22）：<strong>每月</strong>開單。</li>
+    <li>法 26 起徵點由<strong>財政部</strong>定之；法 27 第一節規定除<strong>法 14、15 Ⅰ、16 Ⅰ但書</strong>外，第二節<strong>準用</strong>。</li>
+  </ul>
+</section>
+
+<section id="mixed">
+  <h2>兼營營業人（403 申報書）</h2>
+
+  <p>兼營指依第一節計稅而<strong>兼營應稅及免稅</strong>，或<strong>兼依第一、二節</strong>計稅（辦法 2）。麻煩在於：同一批進項可能同時服務於應稅與免稅的業務，無法逐筆切開，因此需要一個比例來決定「有多少不能扣」。</p>
+
+  <pre>不得扣抵比例 = (免稅銷售淨額 + 第二節計稅部分銷售淨額) ÷ 全部銷售淨額
+銷售淨額 = 銷售總額 − 銷貨退回或折讓
+<span class="com">排除：土地、各級政府債券、應課證券交易稅之證券</span></pre>
+
+  <table>
+    <tr><th>比較</th><th>比例扣抵法</th><th>直接扣抵法（辦法 8-1、8-2）</th></tr>
+    <tr><td>要件</td><td>當然適用</td><td>帳簿完備能<strong>明確區分實際用途</strong>；採用後 <strong>3 年不得變更</strong></td></tr>
+    <tr><td>進項分類</td><td>不分類</td><td><strong>專供應稅（含零稅率）／專供免稅／共同使用</strong></td></tr>
+    <tr><td>當期公式</td><td>銷項 −(進項 − 法 19 Ⅰ)×(1 − 當期不得扣抵比例)</td><td>銷項 −(進項 − 法 19 Ⅰ − 專供免稅進項 − 共同使用進項 × 當期不得扣抵比例)</td></tr>
+    <tr><td>簽證</td><td>不需</td><td>符合三情形之一應經會計師或稅務代理人查核簽證</td></tr>
+  </table>
+
+  <h3>年度調整（辦法 7、8-2 ④）</h3>
+  <p>每一期用的是當期比例，但一年下來各期高低起伏，最後要用<strong>全年比例</strong>結算一次。調整在<strong>當年度最後一期</strong>（11–12 月期）併同申報：</p>
+  <pre>調整稅額 = 當年度已扣抵之進項稅額
+         − (當年度進項稅額 − 法 19 Ⅰ不得扣抵) × (1 − 當年度不得扣抵比例)</pre>
+  <p>購買國外勞務另依「給付額 × 徵收率 × 當年度不得扣抵比例 − 已納稅額」調整。<strong>年度中開始營業、實際營業未滿 9 個月者，當年度免辦調整</strong>，俟次年度最後一期辦理；申請註銷登記繳清稅款時準用（辦法 8）。</p>
+
+  <h3>直接扣抵法的簽證門檻（三選一）</h3>
+  <div class="grid3">
+    <div class="card"><h4>製造業</h4><p style="color:var(--muted);font-size:14px;margin:0">經營製造業者</p></div>
+    <div class="card"><h4>10 億元</h4><p style="color:var(--muted);font-size:14px;margin:0">當年度銷售金額合計逾 10 億元</p></div>
+    <div class="card"><h4>2,000 萬元</h4><p style="color:var(--muted);font-size:14px;margin:0">當年度申報扣抵之進項稅額合計逾 2,000 萬元</p></div>
+  </div>
+  <p>未依規定簽證者，稽徵機關得<strong>核定停止採用直接扣抵法</strong>，3 年內應依比例扣抵法（辦法 8-3）。</p>
+
+  <h3>購買國外勞務（法 36）</h3>
+  <ul>
+    <li>買受人應於<strong>給付報酬之次期開始 15 日內</strong>按法 10 稅率繳納（屬法 11 各業者依該稅率）。</li>
+    <li><strong>但</strong>第一節營業人購進勞務<strong>專供應稅</strong>使用者<strong>免予繳納</strong>——因為繳了也是全額扣回來，一來一往等於零。</li>
+    <li>兼營者：應納稅額 ＝ 給付額 × 徵收率 × <strong>當期不得扣抵比例</strong>（辦法 6）。</li>
+    <li>法 36-1　外國事業銷售供<strong>教育、研究或實驗</strong>使用之勞務予各級學校、教育研究機關者，買受人<strong>免辦</strong>。</li>
+  </ul>
+</section>
+
+<section id="procedure">
+  <h2>稽徵程序</h2>
+
+  <h3>稅籍登記</h3>
+  <table>
+    <tr><th>事項</th><th>規定</th><th>條號</th></tr>
+    <tr><td>申請登記</td><td>總機構及各固定營業場所<strong>開始營業前</strong>分別申請</td><td>法 28</td></tr>
+    <tr><td>跨境電商</td><td>年銷售額逾一定基準應登記</td><td>法 28-1</td></tr>
+    <tr><td>免辦登記</td><td>專營法 8 Ⅰ第 2～5、8、12～15、17～20、31 款免稅者及<strong>各級政府機關</strong></td><td>法 29</td></tr>
+    <tr><td>變更／註銷</td><td><strong>事實發生日起 15 日內</strong></td><td>法 30</td></tr>
+    <tr><td>前提</td><td>應<strong>先繳清稅款或提供擔保</strong>；但合併、增資、地址或營業種類變更除外</td><td>法 30 Ⅱ</td></tr>
+    <tr><td>暫停營業</td><td><strong>停業前</strong>申報核備，復業亦同</td><td>法 31</td></tr>
+  </table>
+
+  <h3>申報繳納（法 35）★必考</h3>
+  <ul>
+    <li><strong>不論有無銷售額</strong>，每 2 月為一期，於<strong>次期開始 15 日內</strong>申報；有應納稅額者應<strong>先繳納後併同申報</strong>。</li>
+    <li>細則 38-1：每年 <strong>1、3、5、7、9、11 月 15 日前</strong>。</li>
+    <li><strong>零稅率</strong>得申請<strong>按月</strong>申報（次月 15 日前），<strong>同一年度內不得變更</strong>。</li>
+    <li>使用統一發票者應<strong>檢附統一發票明細表</strong>。</li>
+    <li>法 38 分別申報為原則；第一節營業人得申請<strong>總繳</strong>，但分支機構仍應向所在地申報銷售額及進項憑證（細則 39）。</li>
+    <li>細則 33：合併、轉讓、解散、廢止者<strong>15 日內</strong>申報當期營業稅。</li>
+  </ul>
+
+  <h3>退稅三種（法 39）★極高頻</h3>
+  <p>溢付稅額的<strong>原則是留抵</strong>，只有三種情形可以真正退還。理由都很直白：這三種情形下，未來已經沒有銷項可以讓你抵了。</p>
+  <div class="flow">
+    <div class="box good">零稅率溢付<b>可退</b><span class="mn">上限＝零稅率銷售額×5%</span></div>
+    <div class="box good">取得固定資產<b>可退</b><span class="mn">上限＝該固定資產進項稅額</span></div>
+    <div class="box good">註銷登記<b>可退</b><span class="mn">合併・轉讓・解散・廢止</span></div>
+    <div class="box bad">其他情形<b>一律留抵</b><span class="mn">情形特殊得報財政部核准</span></div>
+  </div>
+  <p>退還上限分別規定於細則 42 與細則 43。</p>
+
+  <h3>核定與補徵</h3>
+  <ul>
+    <li>法 42-1　申報期限屆滿<strong>次日起 6 個月內</strong>核定；自動補報補繳者自受理次日起 6 個月內。無應補退稅額者得以<strong>公告</strong>代替送達。</li>
+    <li>法 43　得依查得資料核定補徵六款：①逾期 30 日未申報　②未設帳／未記載／遺失帳證／拒絕調閱／虛偽記載　③未辦妥登記即營業或歇業後續營而未申報　④<strong>短漏報銷售額</strong>　⑤<strong>漏開短開發票</strong>　⑥核定應使用發票而不使用。申報顯不正常者得參照同業核定。</li>
+    <li>法 41 進口營業稅由<strong>海關代徵</strong>；法 42 補徵稅款及滯報怠報金應於<strong>送達次日起 10 日內</strong>繳納。</li>
+    <li>法 57 欠繳稅款等<strong>優先於普通債權</strong>受償；法 58 統一發票給獎經費為全年營業稅收入總額 <strong>3%</strong>。</li>
+  </ul>
+</section>
+
+<section id="invoice">
+  <h2>統一發票</h2>
+
+  <h3>開立義務（法 32）</h3>
+  <ul>
+    <li>依<strong>營業人開立銷售憑證時限表</strong>開立；<strong>營業性質特殊及小規模營業人得掣發普通收據</strong>。</li>
+    <li>應稅貨物勞務<strong>定價應內含營業稅</strong>（違者依法 48-1 處罰）。</li>
+    <li>買受人為<strong>營業人</strong> → 銷售額與稅額<strong>分別載明</strong>；<strong>非營業人</strong> → 以<strong>定價</strong>開立。</li>
+    <li>法 32-1　電子發票應將發票資訊及<strong>買受人載具識別資訊</strong>傳輸至財政部平台<strong>存證</strong>。</li>
+  </ul>
+
+  <h3>五種發票（辦法 7）</h3>
+  <table>
+    <tr><th>種類</th><th>用途</th><th>聯次</th></tr>
+    <tr><td>三聯式</td><td>第一節營業人銷售與<strong>營業人</strong></td><td>存根／<strong>扣抵</strong>／收執</td></tr>
+    <tr><td>二聯式</td><td>第一節營業人銷售與<strong>非營業人</strong></td><td>存根／收執</td></tr>
+    <tr><td>特種</td><td><strong>第二節</strong>營業人</td><td>存根／收執</td></tr>
+    <tr><td>收銀機</td><td>第一節營業人以收銀機開立</td><td>依收銀機辦法</td></tr>
+    <tr><td>電子發票</td><td>網際網路或電子方式</td><td><strong>存根檔／收執檔／存證檔</strong></td></tr>
+  </table>
+  <div class="tip">三聯式多出來的那一聯就是<strong>扣抵聯</strong>——它是買方能夠扣抵進項的憑據。所以「買受人是不是營業人」決定了開幾聯，這也是二聯式必須用 <span class="mn">÷ (1+徵收率)</span> 還原銷售額的原因：二聯式的金額是含稅定價。</div>
+  <p><strong>雲端發票</strong>（辦法 7-1）指買受人使用核准載具或捐贈碼，且<strong>未列印電子發票證明聯</strong>者。</p>
+
+  <h3>開立時點的特殊規定</h3>
+  <table>
+    <tr><th>情形</th><th>時點</th><th>條號</th></tr>
+    <tr><td>貨物交換</td><td><strong>換出時</strong></td><td>辦法 12</td></tr>
+    <tr><td>商品禮券</td><td><strong>出售禮券時</strong></td><td>辦法 14 ①</td></tr>
+    <tr><td>現金禮券</td><td><strong>兌付貨物時</strong></td><td>辦法 14 ②</td></tr>
+    <tr><td>分期付款</td><td>第一期全額開立，或按各期收款</td><td>辦法 18</td></tr>
+    <tr><td>代購</td><td>按佣金開立，另依<strong>實際價格</strong>開立註明「代購」</td><td>辦法 17 Ⅰ</td></tr>
+    <tr><td>委託代銷</td><td><strong>送貨時</strong>開立註明「委託代銷」；受託人銷售時註明「受託代銷」；結帳期間<strong>不得超過 2 個月</strong></td><td>辦法 17 ⅡⅢ</td></tr>
+    <tr><td>收受支票</td><td>得於<strong>票載日</strong>開立</td><td>辦法 16</td></tr>
+    <tr><td>預開發票</td><td>以<strong>發票金額</strong>為銷售額</td><td>細則 22</td></tr>
+  </table>
+  <div class="when"><b>禮券兩款要分清：</b>商品禮券已經指定了商品，出售當下交易內容就確定，所以<strong>出售時</strong>開立；現金禮券只是一張面額，要等實際換了什麼貨物才知道，所以<strong>兌付時</strong>開立。</div>
+
+  <h3>彙開兩種</h3>
+  <ul>
+    <li><strong>小額彙開</strong>（辦法 15）：每筆銷售額與稅額合計<strong>未滿 50 元</strong>，除買受人要求外得免逐筆開立，每日營業終了按總額<strong>彙開一張</strong>並註明「彙開」，明細表備考欄註明「按日彙開」。<strong>電子發票、收銀機、自動販賣機不適用</strong>。</li>
+    <li><strong>按月彙總</strong>（辦法 15-1）：無積欠已確定營業稅罰鍰及營所稅，且最近 2 年度營所稅經<strong>會計師簽證或使用藍色申報書</strong>者，得對<strong>其他營業人</strong>按月彙總於<strong>當月月底</strong>開立。</li>
+  </ul>
+
+  <h3>作廢、折讓與遺失（辦法 20、23、24）</h3>
+  <table>
+    <tr><th>買受人</th><th>尚未申報</th><th>已申報</th></tr>
+    <tr><td>營業人</td><td>收回<strong>收執聯及扣抵聯</strong>黏貼存根聯註明「作廢」；載有名稱統編者得以<strong>折讓證明單</strong>代之</td><td>取得<strong>折讓證明單</strong>（限原發票載有名稱統編者）</td></tr>
+    <tr><td>非營業人</td><td>收回<strong>收執聯</strong>黏貼存根聯註明「作廢」</td><td>取得折讓證明單<strong>並</strong>收回收執聯（無法收回得以影本；訂有合約且載明名稱地址者可免收回）</td></tr>
+  </table>
+  <ul>
+    <li>折讓證明單<strong>一式四聯</strong>：1、2 聯賣方扣減<strong>銷項</strong>；3、4 聯買方扣減<strong>進項</strong>。</li>
+    <li>辦法 24　記載錯誤應<strong>另行開立</strong>，誤寫者註明「作廢」黏貼存根聯並於明細表註明。</li>
+    <li>辦法 21　<strong>非當期</strong>發票不得開立；字軌不得轉供他人使用。</li>
+    <li>辦法 22　賸餘空白未使用發票應<strong>截角作廢保存</strong>並於明細表載明字軌起訖號碼。</li>
+    <li>辦法 23　遺失<strong>空白未使用</strong>者應<strong>即日</strong>申報核銷；遺失存根聯得以買受人蓋章之收執聯影本代替；遺失扣抵聯或收執聯得以存根聯影本或未遺失聯影本自行蓋章證明代替。</li>
+    <li>辦法 19　漏開短開經查獲應<strong>補開</strong>並註明<strong>「違章補開」</strong>；<strong>經買受人檢舉查獲者毋須註明</strong>——這正好對應細則 30 的扣抵例外。</li>
+  </ul>
+
+  <h3>免用或免開統一發票（辦法 4）</h3>
+  <p>共 35 款，常考的有：小規模營業人／視障按摩業／<strong>計程車業及交通運輸事業客票收入</strong>／免稅商店／醫院診所／社福團體／學校／職校實習商店／員工福利機構／監獄工廠／郵政電信及專賣品／<strong>經核准登記之攤販</strong>／<strong>理髮業及沐浴業</strong>／查定課徵之特種飲食業／報社雜誌電視臺本事業／<strong>銀行保險信託投資證券期貨票券業</strong>／典當業利息及租金／<strong>娛樂業門票收入</strong>、遊藝場、撞球場、釣魚場、兒童樂園／<strong>營業人取得之賠償收入</strong>／<strong>外銷貨物與外銷勞務</strong>／保稅區直接出口／各級政府債券及應課證交稅之證券。</p>
+</section>
+
+<section id="penalty">
+  <h2>罰則</h2>
+
+  <p>罰則分兩類：<strong>行為罰</strong>（法 45～50）處罰的是「沒有照規矩做事」，<strong>漏稅罰</strong>（法 51、52）處罰的是「國庫實際少收了錢」。同一件事可能兩者都構成，這時依行政罰法擇一從重。</p>
+
+  <table>
+    <tr><th>條</th><th>違章行為</th><th>罰鍰（新臺幣）</th><th>附加</th></tr>
+    <tr><td>45</td><td>未申請<strong>稅籍登記</strong></td><td>3,000～30,000</td><td>限期補辦，<strong>得按次處罰</strong></td></tr>
+    <tr><td>46</td><td>未申請變更／註銷或停復業；登記事項<strong>不實</strong></td><td>1,500～15,000</td><td>得按次處罰</td></tr>
+    <tr><td>47</td><td>核定應使用發票而不使用；<strong>發票轉供他人使用</strong>；拒絕接受繳款書</td><td>3,000～30,000</td><td>得按次處罰，<strong>得停止營業</strong></td></tr>
+    <tr><td>48</td><td>發票應記載事項<strong>未記載或所載不實</strong></td><td>銷售額 <strong>1%</strong>（1,500～15,000）</td><td>買受人名稱地址統編錯誤者<strong>第二次以後 2%</strong>（3,000～30,000）</td></tr>
+    <tr><td>48-1</td><td>定價<strong>未內含</strong>營業稅經限期未改正</td><td>1,500～15,000</td><td>—</td></tr>
+    <tr><td>48-2</td><td>電子發票未依時限或未據實<strong>傳輸存證</strong></td><td>1,500～15,000</td><td>得按次處罰</td></tr>
+    <tr><td>49-1</td><td>跨境電商<strong>代理人</strong>未依期間代理申報</td><td>3,000～30,000</td><td>—</td></tr>
+  </table>
+
+  <h3>滯報金與怠報金（法 49）★必背</h3>
+  <p>兩者罰的都是<strong>沒有按時申報</strong>，分界線在<strong>逾期 30 日</strong>。注意它們跟<strong>滯納金</strong>不同：滯納金罰的是「沒有按時繳納」。</p>
+  <table>
+    <tr><th>逾期</th><th>名稱</th><th>計算</th><th>下限</th><th>上限</th><th>無應納稅額時</th></tr>
+    <tr><td>未逾 30 日</td><td><strong>滯報金</strong></td><td>每逾 2 日按應納稅額加徵 1%</td><td>1,200</td><td>12,000</td><td>1,200</td></tr>
+    <tr><td>逾 30 日</td><td><strong>怠報金</strong></td><td>按核定應納稅額加徵 30%</td><td>3,000</td><td>30,000</td><td>3,000</td></tr>
+  </table>
+
+  <h4>動手算：滯報金與怠報金</h4>
+  <p>輸入應納稅額與逾期日數，看落在哪一段、上下限有沒有咬住。</p>
+  <div class="calc">
+    <div class="row">
+      <div>
+        <label for="pTax">應納稅額（元）</label>
+        <input type="number" id="pTax" value="80000" min="0" step="1000">
+      </div>
+      <div>
+        <label for="pDays">逾期日數（日）</label>
+        <input type="number" id="pDays" value="10" min="1" step="1">
+      </div>
+    </div>
+    <div class="controls"><button onclick="calcLate()">計算</button></div>
+    <div class="res" id="lateBox"></div>
+  </div>
+  <div class="tip">上面的滯報金以「每滿 2 日加徵 1%、不滿 2 日以 2 日計」計算倍數，用來理解上下限如何咬住結果；實際核課金額仍以稽徵機關依細則 50 編造之繳款書為準。細則 50 規定，稽徵機關於申報期限屆滿<strong>一個月後 15 日內</strong>編造徵收清冊填發繳款書。</div>
+
+  <p>法 50 逾期繳納者加徵<strong>滯納金</strong>；逾 30 日仍未繳納，除移送強制執行外<strong>並得停止營業</strong>，並自滯納期限屆滿次日起按<strong>郵政儲金 1 年期定儲固定利率</strong>按日計息。</p>
+
+  <h3>漏稅罰（法 51）</h3>
+  <p>除追繳稅款外，按所漏稅額處 <strong>5 倍以下</strong>罰鍰，並得停止營業。七款情形：</p>
+  <ol>
+    <li>未申請<strong>稅籍登記</strong>而營業。</li>
+    <li>逾規定期限 <strong>30 日</strong>未申報銷售額或發票明細表，亦未繳納。</li>
+    <li><strong>短報或漏報</strong>銷售額。</li>
+    <li>註銷登記後或停業處分後<strong>仍繼續營業</strong>。</li>
+    <li><strong>虛報進項稅額</strong>。</li>
+    <li>逾規定期限 30 日未依法 36 Ⅰ繳納。</li>
+    <li>其他有漏稅事實。</li>
+  </ol>
+  <div class="when"><b>兩個關鍵補充：</b>細則 52——<strong>虛報進項稅額</strong>包括依法<strong>不得扣抵</strong>、<strong>無進貨事實</strong>及<strong>偽造憑證</strong>而申報退抵稅額者；法 51 Ⅱ——取得<strong>非實際交易對象</strong>之憑證，若經查明<strong>確有進貨事實</strong>、憑證確由<strong>實際銷貨之營利事業交付</strong>且該事業<strong>已依法補稅處罰</strong>者，<strong>免依漏稅罰處罰</strong>（但仍可能有稅捐稽徵法 44 條的行為罰）。</div>
+
+  <h3>漏開發票（法 52）</h3>
+  <p>於<strong>法定申報期限前經查獲</strong>者，就短漏開銷售額計算稅額繳納，並按<strong>該稅額處 5 倍以下</strong>罰鍰，但<strong>不得超過 100 萬元</strong>；<strong>一年內查獲達 3 次者停止營業</strong>。</p>
+
+  <h3>其他</h3>
+  <ul>
+    <li>法 53　停業處分<strong>最長 6 個月</strong>；期滿仍不履行得繼續處分；由<strong>警察機關協助執行</strong>。</li>
+    <li>法 53-1　<strong>從新從輕</strong>：適用<strong>裁處時</strong>之罰則，但裁處前之法律有利於營業人者從有利。</li>
+    <li>細則 51　限期改正補辦之期限<strong>不得超過送達次日起 15 日</strong>。</li>
+    <li>法 44　稽查人員查獲應開立而未開立發票者應<strong>當場作成紀錄</strong>並簽章。</li>
+  </ul>
+</section>
+
+<section id="traps">
+  <h2>易錯陷阱與速記</h2>
+
+  <h3>六組最容易混淆的對照</h3>
+  <table>
+    <tr><th>A</th><th>B</th><th>關鍵差別</th></tr>
+    <tr><td>零稅率</td><td>免稅</td><td>零稅率<strong>可退進項</strong>；免稅不可，且可<strong>申請放棄</strong>（3 年不得變更）</td></tr>
+    <tr><td>滯報金</td><td>怠報金</td><td>30 日內／每 2 日 1%／1,200–12,000　　逾 30 日／30%／3,000–30,000</td></tr>
+    <tr><td>滯報怠報金</td><td>滯納金</td><td>前者罰<strong>未申報</strong>；後者罰<strong>未繳納</strong></td></tr>
+    <tr><td>401 申報書</td><td>403 申報書</td><td>401＝專營應稅；403＝兼營免稅或兼特種稅額</td></tr>
+    <tr><td>比例扣抵法</td><td>直接扣抵法</td><td>後者須<strong>帳簿明確區分用途</strong>，3 年不得變更，可能須簽證</td></tr>
+    <tr><td>三聯式</td><td>二聯式</td><td>買受人是否為營業人；二聯式須<strong>除以 (1+徵收率)</strong> 還原銷售額</td></tr>
+  </table>
+
+  <h3>期限總表</h3>
+  <table>
+    <tr><th>事項</th><th>期限</th></tr>
+    <tr><td>申報營業稅</td><td>15 日（次期開始起算，法 35）</td></tr>
+    <tr><td>變更／註銷登記</td><td>15 日（事實發生日起，法 30）</td></tr>
+    <tr><td>合併解散廢止申報</td><td>15 日（細則 33）</td></tr>
+    <tr><td>購買國外勞務</td><td>15 日（給付報酬之次期開始，法 36）</td></tr>
+    <tr><td>補徵稅款繳納</td><td>10 日（繳款書送達次日起，法 42）</td></tr>
+    <tr><td>限期改正補辦</td><td>15 日（通知送達次日起，細則 51）</td></tr>
+    <tr><td>稽徵機關核定</td><td>6 個月（申報期限屆滿次日起，法 42-1）</td></tr>
+    <tr><td>停業處分</td><td>最長 6 個月（法 53）</td></tr>
+    <tr><td>進項憑證扣抵</td><td>得延次期，最長 10 年（細則 29）</td></tr>
+    <tr><td>代銷結帳期間</td><td>不得超過 2 個月（辦法 17）</td></tr>
+    <tr><td>清算期間（非公司）</td><td>解散廢止日起 3 個月（細則 34）</td></tr>
+    <tr><td>兼營年度調整豁免</td><td>營業未滿 9 個月（兼營辦法 7）</td></tr>
+  </table>
+
+  <h3>十個最容易答錯的地方</h3>
+  <ol>
+    <li>稅率法定為 <strong>5%～10% 區間</strong>，5% 是<strong>行政院訂定的徵收率</strong>。</li>
+    <li>執行業務者（含<strong>記帳士</strong>）之專業性勞務<strong>不屬於</strong>銷售勞務。</li>
+    <li>應徵貨物稅、菸酒稅之貨物，營業稅<strong>稅基要加計</strong>該等稅捐。</li>
+    <li>非供本業使用原則不得扣抵，<strong>但</strong>協助國防建設、慰勞軍隊、對政府捐獻<strong>可以扣抵</strong>。</li>
+    <li>自用乘人小汽車＝<strong>9 座以下</strong>且<strong>非供銷售或提供勞務使用</strong>。</li>
+    <li>溢付稅額原則<strong>留抵</strong>，只有零稅率、固定資產、註銷登記三種可退還。</li>
+    <li>零稅率退稅有<strong>上限</strong>（零稅率銷售額 × 5%），不是全額退。</li>
+    <li>放棄免稅須<strong>財政部核准</strong>，3 年內不得變更；要變更回免稅仍須再申請核准（細則 38-2）。</li>
+    <li>查定課徵者進項只能扣減 <strong>10%</strong>，有<strong>起徵點</strong>限制，且須於 1、4、7、10 月 <strong>5 日前</strong>申報憑證。</li>
+    <li>法 52 漏開發票罰鍰有 <strong>100 萬元上限</strong>；法 51 漏稅罰<strong>沒有</strong>金額上限（僅 5 倍以下）。</li>
+  </ol>
+
+  <h3>申論題答題骨架</h3>
+  <div class="card">
+    <p style="margin:0">① 是否屬課稅範圍（法 1、3、4）→ ② 納稅義務人是誰（法 2）→ ③ 有無零稅率或免稅（法 7、8）→ ④ 銷售額如何認定（法 16、細則）→ ⑤ 稅率與稅額計算（法 10～15）→ ⑥ 憑證與申報義務（法 32、35）→ ⑦ 違反的法律效果（法 45～52）</p>
+  </div>
+
+  <div class="tip">接著看<a href="../income-tax/index.html">所得稅</a>：營業稅處理的是「交易」，所得稅處理的是「一年下來賺了多少」，兩者的申報期限、罰則體系都不同，放在一起對照最不容易記混。</div>
+</section>
+
+<section id="source">
+  <h2>法源與更新</h2>
+  <p>本頁依下列條文整理：本法 114.05.28 ｜ 施行細則 113.12.17 ｜ 統一發票使用辦法 113.12.12 ｜ 兼營辦法 95.12.21。</p>
+  <ul>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=G0340080" target="_blank" rel="noopener">加值型及非加值型營業稅法</a></li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340081" target="_blank" rel="noopener">施行細則</a></li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340082" target="_blank" rel="noopener">統一發票使用辦法</a></li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=G0340085" target="_blank" rel="noopener">兼營營業人營業稅額計算辦法</a></li>
+  </ul>
+  <div class="when"><b>使用提醒：</b>本頁為考試重點整理，條文經節錄改寫，作答與實務適用請以法規資料庫現行條文為準。起徵點、使用統一發票標準、跨境電商登記基準等金額由財政部另行公告，應查對最新函令。</div>
+</section>
+</main>
+
+<aside class="rail">
+  <nav class="toc">
+    <h4>本頁章節</h4>
+    <a href="#overview">體系與速覽</a>
+    <a href="#scope">課稅範圍與納稅義務人</a>
+    <a href="#zero-exempt">零稅率與免稅 ★</a>
+    <a href="#rate">稅率結構</a>
+    <a href="#general">一般稅額計算</a>
+    <a href="#special">特種稅額計算</a>
+    <a href="#mixed">兼營營業人</a>
+    <a href="#procedure">稽徵程序</a>
+    <a href="#invoice">統一發票</a>
+    <a href="#penalty">罰則</a>
+    <a href="#traps">易錯陷阱與速記</a>
+    <a href="#source">法源與更新</a>
+  </nav>
+  <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
+    <span class="ad-tag">Advertisement</span>
+    <span>側邊欄廣告版位<br>AdSense 核准後<br>在此貼上廣告單元</span>
+  </div>
+</aside>
+</div>
+
+<footer>
+  <div class="flinks">
+    <a href="../../about/index.html">關於本站</a>
+    <a href="../../privacy/index.html">隱私權政策</a>
+    <a href="../../contact/index.html">聯絡我們</a>
+  </div>
+  © 2026 直覺科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+</footer>
+
+<script>
+const nf = n => Math.round(n).toLocaleString('en-US');
+
+/* 零稅率 vs 免稅 */
+function calcZero(){
+  const s = Math.max(0, +document.getElementById('zSales').value || 0);
+  const p = Math.max(0, +document.getElementById('zInput').value || 0);
+  const cap = s * 0.05;
+  const refund = Math.min(p, cap);
+  const carry = p - refund;
+  document.getElementById('zeroBox').innerHTML =
+    '<b style="color:#6ee7b7">零稅率</b><br>' +
+    '<span class="k">銷項稅額</span><span class="num">0</span><br>' +
+    '<span class="k">進項稅額</span><span class="num">' + nf(p) + '</span><br>' +
+    '<span class="k">溢付稅額</span><span class="num">' + nf(p) + '</span><br>' +
+    '<span class="k">退還上限（銷售額×5%）</span><span class="num">' + nf(cap) + '</span><br>' +
+    '<span class="k">本期可退還</span><span class="num">' + nf(refund) + '</span><br>' +
+    '<span class="k">留抵次期</span><span class="num">' + nf(carry) + '</span><br>' +
+    '<span class="k">沉澱為成本</span><span class="num">0</span>';
+  document.getElementById('exemptBox').innerHTML =
+    '<b style="color:#fb7185">免稅</b><br>' +
+    '<span class="k">銷項稅額</span><span class="num">0</span><br>' +
+    '<span class="k">進項稅額</span><span class="num">' + nf(p) + '</span><br>' +
+    '<span class="k">可扣抵</span><span class="num">0</span>（法 19 Ⅱ）<br>' +
+    '<span class="k">退還上限</span><span class="num">—</span><br>' +
+    '<span class="k">本期可退還</span><span class="num">0</span><br>' +
+    '<span class="k">留抵次期</span><span class="num">0</span><br>' +
+    '<span class="k">沉澱為成本</span><span class="num">' + nf(p) + '</span>';
+}
+
+/* 二聯式還原 */
+function calcSplit(){
+  const g = Math.max(0, +document.getElementById('tGross').value || 0);
+  const r = +document.getElementById('tRate').value;
+  const tax = Math.round(g / (1 + r) * r);
+  const net = g - tax;
+  document.getElementById('splitBox').innerHTML =
+    '<span class="k">發票總額（含稅）</span><span class="num">' + nf(g) + '</span><br>' +
+    '<span class="k">÷ (1 + ' + (r * 100) + '%) × ' + (r * 100) + '%</span><br>' +
+    '<span class="k">銷項稅額</span><span class="num">' + nf(tax) + '</span>（尾數四捨五入）<br>' +
+    '<span class="k">銷售額（未稅）</span><span class="num">' + nf(net) + '</span>';
+}
+
+/* 進項扣抵判斷 */
+const CASES = [
+  {t:'宴請客戶的餐費', ok:false, law:'法 19 Ⅰ③ 交際應酬', why:'細則 26 Ⅰ 明定交際應酬包含宴客，以及與推廣業務無關之餽贈。'},
+  {t:'買 5 人座轎車給總經理代步', ok:false, law:'法 19 Ⅰ⑤ 自用乘人小汽車', why:'9 座以下且非供銷售或提供勞務使用者，屬自用乘人小汽車。'},
+  {t:'租車公司買 5 人座轎車出租', ok:true, law:'不屬法 19 Ⅰ⑤', why:'該車是用來提供勞務（出租）而非自用，因此不落入第五款，進項可以扣抵。'},
+  {t:'中秋節發給員工的禮盒', ok:false, law:'法 19 Ⅰ④ 酬勞員工個人', why:'利益直接歸屬員工個人，不是為了本業經營。'},
+  {t:'捐給國防單位的物資', ok:true, law:'法 19 Ⅰ② 但書', why:'協助國防建設、慰勞軍隊、對政府捐獻是第二款的明文例外。'},
+  {t:'工廠生產線用的原料', ok:true, law:'原則可扣抵', why:'供本業及附屬業務使用，取得合法憑證即可全額扣抵。'},
+  {t:'送給經銷商推廣用的樣品', ok:true, law:'不屬交際應酬', why:'細則 26 Ⅰ 排除的是「與推廣業務無關」之餽贈；為推廣業務所為者仍可扣抵。'},
+  {t:'只拿到收據、沒有發票', ok:false, law:'法 19 Ⅰ① 未取得法 33 憑證', why:'扣抵憑證須載明名稱、地址及統一編號並載有營業稅額。'}
+];
+function judge(i){
+  const c = CASES[i], box = document.getElementById('judgeBox');
+  box.className = 'verdict ' + (c.ok ? 'yes' : 'no');
+  box.innerHTML = '<b>' + c.t + '</b> → ' + (c.ok ? '✅ 可以扣抵' : '❌ 不得扣抵') +
+    '<br><span style="color:var(--muted)">依據：</span>' + c.law +
+    '<br><span style="color:var(--muted)">理由：</span>' + c.why;
+}
+
+/* 滯報金／怠報金 */
+function calcLate(){
+  const t = Math.max(0, +document.getElementById('pTax').value || 0);
+  const d = Math.max(1, Math.floor(+document.getElementById('pDays').value || 1));
+  let html;
+  if (d <= 30){
+    const units = Math.ceil(d / 2);
+    const raw = t * 0.01 * units;
+    const fin = t === 0 ? 1200 : Math.min(12000, Math.max(1200, raw));
+    html = '<b style="color:#fbbf24">滯報金</b>（逾期 ' + d + ' 日，未逾 30 日）<br>' +
+      '<span class="k">加徵倍數</span><span class="num">' + units + ' × 1% = ' + (units) + '%</span><br>' +
+      '<span class="k">計算金額</span><span class="num">' + nf(raw) + '</span><br>' +
+      '<span class="k">上下限（1,200～12,000）</span><br>' +
+      '<span class="k">應加徵滯報金</span><span class="num">' + nf(fin) + '</span>' +
+      (t === 0 ? '<br><span style="color:var(--muted)">無應納稅額，按下限 1,200 元。</span>' : '');
+  } else {
+    const raw = t * 0.30;
+    const fin = t === 0 ? 3000 : Math.min(30000, Math.max(3000, raw));
+    html = '<b style="color:#fb7185">怠報金</b>（逾期 ' + d + ' 日，已逾 30 日）<br>' +
+      '<span class="k">加徵比率</span><span class="num">30%</span><br>' +
+      '<span class="k">計算金額</span><span class="num">' + nf(raw) + '</span><br>' +
+      '<span class="k">上下限（3,000～30,000）</span><br>' +
+      '<span class="k">應加徵怠報金</span><span class="num">' + nf(fin) + '</span>' +
+      (t === 0 ? '<br><span style="color:var(--muted)">無應納稅額，按下限 3,000 元。</span>' : '');
+  }
+  document.getElementById('lateBox').innerHTML = html;
+}
+
+calcZero(); calcSplit(); calcLate();
+</script>
+</body>
+</html>

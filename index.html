@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>直覺科學互動學習｜從演算法到有限差分與數值模擬（圖解 + JavaScript）</title>
-<meta name="description" content="用生活比喻、圖解與可操作動畫，把科學與工程的基礎變直覺：演算法、資料結構、設計模式，以及有限差分、數值模擬、波動與水波理論。程式碼以 JavaScript 示範，適合初學到複習。">
-<meta name="keywords" content="演算法, 資料結構, 設計模式, Big-O, 有限差分, 數值模擬, 歐拉法, 波動方程, 二階導數, 微積分, finite difference, Design Patterns, JavaScript 教學">
+<title>直覺科學互動學習｜有限差分、數值模擬與流體力學（圖解 + JavaScript）</title>
+<meta name="description" content="用生活比喻、圖解與可操作動畫，把科學與工程的基礎變直覺：有限差分、數值模擬、波動、流體力學與水波理論。程式碼以 JavaScript 示範，適合初學到複習。">
+<meta name="keywords" content="有限差分, 數值模擬, 流體力學, 歐拉法, 波動方程, 二階導數, 微積分, Navier-Stokes, 水波理論, Airy, finite difference, JavaScript 教學">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://claytonshih.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="直覺科學互動學習">
-<meta property="og:title" content="直覺科學互動學習｜從演算法到有限差分與數值模擬">
-<meta property="og:description" content="生活比喻＋圖解＋可操作動畫，把科學與工程的基礎變直覺：演算法、資料結構、設計模式、有限差分、數值模擬與波動。可離線開啟。">
+<meta property="og:title" content="直覺科學互動學習｜有限差分、數值模擬與流體力學">
+<meta property="og:description" content="生活比喻＋圖解＋可操作動畫，把科學與工程的基礎變直覺：有限差分、數值模擬、波動、流體力學與水波理論。可離線開啟。">
 <meta property="og:url" content="https://claytonshih.github.io/">
 <meta property="og:image" content="https://claytonshih.github.io/og-cover.png">
 <meta property="og:image:width" content="1200">
@@ -27,7 +27,7 @@
   "@type":"WebSite",
   "name":"直覺科學互動學習",
   "url":"https://claytonshih.github.io/",
-  "description":"以圖解與互動動畫講解科學與工程基礎的中文學習網站：演算法、資料結構、設計模式、有限差分、數值模擬與波動理論。",
+  "description":"以圖解與互動動畫講解科學與工程基礎的中文學習網站：有限差分、數值模擬、波動、流體力學與水波理論。",
   "inLanguage":"zh-Hant"
 }
 </script>
@@ -39,19 +39,17 @@
 <header class="topnav">
   <a href="index.html" class="logo">📚 直覺科學互動學習</a>
   <a href="index.html" class="nl active">首頁</a>
-  <a href="algorithms/index.html" class="nl">演算法</a>
-  <a href="data-structures/index.html" class="nl">資料結構</a>
-  <a href="design-patterns/index.html" class="nl">設計模式</a>
   <a href="finite-difference/index.html" class="nl">有限差分</a>
   <a href="numerical/index.html" class="nl">數值模擬</a>
   <a href="wave/index.html" class="nl">波動模擬</a>
   <a href="fluid-mechanics/index.html" class="nl">流體力學</a>
   <a href="airy/index.html" class="nl">水波理論</a>
+  <a href="bookkeeper/index.html" class="nl">記帳士考試</a>
 </header>
 
 <section class="hero">
   <h1>用<span class="accent">生活裡的現象</span>，把複雜的科學變直覺</h1>
-  <p>不背死公式——用簡單、實際的例子和可以按按鈕的動畫，把抽象觀念說清楚，替你從基礎<strong>銜接到研究所的難題</strong>。內容橫跨資訊科學（演算法、資料結構、設計模式）與計算物理（有限差分、數值模擬、波動與水波理論），程式碼以 JavaScript 示範。</p>
+  <p>不背死公式——用簡單、實際的例子和可以按按鈕的動畫，把抽象觀念說清楚，替你從基礎<strong>銜接到研究所的難題</strong>。內容聚焦計算物理與工程數學（有限差分、數值模擬、波動、流體力學與水波理論），程式碼以 JavaScript 示範。</p>
 </section>
 
 <!-- ===== 廣告版位：頂部橫幅（leaderboard）===== -->
@@ -61,24 +59,6 @@
 </div>
 
 <div class="cards">
-  <a href="algorithms/index.html" class="tcard">
-    <div class="emoji">🧭</div>
-    <h3>演算法</h3>
-    <p>時間複雜度 Big-O、遞迴、排序演算法、二分搜尋，以及圖的走訪 BFS / DFS。含可操作的排序與搜尋動畫。</p>
-    <span class="go">開始學 →</span>
-  </a>
-  <a href="data-structures/index.html" class="tcard">
-    <div class="emoji">🗃️</div>
-    <h3>資料結構</h3>
-    <p>陣列、鏈結串列、堆疊與佇列、雜湊表、二元搜尋樹。理解「資料怎麼擺」如何決定操作快慢。</p>
-    <span class="go">開始學 →</span>
-  </a>
-  <a href="design-patterns/index.html" class="tcard">
-    <div class="emoji">🧩</div>
-    <h3>設計模式</h3>
-    <p>SOLID 原則與 9 大 GoF 設計模式：Singleton、Factory、Observer、Strategy 等，附互動示範。</p>
-    <span class="go">開始學 →</span>
-  </a>
   <a href="finite-difference/index.html" class="tcard">
     <div class="emoji">➗</div>
     <h3>有限差分</h3>
@@ -97,19 +77,37 @@
     <p>撥弦、水波怎麼算？從有限差分、三對角矩陣到 CFL 穩定條件，再到線性水波理論（Airy）完整推導。</p>
     <span class="go">開始學 →</span>
   </a>
+  <a href="fluid-mechanics/index.html" class="tcard">
+    <div class="emoji">💧</div>
+    <h3>流體力學</h3>
+    <p>流體的控制方程怎麼來的？從隨體導數、連續方程到 Euler 方程，一步步推出描述水波的方程式，每一項都有直覺解釋。</p>
+    <span class="go">開始學 →</span>
+  </a>
+  <a href="airy/index.html" class="tcard">
+    <div class="emoji">〰️</div>
+    <h3>水波理論</h3>
+    <p>線性水波（Airy）理論完整推導：從流體力學的控制方程一路推到頻散關係，理解深水到淺水波如何變化。</p>
+    <span class="go">開始學 →</span>
+  </a>
+  <a href="bookkeeper/index.html" class="tcard">
+    <div class="emoji">🧮</div>
+    <h3>記帳士考試</h3>
+    <p>稅法也能用同一套方法讀：先看制度在防什麼，再用表格收攏數字，最後自己動手算。含營業稅與所得稅完整重點與互動計算器。</p>
+    <span class="go">開始學 →</span>
+  </a>
 </div>
 
 <div class="page">
 <main class="content">
 <section>
   <h2>這個網站想解決什麼問題？</h2>
-  <p>很多理工觀念第一次學都卡在同一件事：「看得懂定義，卻不知道它在幹嘛」。不管是演算法的 Big-O、資料結構的指標，還是微積分的導數、物理的波動方程，教科書往往用抽象符號描述，少了直覺。這個網站的做法相反：<strong>先給你一個生活場景的比喻，再用圖解拆開結構，最後放一個可以自己按按鈕操作的小動畫</strong>，讓你親眼看到資料怎麼流動、公式怎麼一步步跑出答案。</p>
-  <p>舉例來說，二分搜尋不是冷冰冰的 while 迴圈，而是「猜 1 到 100，每次先猜正中間」的遊戲；二階導數不是嚇人的符號，而是「你比左右鄰居的平均高還是低」；波動方程不是一串偏微分，而是「撥一下弦、丟一顆石頭」。當你把抽象觀念綁在熟悉的畫面上，理解和記憶都會牢固很多。</p>
+  <p>很多理工觀念第一次學都卡在同一件事：「看得懂定義，卻不知道它在幹嘛」。不管是微積分的導數、有限差分的近似，還是物理的波動方程與流體流動，教科書往往用抽象符號描述，少了直覺。這個網站的做法相反：<strong>先給你一個生活場景的比喻，再用圖解拆開結構，最後放一個可以自己按按鈕操作的小動畫</strong>，讓你親眼看到資料怎麼流動、公式怎麼一步步跑出答案。</p>
+  <p>舉例來說，二階導數不是嚇人的符號，而是「你比左右鄰居的平均高還是低」；波動方程不是一串偏微分，而是「撥一下弦、丟一顆石頭」；流體的黏滯不是抽象係數，而是「糖漿為什麼比水難攪」。當你把抽象觀念綁在熟悉的畫面上，理解和記憶都會牢固很多。</p>
   <h3>適合誰？</h3>
-  <p>修資料結構、數值方法、工程數學或普通物理的學生，準備面試的工程師，想補底子的自學者，或任何對「這些公式到底在做什麼」感到好奇的人。每一頁都從最基本的概念講起，不預設你已經會了什麼。</p>
+  <p>修數值方法、工程數學、計算物理或普通物理的學生，準備面試的工程師，想補底子的自學者，或任何對「這些公式到底在做什麼」感到好奇的人。每一頁都從最基本的概念講起，不預設你已經會了什麼。</p>
   <h3>怎麼使用</h3>
   <p>每個主題各自獨立成一頁，你可以照順序讀，也可以直接跳到需要的章節。每頁右側都有本頁目錄，方便快速定位。所有互動元件都是純前端 JavaScript，不需要安裝任何東西，把網頁存下來也能離線使用。</p>
-  <div class="tip">建議路線：想學<strong>資訊科學</strong>就先看<a href="algorithms/index.html">演算法</a>建立「快與慢」的直覺，再讀<a href="data-structures/index.html">資料結構</a>與<a href="design-patterns/index.html">設計模式</a>；想補<strong>數學與物理</strong>就從<a href="finite-difference/index.html">有限差分</a>開始（為什麼要把微積分變成加減乘除），再進到<a href="numerical/index.html">數值模擬</a>與<a href="wave/index.html">波動模擬</a>。兩條線都不需要先修基礎。</div>
+  <div class="tip">另有<a href="bookkeeper/index.html">記帳士考試</a>單元，用同樣的方式整理營業稅與所得稅的條文體系與計算。<br>建議路線：從<a href="finite-difference/index.html">有限差分</a>開始（為什麼要把微積分變成加減乘除），再進到<a href="numerical/index.html">數值模擬</a>與<a href="wave/index.html">波動模擬</a>，最後看<a href="fluid-mechanics/index.html">流體力學</a>與<a href="airy/index.html">水波理論</a>。每一頁都自成一體，不需要先修基礎。</div>
 </section>
 </main>
 <aside class="rail">
