@@ -505,6 +505,113 @@
   </ul>
 </section>
 
+<section id="b1x">
+  <h2>境外所得與稅額扣抵 ★延伸</h2>
+
+  <p>總機構在境內的營利事業要就「境內外全部所得」課稅，於是馬上出現一個實務問題：<strong>境外那一塊是誰賺的？</strong>是自己在國外開的分公司，還是自己投資的另一家公司？答案不同，併計的時點、金額與能扣抵的稅都不一樣。</p>
+
+  <div class="analogy"><b>比喻：</b><strong>分公司像自己的左手</strong>——左手賺的錢就是你賺的，賠的也是你賠的，當下就記進同一本帳。<strong>子公司則是另一個人</strong>——他自己賺自己賠，只有在他<strong>把錢分給你</strong>的那一刻，才進你的帳。所以分公司「按年併計損益」，子公司「按分配年度認列收益」。</div>
+
+  <h3>三種情形對照</h3>
+  <table>
+    <tr><th>項目</th><th>國外分公司</th><th>大陸分公司</th><th>外國子公司</th></tr>
+    <tr><td>法人格</td><td>非獨立法人，總機構之分支機構</td><td>非獨立法人</td><td><strong>獨立法人</strong></td></tr>
+    <tr><td>認列時點</td><td><strong>所得發生年度</strong>逐年併計</td><td><strong>所得發生年度</strong>逐年併計</td><td><strong>獲配股利或盈餘之年度</strong></td></tr>
+    <tr><td>併計依據</td><td>法 3 Ⅱ</td><td>兩岸條例 24 Ⅰ</td><td>法 3 Ⅱ（<strong>法 42 不適用</strong>）</td></tr>
+    <tr><td>虧損</td><td>直接沖減總機構所得</td><td>直接沖減總機構所得</td><td><strong>不得</strong>，虧損留在子公司</td></tr>
+    <tr><td>可扣抵之稅</td><td>來源國所得稅</td><td>大陸已納所得稅（＋第三地區稅）</td><td>來源國就股利課徵／扣繳之稅</td></tr>
+    <tr><td>納稅憑證</td><td>來源國稅務機關憑證，經<strong>我國使領館或政府認許機構簽證</strong></td><td>大陸納稅憑證，經<strong>海基會驗證</strong></td><td>同國外分公司</td></tr>
+    <tr><td>扣抵限額</td><td>法 3 Ⅱ 但書</td><td>兩岸條例 24 Ⅲ</td><td>法 3 Ⅱ 但書</td></tr>
+  </table>
+
+  <div class="when"><b>法 42 的關鍵字是「國內」：</b>條文寫的是「因投資於<strong>國內</strong>其他營利事業，所獲配之股利或盈餘，不計入所得額課稅」。國內轉投資收益不計入，是為了避免同一筆盈餘在法人層次重複課稅；<strong>外國子公司的股利不在此列，必須計入所得額</strong>，改以「已納外國稅得扣抵」的方式消除重複課稅。這一組對比幾乎年年考。</div>
+
+  <h3>加計國外所得之稅額計算（法 3 Ⅱ）</h3>
+  <p>法 3 Ⅱ 但書把扣抵的門檻寫得很明確：須提出<strong>所得來源國稅務機關發給之同一年度納稅憑證</strong>，並取得<strong>所在地我國使領館或其他經我國政府認許機構之簽證</strong>；而且「<strong>扣抵之數，不得超過因加計其國外所得，而依國內適用稅率計算增加之結算應納稅額</strong>」。</p>
+
+  <p>財政部把這句話拆成四個步驟，實務上三個數字取最小：</p>
+  <pre><span class="com">① 境外已納稅額                     = A</span>
+<span class="com">② 可扣抵限額</span>
+   境外所得額 = 境外收入 − 相關成本費用     <span class="com">← 不是用「收入」算</span>
+   B = 境外所得額 × 20%
+<span class="com">③ 因加計國外所得而增加之應納稅額</span>
+   C = 國內所得額 × 20%
+   D = (國內所得額 + 境外所得額) × 20%
+   E = D − C
+<span class="com">④ 可扣抵稅額 = min(A, B, E)</span></pre>
+
+  <div class="tip"><b>兩個最常犯的錯：</b>一是<strong>用境外「收入」而非「所得額」算限額</strong>——境外收入必須先減除相關成本及費用；二是<strong>分國逐一計算</strong>——應以<strong>全部境外所得合併</strong>適用稅率計算限額，不是一國一國分開算。</div>
+
+  <h4>動手算：可扣抵稅額到底是多少</h4>
+  <p>國內有盈餘時，通常是 B 與 E 相等、由 A 或 B 卡住；<strong>國內虧損時 E 會小於 B</strong>，這時卡住的是 E。把國內所得額改成負數就看得出來。</p>
+
+  <div class="calc">
+    <div class="row">
+      <div>
+        <label for="fDom">國內所得額（元，可為負）</label>
+        <input type="number" id="fDom" value="3000000" step="100000">
+      </div>
+      <div>
+        <label for="fPaid">境外已納稅額 A（元）</label>
+        <input type="number" id="fPaid" value="2000000" min="0" step="100000">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="fRev">境外收入（元）</label>
+        <input type="number" id="fRev" value="10000000" min="0" step="100000">
+      </div>
+      <div>
+        <label for="fCost">境外相關成本及費用（元）</label>
+        <input type="number" id="fCost" value="3000000" min="0" step="100000">
+      </div>
+    </div>
+    <div class="controls">
+      <button onclick="calcFTC()">計算</button>
+      <button class="ghost" onclick="ftcDemo()">帶入財政部例示</button>
+    </div>
+    <div class="res" id="ftcBox"></div>
+  </div>
+
+  <h3>加計大陸地區所得之稅額計算（兩岸條例 24）</h3>
+  <p>大陸地區來源所得<strong>不適用</strong>所得稅法第 3 條，而是回到臺灣地區與大陸地區人民關係條例第 24 條。三項各管一件事：</p>
+  <table>
+    <tr><th>項</th><th>規定</th></tr>
+    <tr><td>Ⅰ</td><td>臺灣地區人民、法人、團體或其他機構有<strong>大陸地區來源所得</strong>者，應<strong>併同臺灣地區來源所得</strong>課徵所得稅；<strong>在大陸地區已繳納之稅額，得自應納稅額中扣抵</strong></td></tr>
+    <tr><td>Ⅱ</td><td>經主管機關許可，<strong>經由第三地區投資設立之公司或事業</strong>在大陸地區從事投資者，其獲配自該第三地區公司之投資收益，<strong>在大陸地區及第三地區已繳納之所得稅</strong>均得扣抵</td></tr>
+    <tr><td>Ⅲ</td><td>扣抵數額之合計數，<strong>不得超過因加計大陸地區來源所得，而依臺灣地區適用稅率計算增加之應納稅額</strong></td></tr>
+  </table>
+
+  <p>施行細則 21 補上三件事：</p>
+  <ul>
+    <li><strong>適用起點</strong>：91/6/30 前經許可者，自 <strong>91/7/1 起</strong>獲配之投資收益，<strong>不論該第三地區公司用以分配之盈餘發生於哪一年度</strong>，均適用 24 Ⅱ；91/7/1 以後經許可者，自<strong>許可之日起</strong>適用。</li>
+    <li><strong>年度彈性</strong>：取具規定憑證者，<strong>得不分稅額之繳納年度</strong>，在限額內扣抵——這一點與法 3 Ⅱ 要求「<strong>同一年度</strong>納稅憑證」不同，是兩制度的重要差異。</li>
+    <li><strong>證明文件</strong>：足資證明大陸地區來源投資收益之財務報表、第三地區公司源自大陸投資收益之相關文件及分配投資收益之財務報表；納稅憑證屬大陸地區者，應經<strong>海基會（本條例 7 條所定機構或民間團體）驗證</strong>。</li>
+  </ul>
+
+  <div class="when"><b>陷阱：大陸地區來源所得不是「海外所得」。</b>依兩岸條例 2 及 24 Ⅰ，大陸來源所得<strong>併入綜合所得總額</strong>課稅，<strong>不是</strong>所得基本稅額條例 §12 Ⅰ① 的海外所得，因此沒有「未達 100 萬元免計入」那道門檻，也不走最低稅負制。個人常誤以為大陸所得可以比照海外所得處理而漏報。</div>
+
+  <h3>外國子公司所得之計算及扣抵限額</h3>
+  <p>外國子公司是獨立法人，台灣母公司在它「賺錢」的當下<strong>不認列任何所得</strong>，要等到<strong>獲配股利或盈餘</strong>才計入。認列後：</p>
+  <ol>
+    <li>股利或盈餘<strong>全額計入</strong>營利事業所得額（法 42 只適用國內轉投資）。</li>
+    <li>來源國就該筆股利課徵或扣繳之所得稅，依法 3 Ⅱ 於限額內扣抵。</li>
+    <li>計算限額時，該筆股利收入仍應<strong>減除可合理歸屬之成本費用</strong>後，才是境外所得額。</li>
+  </ol>
+  <p>兩個銜接規定要一起記：</p>
+  <ul>
+    <li><strong>與 CFC 的關係（法 43-3）</strong>：若該子公司屬受控外國企業，投資收益已<strong>提前按持股比率認列</strong>；日後實際獲配股利時，<strong>在已認列投資收益範圍內不計入所得額</strong>，已納國外稅得於<strong>認列投資收益年度申報期間屆滿翌日起 5 年內</strong>申請扣抵。</li>
+    <li><strong>大陸子公司</strong>：若是經核准經由第三地區公司間接投資大陸，走兩岸條例 24 Ⅱ，<strong>大陸稅與第三地區稅都可扣抵</strong>；若是直接投資大陸，走 24 Ⅰ。</li>
+  </ul>
+
+  <div class="tip"><b>暫繳也能扣抵：</b>依財政部 106.08.25 台財稅字第 10604544060 號令，自 103 年度起，依法 67 Ⅲ <strong>試算</strong>當年度前 6 個月所得額計算暫繳稅額者，其境外及大陸已納所得稅得自<strong>暫繳稅額</strong>中扣抵，同樣<strong>不得超過因加計該所得而增加之暫繳稅額</strong>。</div>
+
+  <h3>三句話收尾</h3>
+  <div class="card">
+    <p style="margin:0">① <strong>分公司按年併、子公司按分配年度併</strong>；② <strong>限額一律是「因加計而增加的應納稅額」</strong>，境外看法 3 Ⅱ、大陸看兩岸條例 24 Ⅲ；③ <strong>憑證決定能不能扣</strong>——國外要使領館或認許機構簽證且為同一年度，大陸要海基會驗證但不分繳納年度。</p>
+  </div>
+</section>
+
 <section id="b2">
   <h2>所得額計算（法 24）</h2>
   <pre>所得額 = 收入總額 − 成本 − 費用 − 損失 − 稅捐
@@ -1053,6 +1160,8 @@
     <li>物價調整門檻有兩套：<strong>所得稅法各項金額為 3%</strong>（千元／萬元為單位），<strong>最低稅負制為 10%</strong>（10 萬元為單位）。</li>
     <li>最低稅負制的<strong>海外所得</strong>是「未達 100 萬元免計入」，<strong>達到就全數計入</strong>；保險給付則是<strong>死亡給付</strong>才有 3,740 萬免稅額，<strong>生存給付全數計入</strong>。</li>
     <li>扣繳率的第一問永遠是<strong>「是不是境內居住者」</strong>；<strong>2,000 元起扣點只給境內居住者及境內有固定營業場所之營利事業</strong>，且<strong>分離課稅所得不適用起扣點</strong>。</li>
+    <li>境外可扣抵稅額限額要用<strong>境外所得額</strong>（收入減成本費用）而非收入計算，且<strong>全部境外所得合併</strong>算、不分國；大陸地區來源所得走<strong>兩岸條例 24</strong>，不是所得稅法第 3 條，也<strong>不屬</strong>最低稅負制的海外所得。</li>
+    <li>法 42 不計入所得額只限<strong>國內</strong>轉投資；<strong>外國子公司股利應計入</strong>，改用已納外國稅扣抵。</li>
     <li>查核準則的 <strong>80,000 元</strong>（§77-1 固定資產費用化）、<strong>3,000 元</strong>（§88 伙食費）、<strong>2,000 元</strong>（§83 團保）、<strong>700／600 元</strong>（§74 出差膳雜費）是四組不同的數字，別互相串位。</li>
   </ol>
 
@@ -1075,7 +1184,9 @@
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340115" target="_blank" rel="noopener">所得基本稅額條例</a>（110.01.27）</li>
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?PCode=G0340051" target="_blank" rel="noopener">營利事業所得稅查核準則</a>（112.12.11）</li>
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340028" target="_blank" rel="noopener">各類所得扣繳率標準</a>（110.06.30）</li>
-    <li><a href="https://www.mof.gov.tw/" target="_blank" rel="noopener">財政部</a>（各年度綜合所得稅及所得基本稅額相關金額公告）</li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=Q0010001" target="_blank" rel="noopener">臺灣地區與大陸地區人民關係條例</a>（第 24 條：大陸地區來源所得之併計與扣抵）</li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=Q0010002" target="_blank" rel="noopener">臺灣地區與大陸地區人民關係條例施行細則</a>（第 21 條：第三地區間接投資之扣抵）</li>
+    <li><a href="https://www.mof.gov.tw/" target="_blank" rel="noopener">財政部</a>（各年度綜合所得稅及所得基本稅額相關金額公告；境外可扣抵稅額計算例示；106.08.25 台財稅字第 10604544060 號令）</li>
   </ul>
   <div class="when"><b>使用提醒：</b>本頁為考試重點整理，條文經節錄改寫，作答與實務適用請以法規資料庫現行條文及財政部最新公告為準。綜所稅各項金額為 115 年度公告數；最低稅負制扣除金額為現行公告數（個人 750 萬元、營利事業 60 萬元，115 年度未調整）。</div>
 </section>
@@ -1094,6 +1205,7 @@
     <a href="#a6">個人結算申報</a>
     <a href="#partB">— Part B　營利事業 —</a>
     <a href="#b1">課稅主體與範圍</a>
+    <a href="#b1x">境外所得與稅額扣抵 ★</a>
     <a href="#b2">所得額計算</a>
     <a href="#b3">費用與損失限額 ★</a>
     <a href="#b4">資產估價</a>
@@ -1304,7 +1416,41 @@ function calcAMT(){
       : '<b style="color:#6ee7b7">一般所得稅額 ≥ 基本稅額</b>，依所得稅法繳納即可，不必再繳差額。');
 }
 
-calcNet(); calcDiv(); calcHouse(); calcWith(); calcAMT();
+/* 境外／大陸已納稅額之可扣抵稅額 */
+function calcFTC(){
+  const dom  = +document.getElementById('fDom').value || 0;
+  const paid = Math.max(0, +document.getElementById('fPaid').value || 0);
+  const rev  = Math.max(0, +document.getElementById('fRev').value || 0);
+  const cost = Math.max(0, +document.getElementById('fCost').value || 0);
+  const R = 0.20;
+  const foreign = rev - cost;                 // 境外所得額
+  const A = paid;
+  const B = Math.max(0, foreign * R);         // 可扣抵限額
+  const C = Math.max(0, dom) * R;             // 國內所得應納稅額
+  const D = Math.max(0, dom + foreign) * R;   // 全部所得應納稅額
+  const E = Math.max(0, D - C);               // 因加計而增加之應納稅額
+  const credit = Math.min(A, B, E);
+  const binding = credit === A ? '已納稅額 A' : (credit === B ? '扣抵限額 B' : '增加之應納稅額 E');
+  document.getElementById('ftcBox').innerHTML =
+    '<span class="k">境外所得額（收入−成本費用）</span><span class="num">' + nf(foreign) + '</span><br>' +
+    '<span class="k">A　境外已納稅額</span><span class="num">' + nf(A) + '</span><br>' +
+    '<span class="k">B　可扣抵限額（境外所得×20%）</span><span class="num">' + nf(B) + '</span><br>' +
+    '<span class="k">C　國內所得應納稅額</span><span class="num">' + nf(C) + '</span><br>' +
+    '<span class="k">D　全部所得應納稅額</span><span class="num">' + nf(D) + '</span><br>' +
+    '<span class="k">E　因加計而增加（D−C）</span><span class="num">' + nf(E) + '</span><br>' +
+    '<b style="color:#6ee7b7">可扣抵稅額 = min(A, B, E) = <span class="num" style="font-size:17px">' + nf(credit) + '</span></b><br>' +
+    '<span style="color:var(--muted)">本例由「' + binding + '」卡住上限；超出部分 ' + nf(A - credit) + ' 元不得扣抵。</span><br>' +
+    '<span style="color:var(--muted)">結算應納稅額 ＝ ' + nf(D) + ' − ' + nf(credit) + ' ＝ <span class="num">' + nf(Math.max(0, D - credit)) + '</span> 元（未計 12 萬元起徵額之調整）。</span>';
+}
+function ftcDemo(){
+  document.getElementById('fDom').value = -2000000;
+  document.getElementById('fPaid').value = 2000000;
+  document.getElementById('fRev').value = 10000000;
+  document.getElementById('fCost').value = 3000000;
+  calcFTC();
+}
+
+calcNet(); calcDiv(); calcHouse(); calcWith(); calcAMT(); calcFTC();
 </script>
 </body>
 </html>
