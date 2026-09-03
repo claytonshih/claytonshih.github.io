@@ -26,12 +26,13 @@
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3789985806166718" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="../assets/style.css">
 <style>
-  .cards2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:24px 0}
-  .cards2 .tcard p{margin:0 0 8px}
+  .cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:24px 0}
+  .cards3 .tcard p{margin:0 0 8px}
   .taglist{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
   .taglist span{font-size:12px;padding:3px 10px;border-radius:20px;background:var(--panel2);border:1px solid var(--line);color:var(--muted)}
   .key{color:var(--warn);font-weight:700}
-  @media(max-width:900px){.cards2{grid-template-columns:1fr}}
+  @media(max-width:1100px){.cards3{grid-template-columns:1fr 1fr}}
+  @media(max-width:900px){.cards3{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -62,7 +63,7 @@
 
   <p class="lead">稅法讀起來之所以吃力，通常不是條文太難，而是資訊密度太高——同一個名詞在兩部法裡意思不同，同一種罰則有兩套完全不同的金額，同一筆支出在營業稅能扣、在所得稅卻不能列。這裡的整理採取和本站其他主題相同的作法：<strong>先給一個理解制度設計的角度，再用表格把數字收攏，最後放一個可以自己輸入數字的計算器</strong>，讓抽象的公式變成看得見的結果。</p>
 
-  <div class="cards2">
+  <div class="cards3">
     <a href="business-tax/index.html" class="tcard">
       <div class="emoji">🧾</div>
       <h3>營業稅</h3>
@@ -73,20 +74,30 @@
       </div>
       <span class="go">開始讀 →</span>
     </a>
-    <a href="income-tax/index.html" class="tcard">
-      <div class="emoji">💰</div>
-      <h3>所得稅</h3>
-      <p>個人與營利事業分軌整理。十類所得與扣除額金額、股利二擇一、房地合一 2.0、費用限額與查核準則、扣繳率標準，以及所得基本稅額條例。</p>
+    <a href="personal-income-tax/index.html" class="tcard">
+      <div class="emoji">🙋</div>
+      <h3>綜合所得稅</h3>
+      <p>個人這一軌。中華民國來源所得、十類所得、115 年度免稅額與扣除額金額、夫妻申報三方式、股利二擇一、房地合一 2.0，以及個人最低稅負制。</p>
       <div class="taglist">
         <span>十類所得</span><span>115 年度金額</span><span>股利二擇一</span>
-        <span>房地合一 2.0</span><span>查核準則</span><span>扣繳率</span><span>最低稅負制</span>
+        <span>房地合一 2.0</span><span>海外所得</span>
+      </div>
+      <span class="go">開始讀 →</span>
+    </a>
+    <a href="corporate-income-tax/index.html" class="tcard">
+      <div class="emoji">🏢</div>
+      <h3>營利事業所得稅</h3>
+      <p>公司這一軌。境外所得與扣抵限額（國外／大陸分公司、外國子公司）、所得額計算、營利事業房地合一、費用限額與查核準則金額、未分配盈餘與反避稅四條。</p>
+      <div class="taglist">
+        <span>境外扣抵限額</span><span>查核準則</span><span>營利事業房地合一</span>
+        <span>未分配盈餘</span><span>反避稅 CFC</span><span>扣繳率</span>
       </div>
       <span class="go">開始讀 →</span>
     </a>
   </div>
 
 <section id="how">
-  <h2>兩部法怎麼分工</h2>
+  <h2>三頁怎麼分工</h2>
 
   <div class="analogy"><b>比喻：</b>營業稅看的是<strong>每一筆交易</strong>——貨物或勞務每換一次手，就結算一次；所得稅看的是<strong>一整年的結果</strong>——把一年的收入減掉成本費用，才算出要繳多少。前者像收費站，後者像年度結算。也因為看的東西不同，兩部法的申報週期、憑證要求與罰則設計才會完全不一樣。</div>
 
@@ -110,7 +121,7 @@
   <ol>
     <li><strong>先讀營業稅的「體系與速覽」</strong>：理解加值型的鏈條，之後所有的扣抵、退稅、兼營問題都是這個結構的延伸。</li>
     <li><strong>再讀「零稅率與免稅」</strong>：這是營業稅出題密度最高的一節，觀念錯了後面全錯。</li>
-    <li><strong>接著看所得稅的「總則」與「十類所得」</strong>：先把所得歸類搞定，扣除額與稅率才有著力點。</li>
+    <li><strong>接著看綜合所得稅的「總則」與「十類所得」</strong>：先把所得歸類搞定，扣除額與稅率才有著力點；公司的部分再進營利事業所得稅頁。</li>
     <li><strong>把兩部法的期限總表與罰則對照著看</strong>：兩頁最後都有「易錯陷阱與速記」，一起讀最有效率。</li>
     <li><strong>最後做互動計算器</strong>：把自己算過一遍的數字，跟頁面上的分解步驟核對，比重讀十次條文有用。</li>
   </ol>
@@ -123,8 +134,9 @@
   <nav class="toc">
     <h4>本頁章節</h4>
     <a href="business-tax/index.html">營業稅</a>
-    <a href="income-tax/index.html">所得稅</a>
-    <a href="#how">兩部法怎麼分工</a>
+    <a href="personal-income-tax/index.html">綜合所得稅</a>
+    <a href="corporate-income-tax/index.html">營利事業所得稅</a>
+    <a href="#how">三頁怎麼分工</a>
     <a href="#route">建議的閱讀順序</a>
   </nav>
   <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
