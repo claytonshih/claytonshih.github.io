@@ -6,13 +6,13 @@
 <title>線性水波理論（Airy 波）完整推導｜從流體力學到頻散關係</title>
 <meta name="description" content="波浪力學完整推導：從連續方程、Euler 動量方程、無旋與 Bernoulli，一步步推到自由液面邊界條件與頻散關係 ω²=gk·tanh(kh)。每條式子都附物理意義，並用可調水深的水粒子橢圓軌道動畫輔助。">
 <meta name="keywords" content="線性水波理論, Airy 波, 微小振幅波, 波浪力學, 速度勢, Laplace, Bernoulli, Euler 方程, 無旋, 頻散關係, dispersion relation, 水粒子軌道, JavaScript">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://claytonshih.github.io/airy/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"水波理論","item":"https://claytonshih.github.io/airy/"}]},{"@type":"TechArticle","headline":"線性水波理論（Airy 波）完整推導","description":"從流體三大律到頻散關係 ω²=gk·tanh(kh)，每條式子附物理意義，含水粒子橢圓軌道互動。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-07-05T00:00:00+08:00","dateModified":"2026-07-05T12:00:00+08:00","author":{"@type":"Organization","name":"直覺科學互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"直覺科學互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/airy/"}}]}
+{"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"水波理論","item":"https://claytonshih.github.io/airy/"}]},{"@type":"TechArticle","headline":"線性水波理論（Airy 波）完整推導","description":"從流體三大律到頻散關係 ω²=gk·tanh(kh)，每條式子附物理意義，含水粒子橢圓軌道互動。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-07-05T00:00:00+08:00","dateModified":"2026-07-05T12:00:00+08:00","author":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/airy/"}}]}
 </script>
 <meta property="og:type" content="article">
-<meta property="og:site_name" content="直覺科學互動學習">
+<meta property="og:site_name" content="記帳士考試互動學習">
 <meta property="og:title" content="線性水波理論（Airy 波）完整推導">
 <meta property="og:description" content="從流體三大律到頻散關係 ω²=gk·tanh(kh)，每條式子附物理意義，含水粒子橢圓軌道互動。">
 <meta property="og:url" content="https://claytonshih.github.io/airy/">
@@ -52,14 +52,13 @@
 </head>
 <body>
 <header class="topnav">
-  <a href="../index.html" class="logo">📚 直覺科學互動學習</a>
+  <a href="../index.html" class="logo">🧮 記帳士考試互動學習</a>
   <a href="../index.html" class="nl">首頁</a>
-  <a href="../finite-difference/index.html" class="nl">有限差分</a>
-  <a href="../numerical/index.html" class="nl">數值模擬</a>
-  <a href="../wave/index.html" class="nl">波動模擬</a>
-  <a href="../fluid-mechanics/index.html" class="nl">流體力學</a>
-  <a href="../airy/index.html" class="nl active">水波理論</a>
   <a href="../bookkeeper/index.html" class="nl">記帳士考試</a>
+  <a href="../bookkeeper/business-tax/index.html" class="nl">營業稅</a>
+  <a href="../bookkeeper/personal-income-tax/index.html" class="nl">綜合所得稅</a>
+  <a href="../bookkeeper/corporate-income-tax/index.html" class="nl">營利事業所得稅</a>
+  <a href="../bookkeeper/tax-collection-act/index.html" class="nl">稅捐稽徵法</a>
 </header>
 
 <!-- ===== 廣告版位：頂部橫幅 ===== -->
@@ -95,7 +94,7 @@
   <div class="eq"><span class="lbl">速度勢（來自無旋 ③）</span> <b style="font-style:italic">u</b> = ∇φ　⇒　u = <span class="frac"><span>∂φ</span><span>∂x</span></span> <span class="op">,</span> w = <span class="frac"><span>∂φ</span><span>∂z</span></span></div>
   <p>再把它代進<b>質量守恆（①）</b>，馬上得到水體內部的控制方程：</p>
   <div class="eq"><span class="lbl">控制方程（來自質量守恆 ①）</span> ∇²φ = <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂x<sup>2</sup></span></span> <span class="op">+</span> <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂z<sup>2</sup></span></span> = 0</div>
-  <div class="tip"><b>物理意義：</b>Laplace 方程說 φ 在水體內部「處處平滑、沒有源也沒有匯」。它<strong>不含時間、不會自己震盪</strong>——水波的節奏完全由水面決定，內部只是被動地把水面的擾動傳遞下去。這也是水波跟弦振動最不一樣的地方。</p>
+  <div class="tip"><b>物理意義：</b>Laplace 方程說 φ 在水體內部「處處平滑、沒有源也沒有匯」。它<strong>不含時間、不會自己震盪</strong>——水波的節奏完全由水面決定，內部只是被動地把水面的擾動傳遞下去。這也是水波跟弦振動最不一樣的地方。</div>
 
   <h3 id="bernoulli">第 2 步：把動量方程積分成 Bernoulli（壓力從這裡進來）</h3>
   <p>動量方程（②）看起來兇，但無旋讓它每一項都能寫成「<strong>某個東西的梯度</strong>」，於是能一口氣對空間積分。三個改寫：</p>
@@ -120,7 +119,7 @@
   <h3 id="combine">第 4 步：合併成一條液面條件</h3>
   <p>兩條線性化的液面條件都含 η。把動力學式 <span style="font-family:Georgia,serif">∂φ/∂t + gη = 0</span> 對時間微分，再用運動學式 <span style="font-family:Georgia,serif">∂η/∂t = ∂φ/∂z</span> 把 η 消掉，就剩一條只含 φ 的式子：</p>
   <div class="eq"><span class="lbl">合併後的自由液面條件（z=0）</span> <span class="frac"><span>∂<sup>2</sup>φ</span><span>∂t<sup>2</sup></span></span> <span class="op">+</span> g <span class="frac"><span>∂φ</span><span>∂z</span></span> = 0</div>
-  <div class="tip"><b>物理意義：</b>這其實就是水面的「<strong>F = ma</strong>」——<span style="font-family:Georgia,serif">∂²φ/∂t²</span> 對應水面上下振盪的<strong>慣性（加速度）</strong>，<span style="font-family:Georgia,serif">g·∂φ/∂z</span> 對應<strong>重力回復力</strong>。重力想把凸起的水面拉平、慣性又讓它衝過頭，一來一回就振盪成波。</p>
+  <div class="tip"><b>物理意義：</b>這其實就是水面的「<strong>F = ma</strong>」——<span style="font-family:Georgia,serif">∂²φ/∂t²</span> 對應水面上下振盪的<strong>慣性（加速度）</strong>，<span style="font-family:Georgia,serif">g·∂φ/∂z</span> 對應<strong>重力回復力</strong>。重力想把凸起的水面拉平、慣性又讓它衝過頭，一來一回就振盪成波。</div>
 
   <h3 id="vertical">第 5 步：代入行進波，解出「垂直結構」</h3>
   <p>猜一個往 +x 前進的波：<span style="font-family:Georgia,serif">η = a·cos(kx − ωt)</span>、<span style="font-family:Georgia,serif">φ = Z(z)·sin(kx − ωt)</span>（<span style="font-family:Georgia,serif">k = 2π/L</span> 波數、<span style="font-family:Georgia,serif">ω = 2π/T</span> 角頻率）。代進 Laplace 得 <span style="font-family:Georgia,serif">Z″ − k²Z = 0</span>，通解是 <span style="font-family:Georgia,serif">cosh</span>、<span style="font-family:Georgia,serif">sinh</span> 的組合；再用<strong>海底條件</strong> <span style="font-family:Georgia,serif">Z′(−h)=0</span> 砍掉一半，得到：</p>
@@ -187,7 +186,7 @@
     <a href="../privacy/index.html">隱私權政策</a>
     <a href="../contact/index.html">聯絡我們</a>
   </div>
-  © 2026 直覺科學互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
+  © 2026 記帳士考試互動學習 ｜ 內容以圖解與 JavaScript 互動示範，供學習用途。
 </footer>
 
 <script>
