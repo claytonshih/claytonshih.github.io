@@ -147,6 +147,45 @@
 
   <div class="when"><b>法 5 Ⅴ 稅率的三段話：</b>課稅所得額 <strong>12 萬元以下免徵</strong>；超過 12 萬者<strong>就全部課稅所得額課 20%</strong>；<strong>但應納稅額不得超過超過 12 萬元部分之半數</strong>。所以 12 萬不是免稅額，而是<strong>起徵額</strong>——一超過就整筆課，只有最後那句「半數封頂」在緩衝這道門檻。</div>
 
+  <h3>起徵額怎麼算：三段式與 20 萬交叉點 ★</h3>
+
+  <p>條文只寫了「不得超過超過 12 萬元部分之半數」，沒說這個封頂在哪個區間才真的咬得到。把兩個數字並排就清楚了——<strong>應納稅額取兩者較小值</strong>：</p>
+
+  <pre>全額課徵：Y × 20%
+半數封頂：(Y − 120,000) × 1/2
+應納稅額 = min(兩者)
+
+<span class="com">兩者相等時：</span>
+  0.2Y = 0.5(Y − 120,000)
+  0.2Y = 0.5Y − 60,000
+  0.3Y = 60,000
+  <span class="kw">Y = 200,000</span>   <span class="com">← 交叉點，超過 20 萬後但書就失效了</span></pre>
+
+  <table>
+    <tr><th>全年課稅所得額 Y</th><th>應納稅額</th><th>實際適用</th></tr>
+    <tr><td>Y ≤ 120,000</td><td><strong>0</strong></td><td>免徵（法 5 Ⅴ①）</td></tr>
+    <tr><td>120,000 &lt; Y ≤ 200,000</td><td><strong>(Y − 120,000) × 1/2</strong></td><td><strong>但書封頂</strong></td></tr>
+    <tr><td>Y &gt; 200,000</td><td><strong>Y × 20%</strong></td><td>全額課徵（法 5 Ⅴ②本文）</td></tr>
+  </table>
+
+  <div class="analogy"><b>但書在防什麼：</b>如果沒有它，所得額從 120,000 變成 120,001，稅就會從 <strong>0 直接跳到 24,000</strong>——多賺 1 元卻多繳兩萬四。有了封頂，跨過門檻的第一元只課 <strong>0.5 元</strong>，稅負是平滑爬上去的。代價是<strong>這一段的邊際稅率高達 50%</strong>（每多賺 1 元要多繳 0.5 元），比 20% 的正式稅率還高——這是門檻式起徵額必然的副作用，也是考題最愛設在 12～20 萬這個區間的原因。</div>
+
+  <h4>動手算：落在哪一段</h4>
+  <div class="calc">
+    <div>
+      <label for="citY">全年課稅所得額（元）</label>
+      <input type="number" id="citY" value="150000" min="0" step="10000">
+    </div>
+    <div class="controls">
+      <button onclick="calcCit()">計算</button>
+      <button class="ghost" onclick="citSet(120000)">12 萬</button>
+      <button class="ghost" onclick="citSet(150000)">15 萬</button>
+      <button class="ghost" onclick="citSet(200000)">20 萬</button>
+      <button class="ghost" onclick="citSet(250000)">25 萬</button>
+    </div>
+    <div class="res" id="citBox"></div>
+  </div>
+
   <h3>特殊主體與擬制所得</h3>
   <table>
     <tr><th>對象</th><th>所得額</th><th>條號</th></tr>
@@ -816,7 +855,7 @@
 
   <h3>十四個最容易答錯的地方</h3>
   <ol>
-    <li>營所稅起徵額 12 萬<strong>不是免稅額</strong>——超過即就<strong>全部</strong>所得額課 20%，只有「超過 12 萬元部分之半數」封頂在緩衝。</li>
+    <li>營所稅起徵額 12 萬<strong>不是免稅額</strong>——超過即就<strong>全部</strong>所得額課 20%，只有「超過 12 萬元部分之半數」封頂在緩衝。封頂<strong>只在 12 萬～20 萬這一段生效</strong>（應納稅額＝(Y−120,000)×1/2，邊際稅率 50%）；<strong>超過 20 萬</strong>兩者交叉，但書失效、回到 20% 全額課徵。</li>
     <li>總機構在境內是<strong>屬人主義</strong>（境內外全部所得）；個人綜所稅才是屬地主義。</li>
     <li>法 42 不計入所得額只限<strong>國內</strong>轉投資；<strong>外國子公司股利應計入</strong>，改用已納外國稅扣抵。</li>
     <li>境外可扣抵稅額限額要用<strong>境外所得額</strong>（收入減成本費用）而非收入計算，且<strong>全部境外所得合併</strong>算、不分國。</li>
@@ -861,7 +900,7 @@
   <nav class="toc">
     <h4>本頁章節</h4>
     <a href="#general">總則：營利事業這一軌</a>
-    <a href="#b1">課稅主體與範圍</a>
+    <a href="#b1">課稅主體與範圍 ★</a>
     <a href="#b1x">境外所得與稅額扣抵 ★</a>
     <a href="#b2">所得額計算</a>
     <a href="#b2h">營利事業房地合一 ★</a>
@@ -980,6 +1019,36 @@ function calcAMT(){
       : '<b style="color:#6ee7b7">一般所得稅額 ≥ 基本稅額</b>，依所得稅法繳納即可，不必再繳差額。');
 }
 
+/* 營所稅起徵額三段式（法 5 Ⅴ） */
+function citTax(y){
+  if (y <= 120000) return 0;
+  return Math.min(y * 0.20, (y - 120000) / 2);
+}
+function citSet(v){ document.getElementById('citY').value = v; calcCit(); }
+function calcCit(){
+  const y = Math.max(0, +document.getElementById('citY').value || 0);
+  const full = y * 0.20, cap = Math.max(0, (y - 120000) / 2), tax = citTax(y);
+  let band, why;
+  if (y <= 120000){
+    band = 'Y ≤ 120,000　<b style="color:#6ee7b7">免徵</b>';
+    why = '全年課稅所得額在 12 萬元以下，依法 5 Ⅴ① 免徵營利事業所得稅。';
+  } else if (y <= 200000){
+    band = '120,000 &lt; Y ≤ 200,000　<b style="color:#fbbf24">但書封頂</b>';
+    why = '全額課徵會是 ' + nf(full) + ' 元，但但書把它壓到 (Y − 120,000) ÷ 2 ＝ ' + nf(cap) + ' 元，因此以封頂為準。此段邊際稅率 50%。';
+  } else {
+    band = 'Y &gt; 200,000　<b style="color:#7dd3fc">全額課徵</b>';
+    why = '封頂算出來是 ' + nf(cap) + ' 元，高於全額課徵的 ' + nf(full) + ' 元，但書失效，按 20% 全額課徵。';
+  }
+  document.getElementById('citBox').innerHTML =
+    '<span class="k">全年課稅所得額</span><span class="num">' + nf(y) + '</span><br>' +
+    '<span class="k">全額課徵　Y × 20%</span><span class="num">' + nf(full) + '</span><br>' +
+    '<span class="k">半數封頂　(Y−120,000)÷2</span><span class="num">' + (y > 120000 ? nf(cap) : '—') + '</span><br>' +
+    '<span class="k">落在哪一段</span>' + band + '<br>' +
+    '<span class="k">應納稅額</span><span class="num" style="font-size:18px">' + nf(tax) + '</span>' +
+    (y > 0 ? '　<span style="color:var(--muted)">實質稅率 ' + (tax / y * 100).toFixed(2) + '%</span>' : '') + '<br>' +
+    '<span class="k">說明</span>' + why;
+}
+
 /* 境外／大陸已納稅額之可扣抵稅額 */
 function calcFTC(){
   const dom  = +document.getElementById('fDom').value || 0;
@@ -990,8 +1059,8 @@ function calcFTC(){
   const foreign = rev - cost;                 // 境外所得額
   const A = paid;
   const B = Math.max(0, foreign * R);         // 可扣抵限額
-  const C = Math.max(0, dom) * R;             // 國內所得應納稅額
-  const D = Math.max(0, dom + foreign) * R;   // 全部所得應納稅額
+  const C = citTax(Math.max(0, dom));         // 國內所得應納稅額（含起徵額規則）
+  const D = citTax(Math.max(0, dom + foreign)); // 全部所得應納稅額（含起徵額規則）
   const E = Math.max(0, D - C);               // 因加計而增加之應納稅額
   const credit = Math.min(A, B, E);
   const binding = credit === A ? '已納稅額 A' : (credit === B ? '扣抵限額 B' : '增加之應納稅額 E');
@@ -1004,7 +1073,7 @@ function calcFTC(){
     '<span class="k">E　因加計而增加（D−C）</span><span class="num">' + nf(E) + '</span><br>' +
     '<b style="color:#6ee7b7">可扣抵稅額 = min(A, B, E) = <span class="num" style="font-size:17px">' + nf(credit) + '</span></b><br>' +
     '<span style="color:var(--muted)">本例由「' + binding + '」卡住上限；超出部分 ' + nf(A - credit) + ' 元不得扣抵。</span><br>' +
-    '<span style="color:var(--muted)">結算應納稅額 ＝ ' + nf(D) + ' − ' + nf(credit) + ' ＝ <span class="num">' + nf(Math.max(0, D - credit)) + '</span> 元（未計 12 萬元起徵額之調整）。</span>';
+    '<span style="color:var(--muted)">結算應納稅額 ＝ ' + nf(D) + ' − ' + nf(credit) + ' ＝ <span class="num">' + nf(Math.max(0, D - credit)) + '</span> 元（C、D 均已套用法 5 Ⅴ 起徵額規則）。</span>';
 }
 function ftcDemo(){
   document.getElementById('fDom').value = -2000000;
@@ -1014,7 +1083,7 @@ function ftcDemo(){
   calcFTC();
 }
 
-calcHouseCorp(); calcWith(); calcAMT(); calcFTC();
+calcHouseCorp(); calcWith(); calcAMT(); calcCit(); calcFTC();
 </script>
 </body>
 </html>
