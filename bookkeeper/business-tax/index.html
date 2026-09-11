@@ -11,6 +11,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"記帳士考試","item":"https://claytonshih.github.io/bookkeeper/"},{"@type":"ListItem","position":3,"name":"營業稅","item":"https://claytonshih.github.io/bookkeeper/business-tax/"}]},{"@type":"TechArticle","headline":"營業稅重點整理｜零稅率與免稅、進項扣抵、發票與罰則","description":"加值型及非加值型營業稅的體系、稅額計算、稽徵程序與罰則，用圖解與互動計算機理解。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-08-31T00:00:00+08:00","dateModified":"2026-09-11T00:00:00+08:00","author":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/bookkeeper/business-tax/"}}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"營業稅的零稅率和免稅差在哪裡？","acceptedAnswer":{"@type":"Answer","text":"零稅率是完全免稅，免稅只是部分免稅。零稅率仍在課稅範圍內、稅率 0%，進項稅額可以扣抵並退還；免稅則被排除於課稅之外，進項不得扣抵也不得退還（法 19 Ⅱ），只能沉澱為成本。免稅另可申請放棄，核准後 3 年內不得變更（法 8 Ⅱ）。"}},{"@type":"Question","name":"哪些進項稅額不得扣抵？","acceptedAnswer":{"@type":"Answer","text":"法 19 Ⅰ 規定五款不得扣抵：未取得並保存法 33 憑證、非供本業及附屬業務使用、交際應酬用、酬勞員工個人、自用乘人小汽車（9 座以下且非供銷售或提供勞務使用）。但協助國防建設、慰勞軍隊、對政府捐獻不在此限，仍可扣抵。"}},{"@type":"Question","name":"營業稅多久申報一次？什麼時候要報？","acceptedAnswer":{"@type":"Answer","text":"不論有無銷售額，每 2 個月為一期，於次期開始 15 日內申報，也就是每年 1、3、5、7、9、11 月 15 日前（法 35、細則 38-1）。有應納稅額者應先繳納後併同申報；銷售零稅率貨物或勞務者得申請按月申報，同一年度內不得變更。"}},{"@type":"Question","name":"二聯式發票的銷項稅額怎麼算？","acceptedAnswer":{"@type":"Answer","text":"銷項稅額 ＝ 發票總額 ÷ (1 + 徵收率) × 徵收率，一般營業人即除以 1.05 再乘 5%（細則 32-1）。例如發票總額 10,500 元，銷項稅額為 500 元、銷售額為 10,000 元。二聯式開給非營業人，金額為含稅定價，所以要先還原。"}},{"@type":"Question","name":"營業稅溢付的稅額什麼時候可以退還？","acceptedAnswer":{"@type":"Answer","text":"只有三種情形可以退還，其餘一律留抵（法 39）：銷售零稅率貨物勞務而溢付（退還上限為零稅率銷售額 × 5%）、取得固定資產而溢付（上限為該固定資產進項稅額）、因合併轉讓解散或廢止而申請註銷登記。情形特殊者得報經財政部核准退還。"}},{"@type":"Question","name":"滯報金和怠報金差在哪？","acceptedAnswer":{"@type":"Answer","text":"分界線是逾期 30 日。未逾 30 日為滯報金，每逾 2 日按應納稅額加徵 1%，下限 1,200 元、上限 12,000 元；逾 30 日為怠報金，按核定應納稅額加徵 30%，下限 3,000 元、上限 30,000 元（法 49）。兩者罰的都是「未申報」，與罰「未繳納」的滯納金不同。"}},{"@type":"Question","name":"小規模營業人的進項稅額可以扣抵嗎？","acceptedAnswer":{"@type":"Answer","text":"不能扣抵，但可以按進項稅額的 10% 在查定稅額內扣減（法 25）。憑證須於 1、4、7、10 月 5 日前申報且限當期各月份，逾期或非當期不得扣減；查定稅額未達起徵點者不適用，若進項屬法 19 Ⅰ 五款者亦不適用。"}}]}
+</script>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="記帳士考試互動學習">
 <meta property="og:title" content="營業稅重點整理｜零稅率與免稅、進項扣抵、發票與罰則">
@@ -53,6 +56,14 @@
   .verdict b{color:#fff}
   .mn{font-family:ui-monospace,Menlo,monospace}
   .key{color:var(--warn);font-weight:700}
+  /* 常見問題 */
+  .faq{margin:18px 0}
+  .faq-item{border-left:3px solid var(--line);padding:0 0 0 18px;margin:0 0 22px}
+  .faq-item:hover{border-left-color:var(--brand)}
+  .faq-q{font-size:17px;font-weight:700;color:#fff;margin:0 0 8px}
+  .faq-q::before{content:"Q";color:var(--brand);font-family:ui-monospace,monospace;margin-right:9px}
+  .faq-a{margin:0;color:var(--ink);font-size:15px}
+  .faq-a::before{content:"A";color:var(--ok);font-family:ui-monospace,monospace;font-weight:700;margin-right:9px}
 </style>
 </head>
 <body>
@@ -679,6 +690,40 @@
   <div class="tip">接著看<a href="../personal-income-tax/index.html">綜合所得稅</a>與<a href="../corporate-income-tax/index.html">營利事業所得稅</a>：營業稅處理的是「交易」，所得稅處理的是「一年下來賺了多少」，兩者的申報期限、罰則體系都不同，放在一起對照最不容易記混。</div>
 </section>
 
+<section id="faq">
+  <h2>常見問題</h2>
+  <p>下面把最常被問到的幾個問題，答案第一句就講完，細節與條號在後面。想看完整脈絡請回到對應章節。</p>
+  <div class="faq">
+    <div class="faq-item">
+      <p class="faq-q">營業稅的零稅率和免稅差在哪裡？</p>
+      <p class="faq-a">零稅率是<strong>完全免稅</strong>，免稅只是<strong>部分免稅</strong>。零稅率仍在課稅範圍內、稅率 0%，進項稅額<strong>可以扣抵並退還</strong>；免稅則被排除於課稅之外，進項<strong>不得扣抵也不得退還</strong>（法 19 Ⅱ），只能沉澱為成本。免稅另可申請放棄，核准後 3 年內不得變更（法 8 Ⅱ）。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">哪些進項稅額不得扣抵？</p>
+      <p class="faq-a">法 19 Ⅰ 規定五款不得扣抵：未取得並保存法 33 憑證、非供本業及附屬業務使用、交際應酬用、酬勞員工個人、自用乘人小汽車（9 座以下且非供銷售或提供勞務使用）。但協助國防建設、慰勞軍隊、對政府捐獻<strong>不在此限</strong>，仍可扣抵。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">營業稅多久申報一次？什麼時候要報？</p>
+      <p class="faq-a"><strong>不論有無銷售額</strong>，每 2 個月為一期，於次期開始 15 日內申報，也就是每年 1、3、5、7、9、11 月 15 日前（法 35、細則 38-1）。有應納稅額者應先繳納後併同申報；銷售零稅率貨物或勞務者得申請按月申報，同一年度內不得變更。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">二聯式發票的銷項稅額怎麼算？</p>
+      <p class="faq-a">銷項稅額 ＝ <strong>發票總額 ÷ (1 + 徵收率) × 徵收率</strong>，一般營業人即除以 1.05 再乘 5%（細則 32-1）。例如發票總額 10,500 元，銷項稅額為 500 元、銷售額為 10,000 元。二聯式開給非營業人，金額為含稅定價，所以要先還原。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">營業稅溢付的稅額什麼時候可以退還？</p>
+      <p class="faq-a">只有<strong>三種情形</strong>可以退還，其餘一律留抵（法 39）：銷售零稅率貨物勞務而溢付（退還上限為零稅率銷售額 × 5%）、取得固定資產而溢付（上限為該固定資產進項稅額）、因合併轉讓解散或廢止而申請註銷登記。情形特殊者得報經財政部核准退還。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">滯報金和怠報金差在哪？</p>
+      <p class="faq-a">分界線是<strong>逾期 30 日</strong>。未逾 30 日為滯報金，每逾 2 日按應納稅額加徵 1%，下限 1,200 元、上限 12,000 元；逾 30 日為怠報金，按核定應納稅額加徵 30%，下限 3,000 元、上限 30,000 元（法 49）。兩者罰的都是「未申報」，與罰「未繳納」的滯納金不同。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">小規模營業人的進項稅額可以扣抵嗎？</p>
+      <p class="faq-a"><strong>不能扣抵</strong>，但可以按進項稅額的 <strong>10%</strong> 在查定稅額內扣減（法 25）。憑證須於 1、4、7、10 月 5 日前申報且限當期各月份，逾期或非當期不得扣減；查定稅額未達起徵點者不適用，若進項屬法 19 Ⅰ 五款者亦不適用。</p>
+    </div>
+  </div>
+</section>
 <section id="source">
   <h2>法源與更新</h2>
   <p>本頁依下列條文整理：本法 114.05.28 ｜ 施行細則 113.12.17 ｜ 統一發票使用辦法 113.12.12 ｜ 兼營辦法 95.12.21。</p>
@@ -706,6 +751,7 @@
     <a href="#invoice">統一發票</a>
     <a href="#penalty">罰則</a>
     <a href="#traps">易錯陷阱與速記</a>
+    <a href="#faq">常見問題</a>
     <a href="#source">法源與更新</a>
   </nav>
   <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">

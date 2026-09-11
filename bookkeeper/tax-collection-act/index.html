@@ -11,6 +11,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"記帳士考試","item":"https://claytonshih.github.io/bookkeeper/"},{"@type":"ListItem","position":3,"name":"稅捐稽徵法","item":"https://claytonshih.github.io/bookkeeper/tax-collection-act/"}]},{"@type":"TechArticle","headline":"稅捐稽徵法重點整理｜核課徵收期間、行政救濟、罰則","description":"核課與徵收期間、稅捐保全與限制出境、行政救濟與罰則，附互動查詢與計算器。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-09-03T00:00:00+08:00","dateModified":"2026-09-11T00:00:00+08:00","author":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/bookkeeper/tax-collection-act/"}}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"稅捐的核課期間是幾年？","acceptedAnswer":{"@type":"Answer","text":"誠實申報為 5 年，未申報或不誠實申報為 7 年（法 21）。印花稅及由稽徵機關按稅籍底冊或查得資料核定課徵之稅捐亦為 5 年。起算日依情形不同：已申報自申報日、未申報自申報期間屆滿之翌日、土地增值稅自稽徵機關收件日起算。"}},{"@type":"Question","name":"核課期間和徵收期間有什麼不同？","acceptedAnswer":{"@type":"Answer","text":"核課期間是「確定租稅債權」的期間，徵收期間是「要求履行已確定租稅」的期間，前者在先、後者在後。核課期間 5 或 7 年且無扣除期間；徵收期間為 5 年，自繳納期間屆滿之翌日起算，暫緩或停止執行之期間可以扣除。核課期間屆滿就沒有徵收期間的問題。"}},{"@type":"Question","name":"欠稅多少會被限制出境？","acceptedAnswer":{"@type":"Answer","text":"已確定之欠稅及罰鍰，個人 100 萬元以上、營利事業 200 萬元以上；在行政救濟程序終結前則為個人 150 萬元、營利事業 300 萬元（法 24 Ⅲ）。已提供相當擔保，或稽徵機關未先實施稅捐保全措施者不適用；限制期間自移民署處分之日起不得逾 5 年。"}},{"@type":"Question","name":"逾期繳稅的滯納金怎麼算？","acceptedAnswer":{"@type":"Answer","text":"每逾 3 日按滯納數額加徵 1%，最高加徵 10%（法 20，111 年 1 月 1 日起施行；原為每逾 2 日 1%、最高 15%）。繳納期間屆滿 30 日後仍未繳納者，由稽徵機關移送強制執行，但已依法 35 申請復查者暫緩移送。"}},{"@type":"Question","name":"收到稅單不服要怎麼辦？期限多久？","acceptedAnswer":{"@type":"Answer","text":"先申請復查：有應納或應補徵稅額者，於繳納期間屆滿之翌日起 30 日內向原處分機關申請（法 35）。不服復查決定者，於 30 日內提起訴願，並應先繳納復查決定應納稅額之 1/3 或提供相當擔保。不服訴願決定者，於訴願決定書送達後 2 個月內提起行政訴訟。"}},{"@type":"Question","name":"多繳的稅可以申請退還嗎？期限多久？","acceptedAnswer":{"@type":"Answer","text":"可以。因適用法令、認定事實、計算或其他原因錯誤而溢繳者，自繳納之日起 10 年內申請；因可歸責於政府機關之錯誤而溢繳者為 15 年（法 28）。退還時自繳納之日起按各年度 1 月 1 日郵政儲金一年期定期儲金固定利率按日加計利息。"}},{"@type":"Question","name":"自動補報補繳會被處罰嗎？","acceptedAnswer":{"@type":"Answer","text":"未經檢舉、未經稽徵機關或財政部指定之調查人員進行調查者，免除法 41 至 45 之處罰及各稅法所定逃漏稅之處罰，並得免除刑事責任（法 48-1）。但補繳的稅款仍須自原繳納期限截止之次日起至補繳之日止按日加計利息——免罰不免息。"}}]}
+</script>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="記帳士考試互動學習">
 <meta property="og:title" content="稅捐稽徵法重點整理｜核課徵收期間、行政救濟、罰則">
@@ -56,6 +59,14 @@
   .b5{background:#34d399}.b12{background:#38bdf8}.b20{background:#818cf8}.b30{background:#fbbf24}.b40{background:#fb7185}
   .win{border-left:4px solid var(--ok);background:rgba(52,211,153,.10);border-radius:8px;padding:10px 14px;margin-top:10px}
   @media(max-width:900px){.calc .row,.calc .row3{grid-template-columns:1fr}}
+  /* 常見問題 */
+  .faq{margin:18px 0}
+  .faq-item{border-left:3px solid var(--line);padding:0 0 0 18px;margin:0 0 22px}
+  .faq-item:hover{border-left-color:var(--brand)}
+  .faq-q{font-size:17px;font-weight:700;color:#fff;margin:0 0 8px}
+  .faq-q::before{content:"Q";color:var(--brand);font-family:ui-monospace,monospace;margin-right:9px}
+  .faq-a{margin:0;color:var(--ink);font-size:15px}
+  .faq-a::before{content:"A";color:var(--ok);font-family:ui-monospace,monospace;font-weight:700;margin-right:9px}
 </style>
 </head>
 <body>
@@ -476,6 +487,40 @@
   <div class="tip">本頁是各稅共通的程序法。個別稅目的實體規定請看<a href="../business-tax/index.html">營業稅</a>、<a href="../personal-income-tax/index.html">綜合所得稅</a>與<a href="../corporate-income-tax/index.html">營利事業所得稅</a>；三者的罰則與本法的滯納金、憑證罰放在一起對照，最不容易串位。</div>
 </section>
 
+<section id="faq">
+  <h2>常見問題</h2>
+  <p>下面把最常被問到的幾個問題，答案第一句就講完，細節與條號在後面。想看完整脈絡請回到對應章節。</p>
+  <div class="faq">
+    <div class="faq-item">
+      <p class="faq-q">稅捐的核課期間是幾年？</p>
+      <p class="faq-a"><strong>誠實申報為 5 年，未申報或不誠實申報為 7 年</strong>（法 21）。印花稅及由稽徵機關按稅籍底冊或查得資料核定課徵之稅捐亦為 5 年。起算日依情形不同：已申報自申報日、未申報自申報期間屆滿之翌日、土地增值稅自稽徵機關收件日起算。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">核課期間和徵收期間有什麼不同？</p>
+      <p class="faq-a"><strong>核課期間是「確定租稅債權」的期間，徵收期間是「要求履行已確定租稅」的期間，前者在先、後者在後</strong>。核課期間 5 或 7 年且<strong>無扣除期間</strong>；徵收期間為 5 年，自繳納期間屆滿之翌日起算，<strong>暫緩或停止執行之期間可以扣除</strong>。核課期間屆滿就沒有徵收期間的問題。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">欠稅多少會被限制出境？</p>
+      <p class="faq-a">已確定之欠稅及罰鍰，<strong>個人 100 萬元以上、營利事業 200 萬元以上</strong>；在<strong>行政救濟程序終結前</strong>則為個人 150 萬元、營利事業 300 萬元（法 24 Ⅲ）。已提供相當擔保，或稽徵機關未先實施稅捐保全措施者不適用；限制期間自移民署處分之日起不得逾 5 年。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">逾期繳稅的滯納金怎麼算？</p>
+      <p class="faq-a"><strong>每逾 3 日按滯納數額加徵 1%，最高加徵 10%</strong>（法 20，111 年 1 月 1 日起施行；原為每逾 2 日 1%、最高 15%）。繳納期間屆滿 <strong>30 日</strong>後仍未繳納者，由稽徵機關移送強制執行，但已依法 35 申請復查者暫緩移送。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">收到稅單不服要怎麼辦？期限多久？</p>
+      <p class="faq-a">先申請<strong>復查</strong>：有應納或應補徵稅額者，於繳納期間屆滿之翌日起 <strong>30 日內</strong>向原處分機關申請（法 35）。不服復查決定者，於 30 日內提起<strong>訴願</strong>，並應先繳納復查決定應納稅額之 <strong>1/3</strong> 或提供相當擔保。不服訴願決定者，於訴願決定書送達後 <strong>2 個月內</strong>提起行政訴訟。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">多繳的稅可以申請退還嗎？期限多久？</p>
+      <p class="faq-a">可以。因適用法令、認定事實、計算或其他原因錯誤而溢繳者，自繳納之日起 <strong>10 年內</strong>申請；因<strong>可歸責於政府機關</strong>之錯誤而溢繳者為 <strong>15 年</strong>（法 28）。退還時自繳納之日起按各年度 1 月 1 日郵政儲金一年期定期儲金固定利率按日加計利息。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">自動補報補繳會被處罰嗎？</p>
+      <p class="faq-a"><strong>未經檢舉、未經稽徵機關或財政部指定之調查人員進行調查者，免除法 41 至 45 之處罰及各稅法所定逃漏稅之處罰，並得免除刑事責任</strong>（法 48-1）。但補繳的稅款仍須自原繳納期限截止之次日起至補繳之日止按日加計利息——免罰不免息。</p>
+    </div>
+  </div>
+</section>
 <section id="source">
   <h2>法源與更新</h2>
   <p>本頁依現行條文整理，滯納金部分為 110.12.17 公布、<strong>111.1.1 施行</strong>之修正規定（每逾 3 日加徵 1%、最高 10%）。</p>
@@ -507,6 +552,7 @@
     <a href="#principle">租稅處罰原則</a>
     <a href="#deadlines">重要期間總表</a>
     <a href="#traps">易錯陷阱與速記</a>
+    <a href="#faq">常見問題</a>
     <a href="#source">法源與更新</a>
   </nav>
   <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">

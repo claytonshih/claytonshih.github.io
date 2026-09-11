@@ -11,6 +11,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"記帳士考試","item":"https://claytonshih.github.io/bookkeeper/"},{"@type":"ListItem","position":3,"name":"營利事業所得稅","item":"https://claytonshih.github.io/bookkeeper/corporate-income-tax/"}]},{"@type":"TechArticle","headline":"營利事業所得稅重點整理｜境外扣抵、查核準則、房地合一","description":"境外扣抵、房地合一、費用限額與查核準則、未分配盈餘與反避稅，附互動計算機。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-08-31T00:00:00+08:00","dateModified":"2026-09-11T00:00:00+08:00","author":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/bookkeeper/corporate-income-tax/"}}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"營利事業所得稅的 12 萬元起徵額怎麼算？","acceptedAnswer":{"@type":"Answer","text":"分三段：課稅所得額 12 萬元以下免徵；超過 12 萬至 20 萬元，應納稅額為 (所得額 − 120,000) × 1/2；超過 20 萬元則按所得額 × 20% 全額課徵（法 5 Ⅴ）。20 萬元是兩式的交叉點，超過後但書失效。這段的邊際稅率高達 50%。"}},{"@type":"Question","name":"擴大書面審核的門檻是多少？","acceptedAnswer":{"@type":"Answer","text":"營業收入淨額及非營業收入合計不超過新臺幣 3,000 萬元，且書表齊全、自行依法調整之純益率達標準以上、並於申報期限前繳清稅款。純益率依行業別為 1%～10%，未列舉之其他行業為 6%。部分業別（自有不動產買賣、投資有價證券、醫院等）全年收入 1,000 萬元以上即排除適用。"}},{"@type":"Question","name":"擴大書審可以扣除前 10 年虧損嗎？","acceptedAnswer":{"@type":"Answer","text":"不可以，而且虧損年度仍須按純益率繳稅。法 39 的前 10 年虧損扣除只適用核實申報，且須同時符合四要件：公司組織、會計帳冊簿據完備、虧損及扣除年度均使用藍色申報書或經會計師查核簽證、如期申報。擴大書審也不是免記帳，要點第四點仍要求設帳並保存憑證。"}},{"@type":"Question","name":"同業利潤標準什麼時候會被用到？","acceptedAnswer":{"@type":"Answer","text":"不是可以選的申報方式，而是不配合的後果：未依限申報經催報仍未辦（法 79），或調查、復查時未提示帳簿文據（法 83）時，稽徵機關得依查得資料或同業利潤標準推計核定。實務比率高低通常是同業利潤標準 > 所得額標準 > 擴大書審純益率。"}},{"@type":"Question","name":"國外分公司和外國子公司的課稅差在哪？","acceptedAnswer":{"@type":"Answer","text":"分公司按所得發生年度逐年併計、虧損可直接沖減總機構所得；子公司是獨立法人，要到獲配股利或盈餘的年度才認列。關鍵是法 42「不計入所得額」只限國內轉投資，外國子公司的股利必須計入所得額，改以已納外國稅在限額內扣抵（法 3 Ⅱ）。"}},{"@type":"Question","name":"境外已納稅額的扣抵限額怎麼算？","acceptedAnswer":{"@type":"Answer","text":"取三個數字的最小值：境外已納稅額、境外所得額 × 20%、因加計國外所得而增加之結算應納稅額。兩個常見錯誤是用境外「收入」而非減除成本費用後的「所得額」計算限額，以及分國逐一計算——應以全部境外所得合併計算。大陸地區所得另依兩岸條例 §24。"}},{"@type":"Question","name":"未分配盈餘要加徵多少？沒有盈餘也要申報嗎？","acceptedAnswer":{"@type":"Answer","text":"107 年度起加徵 5%（87～106 年度為 10%），且為零或負數仍應申報（法 102-2）。申報期間為結算申報之次年 5 月 1 日至 5 月 31 日；申報前解散或合併者為 45 日內。財務報表經會計師查核簽證者，以會計師查定數為準。"}}]}
+</script>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="記帳士考試互動學習">
 <meta property="og:title" content="營利事業所得稅重點整理｜境外扣抵、查核準則、房地合一">
@@ -56,6 +59,14 @@
   .b5{background:#34d399}.b12{background:#38bdf8}.b20{background:#818cf8}.b30{background:#fbbf24}.b40{background:#fb7185}
   .win{border-left:4px solid var(--ok);background:rgba(52,211,153,.10);border-radius:8px;padding:10px 14px;margin-top:10px}
   @media(max-width:900px){.calc .row,.calc .row3{grid-template-columns:1fr}}
+  /* 常見問題 */
+  .faq{margin:18px 0}
+  .faq-item{border-left:3px solid var(--line);padding:0 0 0 18px;margin:0 0 22px}
+  .faq-item:hover{border-left-color:var(--brand)}
+  .faq-q{font-size:17px;font-weight:700;color:#fff;margin:0 0 8px}
+  .faq-q::before{content:"Q";color:var(--brand);font-family:ui-monospace,monospace;margin-right:9px}
+  .faq-a{margin:0;color:var(--ink);font-size:15px}
+  .faq-a::before{content:"A";color:var(--ok);font-family:ui-monospace,monospace;font-weight:700;margin-right:9px}
 </style>
 </head>
 <body>
@@ -982,6 +993,40 @@
   <div class="tip">個人那一軌請看<a href="../personal-income-tax/index.html">綜合所得稅</a>；交易面的稅請看<a href="../business-tax/index.html">營業稅</a>。三頁的期限總表與罰則放在一起對照，最不容易串位。</div>
 </section>
 
+<section id="faq">
+  <h2>常見問題</h2>
+  <p>下面把最常被問到的幾個問題，答案第一句就講完，細節與條號在後面。想看完整脈絡請回到對應章節。</p>
+  <div class="faq">
+    <div class="faq-item">
+      <p class="faq-q">營利事業所得稅的 12 萬元起徵額怎麼算？</p>
+      <p class="faq-a">分三段：課稅所得額 <strong>12 萬元以下免徵</strong>；<strong>超過 12 萬至 20 萬元</strong>，應納稅額為 <strong>(所得額 − 120,000) × 1/2</strong>；<strong>超過 20 萬元</strong>則按所得額 × 20% 全額課徵（法 5 Ⅴ）。20 萬元是兩式的交叉點，超過後但書失效。這段的邊際稅率高達 50%。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">擴大書面審核的門檻是多少？</p>
+      <p class="faq-a">營業收入淨額及非營業收入合計<strong>不超過新臺幣 3,000 萬元</strong>，且書表齊全、自行依法調整之純益率達標準以上、並於申報期限前繳清稅款。純益率依行業別為 1%～10%，未列舉之其他行業為 6%。部分業別（自有不動產買賣、投資有價證券、醫院等）全年收入 1,000 萬元以上即排除適用。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">擴大書審可以扣除前 10 年虧損嗎？</p>
+      <p class="faq-a"><strong>不可以</strong>，而且虧損年度仍須按純益率繳稅。法 39 的前 10 年虧損扣除只適用核實申報，且須同時符合四要件：公司組織、會計帳冊簿據完備、虧損及扣除年度均使用藍色申報書或經會計師查核簽證、如期申報。擴大書審也<strong>不是免記帳</strong>，要點第四點仍要求設帳並保存憑證。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">同業利潤標準什麼時候會被用到？</p>
+      <p class="faq-a"><strong>不是可以選的申報方式，而是不配合的後果</strong>：未依限申報經催報仍未辦（法 79），或調查、復查時未提示帳簿文據（法 83）時，稽徵機關得依查得資料或同業利潤標準推計核定。實務比率高低通常是同業利潤標準 > 所得額標準 > 擴大書審純益率。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">國外分公司和外國子公司的課稅差在哪？</p>
+      <p class="faq-a"><strong>分公司按所得發生年度逐年併計、虧損可直接沖減總機構所得；子公司是獨立法人，要到獲配股利或盈餘的年度才認列</strong>。關鍵是法 42「不計入所得額」只限<strong>國內</strong>轉投資，外國子公司的股利必須計入所得額，改以已納外國稅在限額內扣抵（法 3 Ⅱ）。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">境外已納稅額的扣抵限額怎麼算？</p>
+      <p class="faq-a">取三個數字的<strong>最小值</strong>：境外已納稅額、境外所得額 × 20%、因加計國外所得而增加之結算應納稅額。兩個常見錯誤是用境外「收入」而非減除成本費用後的「所得額」計算限額，以及分國逐一計算——應以<strong>全部境外所得合併</strong>計算。大陸地區所得另依兩岸條例 §24。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">未分配盈餘要加徵多少？沒有盈餘也要申報嗎？</p>
+      <p class="faq-a"><strong>107 年度起加徵 5%</strong>（87～106 年度為 10%），且<strong>為零或負數仍應申報</strong>（法 102-2）。申報期間為結算申報之次年 5 月 1 日至 5 月 31 日；申報前解散或合併者為 45 日內。財務報表經會計師查核簽證者，以會計師查定數為準。</p>
+    </div>
+  </div>
+</section>
 <section id="source">
   <h2>法源與更新</h2>
   <p>本頁依下列條文整理：所得稅法 114.12.26 修正；營利事業所得稅查核準則 112.12.11 修正；各類所得扣繳率標準 110.06.30 修正。</p>
@@ -1018,6 +1063,7 @@
     <a href="#c2">營利事業的罰則</a>
     <a href="#d">最低稅負制（營利事業）</a>
     <a href="#traps">易錯陷阱與速記</a>
+    <a href="#faq">常見問題</a>
     <a href="#source">法源與更新</a>
   </nav>
   <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">

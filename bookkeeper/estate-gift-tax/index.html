@@ -11,6 +11,9 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"首頁","item":"https://claytonshih.github.io/"},{"@type":"ListItem","position":2,"name":"記帳士考試","item":"https://claytonshih.github.io/bookkeeper/"},{"@type":"ListItem","position":3,"name":"遺產及贈與稅","item":"https://claytonshih.github.io/bookkeeper/estate-gift-tax/"}]},{"@type":"TechArticle","headline":"遺產及贈與稅法重點整理｜免稅額、扣除額、視為贈與","description":"遺產稅與贈與稅雙軌整理：不計入、扣除額、視為贈與六款與 115 年度金額，附互動試算。","inLanguage":"zh-Hant","image":"https://claytonshih.github.io/og-cover.png","datePublished":"2026-09-08T00:00:00+08:00","dateModified":"2026-09-11T00:00:00+08:00","author":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/"},"publisher":{"@type":"Organization","name":"記帳士考試互動學習","url":"https://claytonshih.github.io/","logo":{"@type":"ImageObject","url":"https://claytonshih.github.io/og-cover.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://claytonshih.github.io/bookkeeper/estate-gift-tax/"}}]}
 </script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"115 年遺產稅的免稅額是多少？","acceptedAnswer":{"@type":"Answer","text":"1,333 萬元；軍警公教人員因執行職務死亡者加倍計算為 2,666 萬元（法 18）。條文原訂 1,200 萬元，實際適用財政部公告數，遇消費者物價指數累計上漲達 10% 以上時調整（法 12-1）。適用哪一年度取決於繼承事實發生日。"}},{"@type":"Question","name":"贈與稅的免稅額是多少？怎麼計算？","acceptedAnswer":{"@type":"Answer","text":"每年 244 萬元，按贈與人計算（法 22）。同一個人一年內贈與多位受贈人，免稅額仍然只有一份；同年度有兩次以上贈與者應合併計算贈與額，再減除本年度以前各次已繳之贈與稅額（法 19 Ⅱ）。"}},{"@type":"Question","name":"遺產稅和贈與稅什麼時候要申報？","acceptedAnswer":{"@type":"Answer","text":"遺產稅為被繼承人死亡之日起 6 個月內向戶籍所在地稽徵機關申報（法 23）；贈與稅為超過免稅額之贈與行為發生後 30 日內申報（法 24）。有正當理由不能如期申報者，應於期限屆滿前以書面申請延長，以 3 個月為限（法 26）。"}},{"@type":"Question","name":"遺產稅有哪些扣除額？金額多少？","acceptedAnswer":{"@type":"Answer","text":"115 年度主要扣除額為：配偶 553 萬元、直系血親卑親屬每人 56 萬元（未成年者按距成年年數每年加扣 56 萬元）、父母每人 138 萬元、重度以上身心障礙者每人再加扣 693 萬元、受扶養之兄弟姊妹祖父母每人 56 萬元、喪葬費 138 萬元（定額、不必檢附單據）。經常居住境外之國民及非國民不適用第 1 至 7 款。"}},{"@type":"Question","name":"二親等親屬間買賣不動產要課贈與稅嗎？","acceptedAnswer":{"@type":"Answer","text":"原則以贈與論，但能舉證即可免除。法 5 ⑥ 規定二親等以內親屬間財產之買賣視為贈與，但能提出已支付價款之確實證明，且該已支付之價款非由出賣人貸與或提供擔保向他人借得者，不在此限。"}},{"@type":"Question","name":"父母出錢幫子女買房要課贈與稅嗎？","acceptedAnswer":{"@type":"Answer","text":"要，而且買不動產時課稅標的是不動產本身而非出資金額。法 5 ③ 規定以自己之資金無償為他人購置財產者課其資金，但該財產為不動產者，其不動產——因為不動產以公告現值估價，通常低於實際出資額，法律直接指定以不動產為標的。"}},{"@type":"Question","name":"死亡前 2 年內的贈與要併入遺產課稅嗎？","acceptedAnswer":{"@type":"Answer","text":"贈與配偶、民法 1138 及 1140 條所定各順序繼承人及其配偶者，應視為遺產併入遺產總額（法 15）。但估價以贈與時之時價為準，且該財產已納之贈與稅與土地增值稅連同利息，得自應納遺產稅額中扣抵（法 11 Ⅱ）。"}}]}
+</script>
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="記帳士考試互動學習">
 <meta property="og:title" content="遺產及贈與稅法重點整理｜免稅額、扣除額、視為贈與">
@@ -64,6 +67,14 @@
   .verdict.yes{display:block;border-left:4px solid var(--ok);background:rgba(52,211,153,.10)}
   .verdict.no{display:block;border-left:4px solid var(--warn);background:rgba(251,191,36,.10)}
   .verdict b{color:#fff}
+  /* 常見問題 */
+  .faq{margin:18px 0}
+  .faq-item{border-left:3px solid var(--line);padding:0 0 0 18px;margin:0 0 22px}
+  .faq-item:hover{border-left-color:var(--brand)}
+  .faq-q{font-size:17px;font-weight:700;color:#fff;margin:0 0 8px}
+  .faq-q::before{content:"Q";color:var(--brand);font-family:ui-monospace,monospace;margin-right:9px}
+  .faq-a{margin:0;color:var(--ink);font-size:15px}
+  .faq-a::before{content:"A";color:var(--ok);font-family:ui-monospace,monospace;font-weight:700;margin-right:9px}
 </style>
 </head>
 <body>
@@ -399,6 +410,40 @@
   <div class="tip">本科屬「稅務相關法規概要」。同科目的其他部分請看<a href="../business-tax/index.html">營業稅</a>、<a href="../personal-income-tax/index.html">綜合所得稅</a>、<a href="../corporate-income-tax/index.html">營利事業所得稅</a>與<a href="../tax-collection-act/index.html">稅捐稽徵法</a>。各稅的申報期限與罰則倍數放在一起對照，最不容易串位。</div>
 </section>
 
+<section id="faq">
+  <h2>常見問題</h2>
+  <p>下面把最常被問到的幾個問題，答案第一句就講完，細節與條號在後面。想看完整脈絡請回到對應章節。</p>
+  <div class="faq">
+    <div class="faq-item">
+      <p class="faq-q">115 年遺產稅的免稅額是多少？</p>
+      <p class="faq-a"><strong>1,333 萬元</strong>；軍警公教人員因執行職務死亡者<strong>加倍計算</strong>為 2,666 萬元（法 18）。條文原訂 1,200 萬元，實際適用財政部公告數，遇消費者物價指數累計上漲達 10% 以上時調整（法 12-1）。適用哪一年度取決於繼承事實發生日。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">贈與稅的免稅額是多少？怎麼計算？</p>
+      <p class="faq-a"><strong>每年 244 萬元，按贈與人計算</strong>（法 22）。同一個人一年內贈與多位受贈人，免稅額仍然只有一份；同年度有兩次以上贈與者應合併計算贈與額，再減除本年度以前各次已繳之贈與稅額（法 19 Ⅱ）。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">遺產稅和贈與稅什麼時候要申報？</p>
+      <p class="faq-a">遺產稅為<strong>被繼承人死亡之日起 6 個月內</strong>向戶籍所在地稽徵機關申報（法 23）；贈與稅為<strong>超過免稅額之贈與行為發生後 30 日內</strong>申報（法 24）。有正當理由不能如期申報者，應於期限屆滿前以書面申請延長，以 <strong>3 個月</strong>為限（法 26）。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">遺產稅有哪些扣除額？金額多少？</p>
+      <p class="faq-a">115 年度主要扣除額為：配偶 <strong>553 萬元</strong>、直系血親卑親屬每人 <strong>56 萬元</strong>（未成年者按距成年年數每年加扣 56 萬元）、父母每人 <strong>138 萬元</strong>、重度以上身心障礙者每人再加扣 <strong>693 萬元</strong>、受扶養之兄弟姊妹祖父母每人 <strong>56 萬元</strong>、喪葬費 <strong>138 萬元</strong>（定額、不必檢附單據）。經常居住境外之國民及非國民不適用第 1 至 7 款。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">二親等親屬間買賣不動產要課贈與稅嗎？</p>
+      <p class="faq-a"><strong>原則以贈與論，但能舉證即可免除</strong>。法 5 ⑥ 規定二親等以內親屬間財產之買賣視為贈與，但能提出<strong>已支付價款之確實證明</strong>，且該已支付之價款<strong>非由出賣人貸與或提供擔保向他人借得</strong>者，不在此限。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">父母出錢幫子女買房要課贈與稅嗎？</p>
+      <p class="faq-a">要，而且買不動產時課稅標的是<strong>不動產本身</strong>而非出資金額。法 5 ③ 規定以自己之資金無償為他人購置財產者課其資金，<strong>但該財產為不動產者，其不動產</strong>——因為不動產以公告現值估價，通常低於實際出資額，法律直接指定以不動產為標的。</p>
+    </div>
+    <div class="faq-item">
+      <p class="faq-q">死亡前 2 年內的贈與要併入遺產課稅嗎？</p>
+      <p class="faq-a"><strong>贈與配偶、民法 1138 及 1140 條所定各順序繼承人及其配偶者，應視為遺產併入遺產總額</strong>（法 15）。但估價以<strong>贈與時</strong>之時價為準，且該財產已納之贈與稅與土地增值稅連同利息，得自應納遺產稅額中扣抵（法 11 Ⅱ）。</p>
+    </div>
+  </div>
+</section>
 <section id="source">
   <h2>法源與更新</h2>
   <p>本頁依現行條文整理；金額為財政部公告 <strong>115 年</strong>發生繼承或贈與案件適用之數額，課稅級距為 <strong>114 年 1 月 1 日</strong>起適用之調整值。</p>
@@ -422,6 +467,7 @@
     <a href="#gift">贈與稅與視為贈與 ★</a>
     <a href="#procedure">稽徵程序</a>
     <a href="#traps">易錯陷阱與速記</a>
+    <a href="#faq">常見問題</a>
     <a href="#source">法源與更新</a>
   </nav>
   <div class="ad-slot ad-rail" role="complementary" aria-label="廣告版位">
