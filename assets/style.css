@@ -111,6 +111,32 @@ svg text{font-family:inherit}
 .jump b{display:block; color:#fff; font-size:14.5px; margin-bottom:3px}
 .jump span{display:block; color:var(--muted); font-size:13px; line-height:1.5}
 
+/* 圖解 */
+.fig{margin:22px 0; background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px 14px}
+.figscroll{overflow-x:auto; -webkit-overflow-scrolling:touch}
+.fig svg{display:block; width:100%; height:auto}
+.fig .scrollhint{display:none}
+@media(max-width:860px){
+  .figscroll svg{width:780px; max-width:none}
+  .fig .scrollhint{display:block; color:var(--muted); font-size:12px; margin:0 0 8px}
+}
+.fig figcaption{color:var(--muted); font-size:13.5px; line-height:1.75; margin:12px 0 0; border-top:1px solid var(--line); padding-top:10px}
+.fig figcaption b{color:var(--ink)}
+.d-box{fill:var(--panel2); stroke:var(--line); stroke-width:1.5}
+.d-brand{fill:rgba(56,189,248,.13); stroke:var(--brand); stroke-width:1.5}
+.d-ok{fill:rgba(52,211,153,.13); stroke:var(--ok); stroke-width:1.5}
+.d-warn{fill:rgba(251,191,36,.13); stroke:var(--warn); stroke-width:1.5}
+.d-bad{fill:rgba(251,113,133,.13); stroke:var(--bad); stroke-width:1.5}
+.d-violet{fill:rgba(129,140,248,.13); stroke:var(--brand2); stroke-width:1.5}
+.d-t{fill:#fff; font-size:14px; font-weight:700}
+.d-s{fill:var(--ink); font-size:12px}
+.d-m{fill:var(--muted); font-size:11.5px}
+.d-n{fill:var(--warn); font-size:13px; font-weight:700; font-family:ui-monospace,Menlo,monospace}
+.d-ng{fill:var(--ok); font-size:13px; font-weight:700; font-family:ui-monospace,Menlo,monospace}
+.d-line{stroke:var(--muted); stroke-width:1.6; fill:none}
+.d-dash{stroke:var(--muted); stroke-width:1.4; fill:none; stroke-dasharray:5 4}
+.d-arrow{fill:var(--muted)}
+
 /* Footer */
 footer{max-width:1180px; margin:56px auto 0; color:var(--muted); font-size:13px; border-top:1px solid var(--line); padding:24px 28px 40px}
 footer .flinks{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:10px}
