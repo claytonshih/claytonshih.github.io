@@ -68,6 +68,9 @@
   .faq-q::before{content:"Q";color:var(--brand);font-family:ui-monospace,monospace;margin-right:9px}
   .faq-a{margin:0;color:var(--ink);font-size:15px}
   .faq-a::before{content:"A";color:var(--ok);font-family:ui-monospace,monospace;font-weight:700;margin-right:9px}
+  .idx{text-align:center;white-space:nowrap;font-weight:700}
+  .idx-y{color:var(--ok)}
+  .idx-n{color:var(--bad)}
 </style>
 </head>
 <body>
@@ -246,8 +249,8 @@
   <h3>第九類退職所得（115 年度金額）</h3>
   <pre><span class="com">一次領取：</span>
   ① ≤ 206,000 × 年資                    → 所得額 0
-  ② 206,000×年資 &lt; 總額 ≤ 412,000×年資  → 超過部分 × 1/2
-  ③ 超過 412,000 × 年資                  → 全數為所得額
+  ② 206,000×年資 &lt; 總額 ≤ 414,000×年資  → 超過部分 × 1/2
+  ③ 超過 414,000 × 年資                  → 全數為所得額
 <span class="com">分期領取：</span>全年領取總額 − 894,000
 <span class="com">兼領：</span>按領取比例分別計算可減除金額
 <span class="com">年資尾數：</span>未滿 6 個月以半年計，滿 6 個月以一年計</pre>
@@ -314,6 +317,43 @@
     <tr><td>特別</td><td>長期照顧特別扣除（114 年起）</td><td>每人 <strong>180,000</strong></td></tr>
     <tr><td>特別</td><td>房屋租金支出特別扣除（113 年起）</td><td>每戶 <strong>180,000</strong>；<strong>本人、配偶或受扶養直系親屬境內有房屋者不得扣除</strong></td></tr>
   </table>
+
+  <h3>115 年度公告金額一覽（哪些會隨物價調整）★</h3>
+  <p>所得稅法的金額分成兩種。一種條文只寫<strong>基準數</strong>，實際適用的是財政部<strong>每年公告</strong>的調整後金額；另一種<strong>直接把數字寫死在條文裡</strong>，不隨物價動，要改只能修法。這條分界本身就是考點——115 年記帳士第 15 題問的正是「下列何者<strong>非</strong>屬所得稅法明定依物價指數調整的扣除額」，答案是保險費列舉扣除的上限金額。</p>
+  <table>
+    <tr><th>項目</th><th>115 年度適用金額</th><th class="idx">隨物價調整</th></tr>
+    <tr><td>免稅額（每人）</td><td><strong>101,000</strong>　<span class="mn">條文基準 60,000</span></td><td class="idx idx-y">○ 法 5 Ⅰ</td></tr>
+    <tr><td>免稅額加成 50%<br><span class="mn">本人・配偶・直系尊親屬滿 70 歲；受扶養未成年子女</span></td><td><strong>151,500</strong></td><td class="idx idx-y">○</td></tr>
+    <tr><td>標準扣除額（單身／有配偶）</td><td><strong>136,000／272,000</strong></td><td class="idx idx-y">○ 法 5-1</td></tr>
+    <tr><td>薪資所得特別扣除額</td><td><strong>227,000</strong></td><td class="idx idx-y">○ 法 5-1</td></tr>
+    <tr><td>身心障礙特別扣除額</td><td><strong>227,000</strong></td><td class="idx idx-y">○ 法 5-1</td></tr>
+    <tr><td>課稅級距（五級距上限）</td><td><strong>61／138／277／519 萬</strong></td><td class="idx idx-y">○ 法 5 Ⅱ</td></tr>
+    <tr><td>退職所得定額免稅—一次領</td><td><strong>206,000／414,000</strong> × 年資<br><span class="mn">條文基準 15 萬／30 萬</span></td><td class="idx idx-y">○ 法 14 Ⅲ</td></tr>
+    <tr><td>退職所得定額免稅—分期領</td><td>全年領取總額 − <strong>894,000</strong><br><span class="mn">條文基準 65 萬</span></td><td class="idx idx-y">○ 法 14 Ⅲ</td></tr>
+    <tr><td><strong>保險費</strong>列舉扣除上限（人身保險）</td><td><strong>24,000</strong>／人<br><span class="mn">健保及勞保、農保、國民年金、軍公教保不受限</span></td><td class="idx idx-n">✗ 第 15 題</td></tr>
+    <tr><td>購屋借款利息列舉扣除上限</td><td><strong>300,000</strong>／戶</td><td class="idx idx-n">✗</td></tr>
+    <tr><td>儲蓄投資特別扣除額</td><td><strong>270,000</strong>／戶</td><td class="idx idx-n">✗</td></tr>
+    <tr><td>教育學費特別扣除額</td><td><strong>25,000</strong>／人</td><td class="idx idx-n">✗</td></tr>
+    <tr><td>幼兒學前特別扣除額</td><td><strong>150,000</strong>（第 1 名）／<strong>225,000</strong>（第 2 名以上）</td><td class="idx idx-n">✗</td></tr>
+    <tr><td>長期照顧特別扣除額</td><td><strong>180,000</strong>／人</td><td class="idx idx-n">✗</td></tr>
+    <tr><td>房屋租金支出特別扣除額</td><td><strong>180,000</strong>／戶</td><td class="idx idx-n">✗</td></tr>
+  </table>
+  <div class="tip"><b>一句話記法：</b>會隨物價調整的只有<strong>免稅額、課稅級距，加上三個「額」——標準扣除額、薪資所得特別扣除額、身心障礙特別扣除額</strong>（外加退職所得定額，規定在法 14 Ⅲ 而非法 5-1）。<strong>其餘所有扣除額的上限金額都是條文寫死的</strong>，包括保險費 24,000、購屋借款利息 30 萬、儲蓄投資 27 萬、教育學費 2.5 萬、幼兒學前、長照、房租。調整門檻也不同：法 5、5-1 是物價指數累計上漲<strong>達 3%</strong>；遺贈稅法 12-1 是<strong>達 10%</strong>。</div>
+
+  <h3>基本生活費差額（納稅者權利保護法 §4）</h3>
+  <p>這一項不在所得稅法裡，但每年申報都會用到，計算階梯上也有它。公式是：</p>
+  <pre><span class="com">基本生活費總額 =</span> 每人基本生活所需費用 × （納稅義務人 + 配偶 + 受扶養親屬人數）
+
+<span class="com">比較項目 =</span> 免稅額 + 標準或列舉扣除額
+           + 儲蓄投資、身心障礙、教育學費、幼兒學前、長期照顧特別扣除額
+
+<span class="com">基本生活費差額 =</span> 基本生活費總額 − 比較項目　（為正數才能減除）</pre>
+  <table>
+    <tr><th>年度</th><th>每人基本生活所需費用</th><th>申報時點</th><th>狀態</th></tr>
+    <tr><td>114 年度</td><td><strong>213,000</strong></td><td>115 年 5 月</td><td>已公告</td></tr>
+    <tr><td>115 年度</td><td><strong>220,000</strong>（推估）</td><td>116 年 5 月</td><td><span class="key">尚待財政部公告</span></td></tr>
+  </table>
+  <div class="when"><b>為什麼 115 年度的數字先標「推估」：</b>納保法 §4 Ⅱ 規定，基本生活所需費用之金額，由中央主管機關參照<strong>最近一年全國每人可支配所得中位數六成</strong>定之，並於每年 12 月底前公告。主計總處公布的 114 年每人可支配所得中位數為 366,841 元，六成約 22 萬元——但<strong>財政部正式公告前，請以公告數為準</strong>。考試作答寫公告數並註明年度，實務則以最新公告為準。<br><strong>比較項目裡沒有薪資所得特別扣除額</strong>，這是最常被記錯的一點：薪資特扣不參與基本生活費的比較。</div>
 
   <h3>排富條款（法 17 Ⅲ）★陷阱</h3>
   <p><strong>長照</strong>與<strong>房租</strong>兩項特別扣除額，有下列情形之一者不適用：</p>
@@ -790,7 +830,8 @@
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340115" target="_blank" rel="noopener">所得基本稅額條例</a>（110.01.27）</li>
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340028" target="_blank" rel="noopener">各類所得扣繳率標準</a>（110.06.30）</li>
     <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=Q0010001" target="_blank" rel="noopener">臺灣地區與大陸地區人民關係條例</a>（第 24 條：大陸地區來源所得之併計與扣抵）</li>
-    <li><a href="https://www.mof.gov.tw/" target="_blank" rel="noopener">財政部</a>（各年度綜合所得稅及所得基本稅額相關金額公告）</li>
+    <li><a href="https://www.mof.gov.tw/" target="_blank" rel="noopener">財政部</a>　114.11.27 台財稅字第 11404664070 號公告：<strong>115 年度</strong>綜合所得稅免稅額、標準扣除額、薪資所得特別扣除額、身心障礙特別扣除額、課稅級距及計算退職所得定額免稅之金額</li>
+    <li><a href="https://law.moj.gov.tw/LawClass/LawAll.aspx?pcode=G0340142" target="_blank" rel="noopener">納稅者權利保護法</a>（第 4 條：基本生活所需費用不得加以課稅）</li>
   </ul>
   <div class="when"><b>使用提醒：</b>本頁為考試重點整理，條文經節錄改寫，作答與實務適用請以法規資料庫現行條文及財政部最新公告為準。各項金額為 115 年度公告數；最低稅負制個人扣除金額 750 萬元為現行公告數（115 年度未調整）。</div>
 </section>
