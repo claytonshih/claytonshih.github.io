@@ -250,11 +250,35 @@
   <pre><span class="com">一次領取：</span>
   ① ≤ 206,000 × 年資                    → 所得額 0
   ② 206,000×年資 &lt; 總額 ≤ 414,000×年資  → 超過部分 × 1/2
-  ③ 超過 414,000 × 年資                  → 全數為所得額
+  ③ 超過 414,000 × 年資                  → ②段半數 ＋ 超過部分全數
 <span class="com">分期領取：</span>全年領取總額 − 894,000
 <span class="com">兼領：</span>按領取比例分別計算可減除金額
 <span class="com">年資尾數：</span>未滿 6 個月以半年計，滿 6 個月以一年計</pre>
   <p>法條的基準數字是 15 萬／30 萬／65 萬，實際適用金額依財政部公告逐年調整。</p>
+
+  <h3>退職所得計算範例（115 年度）</h3>
+  <p>設甲在同一家公司服務 <strong>20 年 7 個月</strong>，115 年退休。先定年資：尾數 7 個月<strong>滿 6 個月，以 1 年計</strong> → 年資 <strong>21 年</strong>（若是 20 年 3 個月，尾數未滿 6 個月以半年計，年資為 20.5 年）。年資一定，兩道門檻就固定了：</p>
+  <div class="flow">
+    <div class="box good">第一道：以下全免<b>4,326,000</b><span class="mn">206,000 × 21</span></div>
+    <span class="arw">→</span>
+    <div class="box">中間段：只算半數</div>
+    <span class="arw">→</span>
+    <div class="box bad">第二道：超出全計<b>8,694,000</b><span class="mn">414,000 × 21</span></div>
+  </div>
+  <table>
+    <tr><th>情況</th><th>領取方式與金額</th><th>所得額</th><th>怎麼來的</th></tr>
+    <tr><td>①</td><td>一次領 <strong>400 萬</strong></td><td class="num">0</td><td>400 萬 ≤ 432.6 萬，整筆落在第一道門檻以下</td></tr>
+    <tr><td>②</td><td>一次領 <strong>600 萬</strong></td><td class="num">837,000</td><td>(6,000,000 − 4,326,000) × 1/2</td></tr>
+    <tr><td>③</td><td>一次領 <strong>1,000 萬</strong></td><td class="num">3,490,000</td><td>中間段半數 ＋ 超過第二道的全數（見下）</td></tr>
+    <tr><td>④</td><td>分期領，115 年全年領 <strong>120 萬</strong></td><td class="num">306,000</td><td>1,200,000 − 894,000</td></tr>
+  </table>
+  <pre><span class="com">情況③ 要分段算：</span>
+  中間段   8,694,000 <span class="kw">−</span>  4,326,000 = 4,368,000  <span class="kw">→</span> 半數  2,184,000
+  超過段  10,000,000 <span class="kw">−</span>  8,694,000 = 1,306,000  <span class="kw">→</span> 全數  1,306,000
+                                         所得額  <span class="kw">3,490,000</span></pre>
+  <div class="tip"><b>情況③ 的速算法：</b>只要超過第二道門檻，<strong>所得額 ＝ 領取總額 − 310,000 × 年資</strong>。310,000 的來源是「第二道門檻 414,000 扣掉中間段每年只算半數所省下的 (414,000 − 206,000) ÷ 2 ＝ 104,000」。驗算：10,000,000 − 310,000 × 21 ＝ <strong>3,490,000</strong>，與分段算法一致。考場上用這條，一行就算完。</div>
+  <div class="when"><b>最常錯的就是情況③。</b>條文寫「超過 414,000 元乘以退職服務年資之金額部分，<strong>全數</strong>為所得額」，很多人直接把整筆 1,000 萬當所得額——那會多算 <strong>650 萬</strong>。這是<strong>分段</strong>計算，邏輯跟累進稅率一樣：第一段永遠免稅，中間段永遠只算一半，只有<strong>超出第二道門檻的那一截</strong>才全數計入。</div>
+  <p>算出來的所得額要<strong>併入綜合所得總額</strong>課稅，不是分離課稅。扣繳時居住者按<strong>減除定額免稅後</strong>的所得額扣繳 <strong>6%</strong>、非居住者 <strong>18%</strong>——注意扣繳基礎是減除後的金額，不是給付總額。</p>
 
   <h3>分離課稅／不併計綜合所得總額</h3>
   <table>
