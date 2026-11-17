@@ -220,3 +220,33 @@ mark.hit{background:rgba(251,191,36,.30); color:#fff; border-radius:3px; padding
   section.collapsed .secbody{display:block !important}
   .readerbar,.rprog,.rtop{display:none !important}
 }
+
+/* ---------- 導覽列下拉選單（2026-11-17） ---------- */
+.topnav details.dd{position:relative}
+.topnav details.dd>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+  font-size:14px;font-weight:600;padding:6px 12px;border-radius:8px;color:var(--muted);white-space:nowrap;
+  -webkit-tap-highlight-color:transparent}
+.topnav details.dd>summary::-webkit-details-marker{display:none}
+.topnav details.dd>summary::marker{content:""}
+.topnav details.dd>summary::after{content:"▾";font-size:11px;line-height:1;opacity:.8;transition:transform .15s}
+.topnav details.dd[open]>summary::after{transform:rotate(180deg)}
+.topnav details.dd>summary:hover{background:var(--panel2);color:var(--ink)}
+.topnav details.dd>summary:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.topnav details.dd[open]>summary{background:var(--panel2);color:var(--ink)}
+.topnav details.dd>summary.cur{color:#04283a;background:var(--brand)}
+.topnav details.dd>summary.cur:hover{background:var(--brand);color:#04283a}
+.topnav .ddmenu{position:absolute;top:calc(100% + 9px);left:0;z-index:70;min-width:224px;
+  max-width:calc(100vw - 28px);background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:6px;box-shadow:0 16px 38px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:2px}
+.topnav .ddmenu a{display:block;padding:9px 13px;border-radius:8px;font-size:14px;line-height:1.45;
+  color:var(--ink);text-decoration:none;white-space:nowrap}
+.topnav .ddmenu a:hover{background:var(--panel2);color:var(--brand)}
+.topnav .ddmenu a.on{color:var(--brand);font-weight:700;background:var(--panel2)}
+.topnav .ddmenu .sep{height:1px;background:var(--line);margin:5px 9px}
+.topnav .ddmenu .lbl{font-size:11.5px;color:var(--muted);padding:7px 13px 3px;letter-spacing:.04em}
+/* 連結少了，手機不必再橫向捲動 */
+@media(max-width:820px){
+  .topnav{flex-wrap:wrap;overflow-x:visible;row-gap:6px}
+  .topnav .ddmenu{white-space:normal}
+  .topnav .ddmenu a{white-space:normal}
+}
